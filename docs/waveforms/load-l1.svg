@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="828" height="618" viewBox="0 0 828 618">
+<rect width="100%" height="100%" fill="#fff"/>
+<style>text{font-family:Arial,sans-serif;fill:#172d42;font-size:15px}.signal{font-family:Menlo,monospace;font-size:14px}.small{font-size:12px}</style>
+<text x="20" y="28" style="font-size:21px">Load instruction: minimum response latency</text>
+<text x="20" y="51">Actual VCD | LATENCY=1, GAP=0 | LD t3,0(t0) at PC=0x0c, then ADD at 0x10</text>
+<line x1="191.0" y1="85" x2="191.0" y2="544" stroke="#d7dfe7" stroke-dasharray="3 4"/>
+<text x="191.0" y="78" text-anchor="middle">C0</text>
+<line x1="263.0" y1="85" x2="263.0" y2="544" stroke="#d7dfe7" stroke-dasharray="3 4"/>
+<text x="263.0" y="78" text-anchor="middle">C1</text>
+<line x1="335.0" y1="85" x2="335.0" y2="544" stroke="#d7dfe7" stroke-dasharray="3 4"/>
+<text x="335.0" y="78" text-anchor="middle">C2</text>
+<line x1="407.0" y1="85" x2="407.0" y2="544" stroke="#d7dfe7" stroke-dasharray="3 4"/>
+<text x="407.0" y="78" text-anchor="middle">C3</text>
+<line x1="479.0" y1="85" x2="479.0" y2="544" stroke="#d7dfe7" stroke-dasharray="3 4"/>
+<text x="479.0" y="78" text-anchor="middle">C4</text>
+<line x1="551.0" y1="85" x2="551.0" y2="544" stroke="#d7dfe7" stroke-dasharray="3 4"/>
+<text x="551.0" y="78" text-anchor="middle">C5</text>
+<line x1="623.0" y1="85" x2="623.0" y2="544" stroke="#d7dfe7" stroke-dasharray="3 4"/>
+<text x="623.0" y="78" text-anchor="middle">C6</text>
+<line x1="695.0" y1="85" x2="695.0" y2="544" stroke="#d7dfe7" stroke-dasharray="3 4"/>
+<text x="695.0" y="78" text-anchor="middle">C7</text>
+<text x="12" y="117" class="signal">clk</text>
+<path d="M 155.00 125 H 191.00 V 104 H 227.00 V 125 H 263.00 V 104 H 299.00 V 125 H 335.00 V 104 H 371.00 V 125 H 407.00 V 104 H 443.00 V 125 H 479.00 V 104 H 515.00 V 125 H 551.00 V 104 H 587.00 V 125 H 623.00 V 104 H 659.00 V 125 H 695.00 V 104 H 731.00 V 125" fill="none" stroke="#245cc5" stroke-width="1.8"/>
+<text x="12" y="151" class="signal">state</text>
+<path d="M 158.0 138 H 188.0 L 191.0 148 L 188.0 159 H 158.0 L 155.0 148 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="173.0" y="153" text-anchor="middle" class="signal">FQ</text>
+<path d="M 194.0 138 H 260.0 L 263.0 148 L 260.0 159 H 194.0 L 191.0 148 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="227.0" y="153" text-anchor="middle" class="signal">FW</text>
+<path d="M 266.0 138 H 332.0 L 335.0 148 L 332.0 159 H 266.0 L 263.0 148 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="299.0" y="153" text-anchor="middle" class="signal">EX</text>
+<path d="M 338.0 138 H 404.0 L 407.0 148 L 404.0 159 H 338.0 L 335.0 148 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="371.0" y="153" text-anchor="middle" class="signal">DQ</text>
+<path d="M 410.0 138 H 476.0 L 479.0 148 L 476.0 159 H 410.0 L 407.0 148 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="443.0" y="153" text-anchor="middle" class="signal">DW</text>
+<path d="M 482.0 138 H 548.0 L 551.0 148 L 548.0 159 H 482.0 L 479.0 148 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="515.0" y="153" text-anchor="middle" class="signal">FQ</text>
+<path d="M 554.0 138 H 620.0 L 623.0 148 L 620.0 159 H 554.0 L 551.0 148 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="587.0" y="153" text-anchor="middle" class="signal">FW</text>
+<path d="M 626.0 138 H 692.0 L 695.0 148 L 692.0 159 H 626.0 L 623.0 148 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="659.0" y="153" text-anchor="middle" class="signal">EX</text>
+<path d="M 698.0 138 H 728.0 L 731.0 148 L 728.0 159 H 698.0 L 695.0 148 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="713.0" y="153" text-anchor="middle" class="signal">FQ</text>
+<text x="12" y="185" class="signal">pc</text>
+<path d="M 158.0 172 H 476.0 L 479.0 182 L 476.0 193 H 158.0 L 155.0 182 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="317.0" y="187" text-anchor="middle" class="signal">0xc</text>
+<path d="M 482.0 172 H 692.0 L 695.0 182 L 692.0 193 H 482.0 L 479.0 182 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="587.0" y="187" text-anchor="middle" class="signal">0x10</text>
+<path d="M 698.0 172 H 728.0 L 731.0 182 L 728.0 193 H 698.0 L 695.0 182 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="12" y="219" class="signal">req_valid</text>
+<path d="M 155.00 206 H 191.00 V 227 H 335.00 V 206 H 407.00 V 227 H 479.00 V 206 H 551.00 V 227 H 695.00 V 206 H 731.00 V 206" fill="none" stroke="#b45309" stroke-width="1.8"/>
+<text x="12" y="253" class="signal">req_ready</text>
+<path d="M 155.00 240 H 227.00 V 261 H 299.00 V 240 H 443.00 V 261 H 515.00 V 240 H 587.00 V 261 H 659.00 V 240 H 731.00 V 240" fill="none" stroke="#b45309" stroke-width="1.8"/>
+<text x="12" y="287" class="signal">req_addr</text>
+<path d="M 158.0 274 H 188.0 L 191.0 284 L 188.0 295 H 158.0 L 155.0 284 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="173.0" y="289" text-anchor="middle" class="signal">0xc</text>
+<path d="M 194.0 274 H 332.0 L 335.0 284 L 332.0 295 H 194.0 L 191.0 284 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="263.0" y="289" text-anchor="middle" class="signal">0x0</text>
+<path d="M 338.0 274 H 476.0 L 479.0 284 L 476.0 295 H 338.0 L 335.0 284 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="407.0" y="289" text-anchor="middle" class="signal">0x1000</text>
+<path d="M 482.0 274 H 548.0 L 551.0 284 L 548.0 295 H 482.0 L 479.0 284 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="515.0" y="289" text-anchor="middle" class="signal">0x10</text>
+<path d="M 554.0 274 H 692.0 L 695.0 284 L 692.0 295 H 554.0 L 551.0 284 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="623.0" y="289" text-anchor="middle" class="signal">0x1000</text>
+<path d="M 698.0 274 H 728.0 L 731.0 284 L 728.0 295 H 698.0 L 695.0 284 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="12" y="321" class="signal">rsp_valid</text>
+<path d="M 155.00 329 H 227.00 V 308 H 299.00 V 329 H 443.00 V 308 H 515.00 V 329 H 587.00 V 308 H 659.00 V 329 H 731.00 V 329" fill="none" stroke="#087f75" stroke-width="1.8"/>
+<text x="12" y="355" class="signal">rsp_ready</text>
+<path d="M 155.00 363 H 191.00 V 342 H 263.00 V 363 H 407.00 V 342 H 479.00 V 363 H 551.00 V 342 H 623.00 V 363 H 731.00 V 363" fill="none" stroke="#087f75" stroke-width="1.8"/>
+<text x="12" y="389" class="signal">rsp_low32</text>
+<path d="M 158.0 376 H 224.0 L 227.0 386 L 224.0 397 H 158.0 L 155.0 386 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="191.0" y="391" text-anchor="middle" class="signal">0x393</text>
+<path d="M 230.0 376 H 440.0 L 443.0 386 L 440.0 397 H 230.0 L 227.0 386 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="335.0" y="391" text-anchor="middle" class="signal">0x2be03</text>
+<path d="M 446.0 376 H 584.0 L 587.0 386 L 584.0 397 H 446.0 L 443.0 386 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="515.0" y="391" text-anchor="middle" class="signal">0x1</text>
+<path d="M 590.0 376 H 728.0 L 731.0 386 L 728.0 397 H 590.0 L 587.0 386 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="659.0" y="391" text-anchor="middle" class="signal">0x1c383b3</text>
+<text x="12" y="423" class="signal">t3 (x28)</text>
+<path d="M 158.0 410 H 476.0 L 479.0 420 L 476.0 431 H 158.0 L 155.0 420 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="317.0" y="425" text-anchor="middle" class="signal">0x0</text>
+<path d="M 482.0 410 H 728.0 L 731.0 420 L 728.0 431 H 482.0 L 479.0 420 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="605.0" y="425" text-anchor="middle" class="signal">0x1</text>
+<text x="12" y="457" class="signal">commit_valid</text>
+<path d="M 155.00 444 H 191.00 V 465 H 479.00 V 444 H 551.00 V 465 H 695.00 V 444 H 731.00 V 444" fill="none" stroke="#245cc5" stroke-width="1.8"/>
+<text x="12" y="491" class="signal">commit_pc</text>
+<path d="M 158.0 478 H 476.0 L 479.0 488 L 476.0 499 H 158.0 L 155.0 488 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="317.0" y="493" text-anchor="middle" class="signal">0x8</text>
+<path d="M 482.0 478 H 692.0 L 695.0 488 L 692.0 499 H 482.0 L 479.0 488 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="587.0" y="493" text-anchor="middle" class="signal">0xc</text>
+<path d="M 698.0 478 H 728.0 L 731.0 488 L 728.0 499 H 698.0 L 695.0 488 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="12" y="525" class="signal">data_wait</text>
+<path d="M 158.0 512 H 728.0 L 731.0 522 L 728.0 533 H 158.0 L 155.0 522 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="443.0" y="527" text-anchor="middle" class="signal">0</text>
+<text x="20" y="569" class="small">FQ=fetch request | FW=fetch response | EX=execute | DQ=data request | DW=data response</text>
+<text x="20" y="591" class="small">Ck marks a rising edge. Handshakes use values BEFORE that edge; registers/state update AFTER it.</text>
+<text x="20" y="609" class="small">Time is relative cycles, not a physical clock-frequency claim. Bus values matter only during valid handshakes.</text>
+</svg>

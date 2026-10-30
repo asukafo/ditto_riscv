@@ -11,10 +11,10 @@ GAP ?= 0
 PROGRAMS := sum dependency pointer_chase
 IMAGES := $(addprefix build/,$(addsuffix .bin,$(PROGRAMS)))
 .DEFAULT_GOAL := help
-.PHONY: help sim test sweep wave lint synth timing clean tools
+.PHONY: help sim test sweep wave diagrams lint synth timing clean tools
 help:
 	@echo 'make sim [PROGRAM=sum|dependency|pointer_chase] [LATENCY=1] [GAP=0]'
-	@echo 'make test / sweep / wave / lint / synth / timing / tools / clean'
+	@echo 'make test / sweep / wave / diagrams / lint / synth / timing / tools / clean'
 build:
 	mkdir -p build
 build/obj_dir/Vrv64_core: rtl/rv64_core.sv sim/main.cpp | build
@@ -33,6 +33,11 @@ sweep: build/obj_dir/Vrv64_core $(IMAGES)
 	$(PYTHON) scripts/experiments.py
 wave: sim
 	surfer build/$(PROGRAM).vcd
+diagrams: build/obj_dir/Vrv64_core build/sum.bin
+	./build/obj_dir/Vrv64_core build/sum.bin 1 build/load-l1.vcd 0
+	./build/obj_dir/Vrv64_core build/sum.bin 5 build/load-l5.vcd 0
+	./build/obj_dir/Vrv64_core build/sum.bin 1 build/load-gap3.vcd 3
+	$(PYTHON) scripts/waveforms.py
 lint:
 	$(VERILATOR) --lint-only -Wall --top-module rv64_core rtl/rv64_core.sv
 synth: | build

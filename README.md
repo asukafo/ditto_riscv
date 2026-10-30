@@ -13,6 +13,7 @@ make test
 make sim PROGRAM=sum LATENCY=5
 make wave PROGRAM=sum LATENCY=5
 make sweep
+make diagrams
 make synth
 make timing
 ```
@@ -32,6 +33,7 @@ make timing
 不支持 C/M/A、CSR、MMU、缓存、流水线重叠或多核，也还不能运行通用 C 程序或 Linux。
 
 - [当前结构、接口与目标架构](docs/architecture.md)
+- [架构设计与真实波形逐周期讲解](docs/design-walkthrough.md)
 - [实验方法、实际结果与波形阅读](docs/experiments.md)
 - [工具和工程目录](docs/tools.md)
 
