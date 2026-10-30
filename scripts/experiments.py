@@ -4,27 +4,34 @@ import csv
 import json
 from pathlib import Path
 import subprocess
+from reference import verify_files
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--test", action="store_true")
 parser.add_argument("--cross", default="riscv64-elf-")
 args = parser.parse_args()
+run_count = 0
 
 
 def run(name, latency, gap=0, fault=0, expected=None):
+    global run_count
+    trace = f"build/{name}-l{latency}-g{gap}.trace.jsonl"
     proc = subprocess.run(["build/obj_dir/Vrv64_core", f"build/{name}.bin",
-                           str(latency), "-", str(gap)], capture_output=True, text=True)
+                           str(latency), "-", str(gap), trace], capture_output=True, text=True)
     assert proc.returncode == (2 if fault else 0), (name, proc.stdout, proc.stderr)
     stats = json.loads(proc.stdout)
     assert stats["fault"] == fault, (name, stats)
     if expected is not None:
         assert stats["result"] == expected, (name, stats)
+    checked = verify_files(f"build/{name}.bin", trace)
+    assert checked == stats["instret"]
+    run_count += 1
     return stats
 
 
 rows = []
 for name, result, retired in [("sum", 2080, 325), ("dependency", 128, 260),
-                              ("pointer_chase", 2016, 325)]:
+                              ("pointer_chase", 2016, 325), ("load_add_store", 14, 30)]:
     baseline = None
     for latency in [1, 5, 20]:
         stats = run(name, latency, expected=result)
@@ -89,6 +96,10 @@ if args.test:
         "misaligned_jump": (".word 0x0020006f", 2, 0),
         "access_fault": ("lui t0, 16\nld t1, 0(t0)", 3, 0),
         "fetch_fault": (".word 0x0001006f", 3, 0),  # JAL x0, 0x10000
+        "store_fault": ("lui t0, 16\nsd zero, 0(t0)", 3, 0),
+        "wraparound": ("addi t0, zero, -1\naddi t0, t0, 1\nsd t0, 512(zero)\nebreak", 0, 0),
+        "bad_branch": (".word 0x00002063", 1, 0),
+        "bad_load": (".word 0x00002283", 1, 0),
     }
     for name, (body, fault, expected) in cases.items():
         source = Path(f"build/{name}.S")
@@ -99,7 +110,7 @@ if args.test:
                         f"build/{name}.elf", f"build/{name}.bin"], check=True)
         for latency, gap in [(1, 0), (5, 3)]:
             run(name, latency, gap, fault, expected)
-    print(f"PASS: 15 workload/latency/backpressure runs + {2 * len(cases)} directed runs")
+    print(f"PASS: {run_count} runs; every commit, halt status and full RAM checked against reference")
 
 destination = Path("build/results.csv")
 with destination.open("w", newline="") as stream:

@@ -10,7 +10,11 @@ module rv64_core (
     output reg [63:0] cycles, output reg [63:0] instret,
     output reg [63:0] fetch_wait, output reg [63:0] data_wait,
     output reg commit_valid, output reg [63:0] commit_pc,
-    output reg [31:0] commit_insn
+    output reg [31:0] commit_insn,
+    output reg commit_rd_wen, output reg [4:0] commit_rd,
+    output reg [63:0] commit_wdata, output reg [63:0] commit_next_pc,
+    output reg commit_mem_valid, output reg commit_mem_write,
+    output reg [63:0] commit_mem_addr, output reg [63:0] commit_mem_data
 );
     localparam [2:0] FETCH_REQ=0, FETCH_RSP=1, EXEC=2,
                      DATA_REQ=3, DATA_RSP=4, STOP=5;
@@ -85,10 +89,14 @@ module rv64_core (
             state<=FETCH_REQ; pc<=0; insn<=0; halted<=0; fault<=0;
             cycles<=0; instret<=0; fetch_wait<=0; data_wait<=0;
             commit_valid<=0; commit_pc<=0; commit_insn<=0;
+            commit_rd_wen<=0; commit_rd<=0; commit_wdata<=0; commit_next_pc<=0;
+            commit_mem_valid<=0; commit_mem_write<=0; commit_mem_addr<=0; commit_mem_data<=0;
             mem_addr<=0; mem_wdata<=0; mem_write<=0; mem_rd<=0;
             for (i=0; i<32; i=i+1) regs[i]<=0;
         end else begin
             commit_valid<=0;
+            commit_rd_wen<=0; commit_rd<=0; commit_wdata<=0;
+            commit_mem_valid<=0; commit_mem_write<=0; commit_mem_addr<=0; commit_mem_data<=0;
             regs[0]<=0;
             if (!halted) cycles<=cycles+1;
             case (state)
@@ -110,6 +118,10 @@ module rv64_core (
                         if (write_rd && rd!=0) regs[rd]<=result;
                         pc<=next_pc; instret<=instret+1;
                         commit_valid<=1; commit_pc<=pc; commit_insn<=insn;
+                        commit_next_pc<=next_pc;
+                        commit_rd_wen<=write_rd && rd!=0;
+                        commit_rd<=(write_rd && rd!=0) ? rd : 5'd0;
+                        commit_wdata<=(write_rd && rd!=0) ? result : 64'd0;
                         if (stop_op) begin halted<=1; state<=STOP; end
                         else state<=FETCH_REQ;
                     end
@@ -122,6 +134,13 @@ module rv64_core (
                             if (!mem_write && mem_rd!=0) regs[mem_rd]<=rsp_rdata;
                             pc<=pc+4; state<=FETCH_REQ; instret<=instret+1;
                             commit_valid<=1; commit_pc<=pc; commit_insn<=insn;
+                            commit_next_pc<=pc+4;
+                            commit_rd_wen<=!mem_write && mem_rd!=0;
+                            commit_rd<=(!mem_write && mem_rd!=0) ? mem_rd : 5'd0;
+                            commit_wdata<=(!mem_write && mem_rd!=0) ? rsp_rdata : 64'd0;
+                            commit_mem_valid<=1; commit_mem_write<=mem_write;
+                            commit_mem_addr<=mem_addr;
+                            commit_mem_data<=mem_write ? mem_wdata : rsp_rdata;
                         end
                     end else data_wait<=data_wait+1;
                 end

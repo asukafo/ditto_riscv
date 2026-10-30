@@ -8,12 +8,12 @@ PYTHON ?= python3
 PROGRAM ?= sum
 LATENCY ?= 1
 GAP ?= 0
-PROGRAMS := sum dependency pointer_chase
+PROGRAMS := sum dependency pointer_chase load_add_store
 IMAGES := $(addprefix build/,$(addsuffix .bin,$(PROGRAMS)))
 .DEFAULT_GOAL := help
-.PHONY: help sim test sweep wave diagrams lint synth timing clean tools
+.PHONY: help sim diff test sweep wave diagrams lint synth timing clean tools
 help:
-	@echo 'make sim [PROGRAM=sum|dependency|pointer_chase] [LATENCY=1] [GAP=0]'
+	@echo 'make sim / diff [PROGRAM=sum|dependency|pointer_chase|load_add_store] [LATENCY=1] [GAP=0]'
 	@echo 'make test / sweep / wave / diagrams / lint / synth / timing / tools / clean'
 build:
 	mkdir -p build
@@ -26,9 +26,12 @@ build/%.elf: sw/%.S build/pointers.bin
 build/%.bin: build/%.elf
 	$(CROSS)objcopy -O binary -j .text $< $@
 sim: build/obj_dir/Vrv64_core build/$(PROGRAM).bin
-	./build/obj_dir/Vrv64_core build/$(PROGRAM).bin $(LATENCY) build/$(PROGRAM).vcd $(GAP)
+	./build/obj_dir/Vrv64_core build/$(PROGRAM).bin $(LATENCY) build/$(PROGRAM).vcd $(GAP) build/$(PROGRAM).trace.jsonl
+diff: sim
+	$(PYTHON) scripts/reference.py --image build/$(PROGRAM).bin --trace build/$(PROGRAM).trace.jsonl --show 16
 test: build/obj_dir/Vrv64_core $(IMAGES)
 	$(PYTHON) scripts/experiments.py --test --cross '$(CROSS)'
+	$(PYTHON) scripts/test_reference.py
 sweep: build/obj_dir/Vrv64_core $(IMAGES)
 	$(PYTHON) scripts/experiments.py
 wave: sim

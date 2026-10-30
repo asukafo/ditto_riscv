@@ -13,7 +13,7 @@
 
 int main(int argc, char** argv) {
     try {
-        if (argc < 3) throw std::runtime_error("usage: sim image.bin latency [wave.vcd] [request_gap]");
+        if (argc < 3) throw std::runtime_error("usage: sim image.bin latency [wave.vcd|-] [request_gap] [trace.jsonl]");
         const int latency = std::stoi(argv[2]);
         const unsigned gap = argc > 4 ? unsigned(std::stoul(argv[4])) : 0;
         if (latency < 1 || latency > 10000 || gap > 10000) throw std::runtime_error("invalid latency/gap");
@@ -27,6 +27,12 @@ int main(int argc, char** argv) {
         context.commandArgs(argc, argv);
         context.traceEverOn(true);
         Vrv64_core top{&context};
+        std::ofstream trace;
+        const std::string trace_path=argc > 5 ? argv[5] : "";
+        if (!trace_path.empty()) {
+            trace.open(trace_path);
+            if (!trace) throw std::runtime_error("cannot open commit trace");
+        }
         std::unique_ptr<VerilatedVcdC> wave;
         if (argc > 3 && std::string(argv[3]) != "-") {
             wave = std::make_unique<VerilatedVcdC>();
@@ -61,6 +67,18 @@ int main(int argc, char** argv) {
             const uint64_t addr=top.req_addr, data=top.req_wdata;
             const bool write=top.req_write;
             evaluate(1);
+            // Sample AFTER the rising edge so this record describes this edge's commit.
+            if (trace.is_open() && top.commit_valid) {
+                trace << "{\"kind\":\"commit\",\"cycle\":" << top.cycles
+                      << ",\"pc\":" << top.commit_pc << ",\"insn\":" << top.commit_insn
+                      << ",\"next_pc\":" << top.commit_next_pc
+                      << ",\"rd_wen\":" << unsigned(top.commit_rd_wen)
+                      << ",\"rd\":" << unsigned(top.commit_rd) << ",\"wdata\":" << top.commit_wdata
+                      << ",\"mem_valid\":" << unsigned(top.commit_mem_valid)
+                      << ",\"mem_write\":" << unsigned(top.commit_mem_write)
+                      << ",\"mem_addr\":" << top.commit_mem_addr << ",\"mem_data\":" << top.commit_mem_data
+                      << "}\n";
+            }
             if (consume) pending=false;
             if (accept) {
                 if (pending) throw std::runtime_error("more than one outstanding request");
@@ -76,6 +94,16 @@ int main(int argc, char** argv) {
         }
         top.final(); if (wave) wave->close();
         if (!top.halted) throw std::runtime_error("simulation timeout");
+        if (trace.is_open()) {
+            trace << "{\"kind\":\"halt\",\"fault\":" << unsigned(top.fault)
+                  << ",\"instret\":" << top.instret << ",\"cycles\":" << top.cycles << "}\n";
+            trace.close();
+            if (!trace) throw std::runtime_error("cannot write commit trace");
+            std::ofstream snapshot(trace_path + ".ram", std::ios::binary);
+            snapshot.write(reinterpret_cast<const char*>(ram.data()), std::streamsize(ram.size()));
+            snapshot.close();
+            if (!snapshot) throw std::runtime_error("cannot write RAM snapshot");
+        }
         uint64_t result=0;
         for (unsigned j=0; j<8; ++j) result |= uint64_t(ram[0x200+j])<<(8*j);
         std::cout << "{\"cycles\":" << top.cycles << ",\"instret\":" << top.instret
