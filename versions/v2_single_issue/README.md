@@ -69,5 +69,5 @@ issue_count、bypass_count（发射时选用前递的指令数）和 flush_count
 涉及 time/中断的测试会因执行速度不同而执行不同次数的等待循环，应比较架构结果与各自参考模型。
 
 构建输出位于本目录 `build/`；永久测试和性能记录放在 `results/<run-id>/`。
-从仓库根目录执行 `python3 versions/benchmark.py` 会生成新的时间戳目录，不覆盖历史记录。
+从仓库根目录执行 `python3 tools/benchmark.py` 会生成新的时间戳目录，不覆盖历史记录。
 时序与面积是同一研究用库下的布局前估计，不能直接作为实际硬件指标。

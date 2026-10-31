@@ -6,14 +6,14 @@
 | [v2_single_issue](v2_single_issue/README.md) | F / X / W 单发射顺序流水线 | 当前开发与实验 |
 
 每版有独立的 rtl、sim、sw、scripts、Makefile、build 和 results。
-仓库根目录的原始 RTL、测试与构建入口继续保留。后续新架构使用新目录，旧架构不随之修改。
+仓库根目录的 Makefile 默认转发至 v2；用 VERSION=v1_multicycle 选择基线。后续新架构使用新目录，旧架构不随之修改。
 公共比较脚本只负责运行实验，不在不同版本之间共用会变化的 RTL。
 
 ```sh
 # 仓库根目录，分别构建两版、同约束综合和逐条参考校验
-python3 versions/benchmark.py
+python3 tools/benchmark.py
 # 指定名称，已存在时明确失败，不覆盖结果
-python3 versions/benchmark.py --run-id my-experiment
+python3 tools/benchmark.py --run-id my-experiment
 ```
 
 比较 9 个程序，在 (latency,gap)=(1,0)、(5,0)、(5,3) 下各跑一次，每版 27 次。
@@ -21,12 +21,12 @@ python3 versions/benchmark.py --run-id my-experiment
 脚本检查两版二进制 SHA-256 一致、退休指令数一致，且逐条提交和最终内存通过独立参考模型。
 
 每版的 `results/<run-id>/` 保存性能 CSV、RTL/程序哈希、工具版本、时序报告及构建摘要。
-合并表保存在 `versions/results/<run-id>/comparison.csv`。
+合并表保存在 `results/comparisons/<run-id>/comparison.csv`。
 最小周期 × 总周期得到的 estimated_time_ns 是模型推算，实际芯片仍需布局布线和硬件验证。
 
 ## 第一版流水线的实际结果
 
-当前最终记录是 [20261031T055411878848Z](results/20261031T055411878848Z/comparison.csv)。
+当前最终记录是 [20261031T055411878848Z](../results/comparisons/20261031T055411878848Z/comparison.csv)。
 以下为延迟 1、无背压时的总周期数；两版退休指令数相同：
 
 | 程序 | v1 多周期 | v2 单发射 | 周期数比值 v1/v2 |
@@ -46,8 +46,8 @@ python3 versions/benchmark.py --run-id my-experiment
 这些结果说明第一版流水线已经能重叠执行，但进一步提速需要改善供指、分支处理及存储访问，
 不能只凭“用了流水线”宣称所有程序更快。
 
-中间实验 [20261031T054659297887Z](results/20261031T054659297887Z/comparison.csv)
-和 [20261031T055205935167Z](results/20261031T055205935167Z/comparison.csv) 也保留。
+中间实验 [20261031T054659297887Z](../results/comparisons/20261031T054659297887Z/comparison.csv)
+和 [20261031T055205935167Z](../results/comparisons/20261031T055205935167Z/comparison.csv) 也保留。
 第一轮统计只覆盖部分阶段重叠；第二轮完整统计的组合条件将关键路径拉长到 4.87 ns。
 最终版本直接读取各级寄存的有效/在途状态，恢复至约 4.33 ns。
 各轮 manifest 中记录的 RTL 哈希可以区分这些测量，不能把不同轮的面积/周期估计混用。

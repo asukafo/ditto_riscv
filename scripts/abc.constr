@@ -1,5 +1,0 @@
-# Nangate45 exploratory boundary assumptions. Load is in fF for ABC.
-# Supplying -constr enables ABC buffer insertion and cell sizing.
-# Override ABC_OPTIONS when using another library/environment.
-set_driving_cell BUF_X1
-set_load 0.01

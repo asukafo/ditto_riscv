@@ -1,3 +1,4 @@
 # Preserve historical CSV line endings and the exact archived ALU source bytes.
 versions/**/*.csv whitespace=cr-at-eol
+results/**/*.csv whitespace=cr-at-eol
 versions/**/rtl/rv64_alu.sv whitespace=-blank-at-eol

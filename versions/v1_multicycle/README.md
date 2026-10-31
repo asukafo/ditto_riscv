@@ -12,5 +12,5 @@ make diff PROGRAM=full_demo
 ```
 
 所有构建文件位于本目录的 `build/`。永久性能记录位于 `results/<run-id>/`，
-同一 run-id 不允许再次写入。跨版本比较从仓库根目录执行 `python3 versions/benchmark.py`。
+同一 run-id 不允许再次写入。跨版本比较从仓库根目录执行 `python3 tools/benchmark.py`。
 实验使用的标准单元库在本机外部安装目录，路径可用 LIB 覆盖。

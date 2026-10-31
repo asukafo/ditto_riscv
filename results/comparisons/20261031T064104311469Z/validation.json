@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "kind": "repository_layout_validation",
+  "commands": [
+    "make check",
+    "make lint test",
+    "make lint test-full VERSION=v1_multicycle",
+    "make diff PROGRAM=full_demo LATENCY=5 GAP=3",
+    "make diff VERSION=v1_multicycle PROGRAM=full_demo LATENCY=5 GAP=3",
+    "make compare"
+  ],
+  "frozen_v1_files": 38,
+  "historical_archives_preserved_byte_for_byte": true,
+  "version_implementation_files_unchanged": true,
+  "benchmark_rows_identical_to_previous_run": 54,
+  "previous_run": "20261031T055411878848Z",
+  "previous_comparison_sha256": "65b4a8989b44af7874025dadafd2d8d047890ad4baa6a23579cb51a4f6ea5243",
+  "local_links_checked": 68,
+  "existing_run_id_rejected": true,
+  "unknown_version_rejected": true
+}
