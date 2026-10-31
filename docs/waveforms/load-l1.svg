@@ -51,16 +51,16 @@
 <text x="12" y="253" class="signal">req_ready</text>
 <path d="M 155.00 240 H 227.00 V 261 H 299.00 V 240 H 443.00 V 261 H 515.00 V 240 H 587.00 V 261 H 659.00 V 240 H 731.00 V 240" fill="none" stroke="#b45309" stroke-width="1.8"/>
 <text x="12" y="287" class="signal">req_addr</text>
-<path d="M 158.0 274 H 188.0 L 191.0 284 L 188.0 295 H 158.0 L 155.0 284 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
-<text x="173.0" y="289" text-anchor="middle" class="signal">0xc</text>
-<path d="M 194.0 274 H 332.0 L 335.0 284 L 332.0 295 H 194.0 L 191.0 284 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
-<text x="263.0" y="289" text-anchor="middle" class="signal">0x0</text>
+<path d="M 158.0 274 H 260.0 L 263.0 284 L 260.0 295 H 158.0 L 155.0 284 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="209.0" y="289" text-anchor="middle" class="signal">0xc</text>
+<path d="M 266.0 274 H 332.0 L 335.0 284 L 332.0 295 H 266.0 L 263.0 284 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="299.0" y="289" text-anchor="middle" class="signal">0x0</text>
 <path d="M 338.0 274 H 476.0 L 479.0 284 L 476.0 295 H 338.0 L 335.0 284 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
 <text x="407.0" y="289" text-anchor="middle" class="signal">0x1000</text>
-<path d="M 482.0 274 H 548.0 L 551.0 284 L 548.0 295 H 482.0 L 479.0 284 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
-<text x="515.0" y="289" text-anchor="middle" class="signal">0x10</text>
-<path d="M 554.0 274 H 692.0 L 695.0 284 L 692.0 295 H 554.0 L 551.0 284 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
-<text x="623.0" y="289" text-anchor="middle" class="signal">0x1000</text>
+<path d="M 482.0 274 H 620.0 L 623.0 284 L 620.0 295 H 482.0 L 479.0 284 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="551.0" y="289" text-anchor="middle" class="signal">0x10</text>
+<path d="M 626.0 274 H 692.0 L 695.0 284 L 692.0 295 H 626.0 L 623.0 284 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
+<text x="659.0" y="289" text-anchor="middle" class="signal">0x1000</text>
 <path d="M 698.0 274 H 728.0 L 731.0 284 L 728.0 295 H 698.0 L 695.0 284 Z" fill="#f5f8fc" stroke="#a7b6c8"/>
 <text x="12" y="321" class="signal">rsp_valid</text>
 <path d="M 155.00 329 H 227.00 V 308 H 299.00 V 329 H 443.00 V 308 H 515.00 V 329 H 587.00 V 308 H 659.00 V 329 H 731.00 V 329" fill="none" stroke="#087f75" stroke-width="1.8"/>

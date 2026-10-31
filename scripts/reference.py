@@ -32,6 +32,17 @@ class Reference:
         self.pc = 0
         self.stopped = False
         self.exit_status = 0
+        self.pc_alignment = 4
+
+    def fetch(self):
+        instruction=self.read(self.pc,4,fetch=True)
+        return instruction,instruction,4
+
+    def write_memory(self,address,data,size):
+        self.ram[address:address+size]=data.to_bytes(size,"little")
+
+    def is_exit_address(self,address):
+        return address==0xfff0
 
     def read(self, address, size=8, store=False, fetch=False):
         if not 0 <= address <= len(self.ram) - size:
@@ -42,16 +53,16 @@ class Reference:
         if self.stopped:
             raise ValueError("extra commit after simulation exit")
         pc = self.pc
-        instruction = self.read(pc, 4, fetch=True)
+        instruction,raw_instruction,instruction_bytes = self.fetch()
         opcode = instruction & 127
         destination = (instruction >> 7) & 31
         function = (instruction >> 12) & 7
         source1 = self.regs[(instruction >> 15) & 31]
         source2 = self.regs[(instruction >> 20) & 31]
         upper = instruction >> 25
-        following = (pc + 4) & MASK
+        following = (pc + instruction_bytes) & MASK
         event = dict.fromkeys(FIELDS, 0)
-        event.update(pc=pc, insn=instruction)
+        event.update(pc=pc, insn=raw_instruction)
         result = None
         address = None
         store = False
@@ -119,11 +130,11 @@ class Reference:
             offset = (((instruction >> 31) << 20) | (((instruction >> 12) & 255) << 12)
                       | (((instruction >> 20) & 1) << 11) | (((instruction >> 21) & 1023) << 1))
             following = (pc + signed(offset, 21)) & MASK
-            result = pc + 4
+            result = pc + instruction_bytes
             name = "jal"
         elif opcode == 0x67 and function == 0:
             following = ((source1 + signed(instruction >> 20, 12)) & MASK) & ~1
-            result, name = pc + 4, "jalr"
+            result, name = pc + instruction_bytes, "jalr"
         elif opcode == 0x63 and function in (0, 1, 4, 5, 6, 7):
             predicates = {0: source1 == source2, 1: source1 != source2,
                           4: signed(source1, 64) < signed(source2, 64),
@@ -147,7 +158,7 @@ class Reference:
         else:
             raise Fault(1, 2, pc, instruction)
         # No register/PC/memory side effects before validation succeeds.
-        if following % 4:
+        if following % self.pc_alignment:
             raise Fault(2, 0, pc, following)
         if address is not None and address % size:
             raise Fault(2, 6 if store else 4, pc, address)
@@ -156,8 +167,8 @@ class Reference:
             data = source2 & ((1 << (size * 8)) - 1) if store else old
             event.update(mem_valid=1, mem_write=int(store), mem_addr=address, mem_data=data, mem_size=size.bit_length()-1)
             if store:
-                self.ram[address:address + size] = data.to_bytes(size, "little")
-                if address == 0xfff0 and size == 8:
+                self.write_memory(address,data,size)
+                if self.is_exit_address(address) and size == 8:
                     stop = True
                     self.exit_status = data
             else:
@@ -173,6 +184,9 @@ class Reference:
 
 
 def verify(image, records, memory, show=0):
+    if records and records[0].get("kind")=="config" and records[0].get("extended"):
+        from full_reference import verify_full
+        return verify_full(image,records,memory,show)
     model = Reference(image)
     commits = 0
     last_cycle = 0

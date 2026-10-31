@@ -1,5 +1,9 @@
 # M0 实验说明
 
+本页的精确周期表对应 `make test-base/sweep/diagrams` 使用的 RV64I 兼容配置。
+默认 `make sim/diff` 已启用模块化 RV64IMAC 和特权系统，C 指令取指、M 运算和 MMU 会改变周期数；
+不能直接与本页公式混用，详见 [默认配置](modular-core.md)。
+
 配套阅读：[架构设计与真实波形逐周期讲解](design-walkthrough.md)。
 
 ## 可重复运行

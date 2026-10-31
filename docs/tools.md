@@ -32,10 +32,13 @@
 并区分“工具成功生成报告”和“设计满足时序约束”。
 
 ```text
-rtl/rv64_core.sv       可综合单核、状态机、寄存器堆、计数器
+rtl/rv64_core.sv       顶层连接、取指状态与提交控制
+rtl/rv64_*.sv          独立译码、ALU、寄存器堆、乘除、LSU、原子、CSR、压缩、MMU
 sim/main.cpp          时钟、复位、事务主存、超时与波形
 sw/*.S                五个汇编示例及 C 启动代码
 sw/c_demo.c           含栈、间接调用和混合宽度数据的裸机 C 示例
+sw/full_demo.c        M/A/C/CSR 的原生 C 示例，预期 949
+sw/machine_demo.S     软件处理三次异常并 MRET 返回，预期 3
 sw/link.ld            启动/正文/数据/BSS/栈布局
 sw/finish.inc         仿真退出邮箱宏
 scripts/pointers.py   可重复的指针数据
@@ -44,7 +47,15 @@ scripts/reference.py  独立指令语义、逐条提交和完整内存对照
 scripts/test_reference.py 检查器的正常与故意损坏输入测试
 scripts/alu_tests.py   汇编编码的 ALU 边界/随机/别名向量与单独数学结果检查
 scripts/rv64i_tests.py 52 条指令覆盖、W/访存/控制/异常与 C 集成回归
+scripts/full_reference.py 原生压缩、M/A、CSR、M/S/U、IRQ 与 Sv39 独立语义模型
+scripts/extension_tests.py M/A/C/CSR 和扩展 C 程序回归
+scripts/privileged_tests.py 特权、异常/中断、页表/权限/跨页和 Svade 重试回归
+scripts/test_full_reference.py 扩展检查器的故意损坏输入测试
 scripts/timing.tcl    OpenSTA 时序约束和报告
 docs/                 架构、实验方法、工具说明
 build/                自动生成，不提交 Git
 ```
+
+默认可执行文件为 build/full_obj/Vrv64_core；build/obj_dir/Vrv64_core 保留原 RV64I 配置。
+make synth/timing 综合默认扩展配置，需对真实内存互连正确实现 bus_lock、req_store_check 和保留失效输入。
+当前默认配置已重新综合与映射，结构检查为零问题；布局前时钟周期估计约 19.64 ns，仍未达到 10 ns。

@@ -35,7 +35,10 @@ def read_vcd(path):
                 value = int(value, 2) if not any(c in value for c in "xz") else None
                 if not traces[code] or traces[code][-1][1] != value:
                     traces[code].append((stamp, value))
-    return {name: traces[code] for name, code in names.items()}
+    result={name: traces[code] for name, code in names.items()}
+    if "regs[28]" not in result and "debug_t3" in result:
+        result["regs[28]"]=result["debug_t3"]
+    return result
 
 
 def value_at(trace, time, before=False):
