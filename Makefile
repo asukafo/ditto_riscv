@@ -8,12 +8,12 @@ PYTHON ?= python3
 PROGRAM ?= sum
 LATENCY ?= 1
 GAP ?= 0
-PROGRAMS := sum dependency pointer_chase load_add_store
+PROGRAMS := sum dependency pointer_chase load_add_store bit_ops
 IMAGES := $(addprefix build/,$(addsuffix .bin,$(PROGRAMS)))
 .DEFAULT_GOAL := help
-.PHONY: help sim diff test sweep wave diagrams lint synth timing clean tools
+.PHONY: help sim diff test test-alu sweep wave diagrams lint synth timing clean tools
 help:
-	@echo 'make sim / diff [PROGRAM=sum|dependency|pointer_chase|load_add_store] [LATENCY=1] [GAP=0]'
+	@echo 'make sim / diff [PROGRAM=sum|dependency|pointer_chase|load_add_store|bit_ops] [LATENCY=1] [GAP=0]'
 	@echo 'make test / sweep / wave / diagrams / lint / synth / timing / tools / clean'
 build:
 	mkdir -p build
@@ -32,6 +32,9 @@ diff: sim
 test: build/obj_dir/Vrv64_core $(IMAGES)
 	$(PYTHON) scripts/experiments.py --test --cross '$(CROSS)'
 	$(PYTHON) scripts/test_reference.py
+	$(PYTHON) scripts/alu_tests.py --cross '$(CROSS)'
+test-alu: build/obj_dir/Vrv64_core
+	$(PYTHON) scripts/alu_tests.py --cross '$(CROSS)'
 sweep: build/obj_dir/Vrv64_core $(IMAGES)
 	$(PYTHON) scripts/experiments.py
 wave: sim

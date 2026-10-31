@@ -12,6 +12,8 @@ make tools
 make lint
 make test
 make diff PROGRAM=load_add_store LATENCY=5 GAP=3
+make diff PROGRAM=bit_ops
+make test-alu
 make sim PROGRAM=sum LATENCY=5
 make wave PROGRAM=sum LATENCY=5
 make sweep
@@ -22,7 +24,8 @@ make timing
 
 `make sim` 生成 VCD、`build/<program>.trace.jsonl` 提交记录及其 `.ram` 内存快照，并输出 JSON 统计。
 `make diff` 进一步独立执行同一个程序，逐条核对提交和最终内存，显示前 16 条记录。
-`make test` 自动完成 50 次仿真对照和 12 项检查器测试；`make sweep` 生成 `build/results.csv`。
+`make test` 自动完成 67 次基础仿真对照、12 项检查器测试，以及 876 组 ALU 向量在 5 种时序配置下的检查。
+`make test-alu` 可单独运行 ALU 向量测试；`make sweep` 生成 `build/results.csv`。
 `make timing` 默认使用之前安装的 Nangate45 typical 库；可覆盖 `LIB=/path/to/library.lib CLOCK_NS=10`。
 `CROSS` 可覆盖交叉工具前缀，例如 Linux 上用 `CROSS=riscv64-unknown-elf-`。
 
@@ -32,14 +35,17 @@ make timing
 | 寄存器依赖链 | `PROGRAM=dependency` | 128 |
 | 打乱地址的指针追踪 | `PROGRAM=pointer_chase` | 2016 |
 | 读、加法、写回、循环分支 | `PROGRAM=load_add_store` | 14 |
+| 位运算、移位与比较 | `PROGRAM=bit_ops` | `0x7ffffffffffffffc` |
 
-当前只是 RV64 整数指令子集：ADDI、ADD、SUB、LUI、JAL、六种条件分支、LD、SD。
+当前支持 RV64 的 19 条 OP/OP-IMM 整数计算指令（加减、位运算、移位、比较），以及 LUI、JAL、六种条件分支、LD、SD。
+完整列表与语义见 [ALU 扩展实验](docs/integer-alu.md)。
 `EBREAK` 暂作仿真结束标记；未实现完整异常处理和特权架构，不宣称符合 RV64I。
 不支持 C/M/A、CSR、MMU、缓存、流水线重叠或多核，也还不能运行通用 C 程序或 Linux。
 
 - [当前结构、接口与目标架构](docs/architecture.md)
 - [架构设计与真实波形逐周期讲解](docs/design-walkthrough.md)
 - [逐条提交跟踪与参考模型验证](docs/commit-trace.md)
+- [整数位运算、移位与比较实验](docs/integer-alu.md)
 - [实验方法、实际结果与波形阅读](docs/experiments.md)
 - [工具和工程目录](docs/tools.md)
 

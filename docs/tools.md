@@ -34,11 +34,12 @@
 ```text
 rtl/rv64_core.sv       可综合单核、状态机、寄存器堆、计数器
 sim/main.cpp          时钟、复位、事务主存、超时与波形
-sw/*.S                四个独立裸机汇编实验
+sw/*.S                五个独立裸机汇编实验
 scripts/pointers.py   可重复的指针数据
 scripts/experiments.py 结果、反压、错误路径与性能回归
 scripts/reference.py  独立指令语义、逐条提交和完整内存对照
 scripts/test_reference.py 检查器的正常与故意损坏输入测试
+scripts/alu_tests.py   汇编编码的 ALU 边界/随机/别名向量与单独数学结果检查
 scripts/timing.tcl    OpenSTA 时序约束和报告
 docs/                 架构、实验方法、工具说明
 build/                自动生成，不提交 Git

@@ -50,13 +50,48 @@ module rv64_core (
         legal=1; write_rd=0; memory_op=0; stop_op=0; branch_taken=0;
         result=0; next_pc=pc+64'd4;
         case (insn[6:0])
-            7'h13: begin // ADDI
-                legal = insn[14:12] == 3'b000;
-                write_rd=1; result=a+imm_i;
+            7'h13: begin // RV64 OP-IMM: shift amount is six bits, not five.
+                write_rd=1;
+                case (insn[14:12])
+                    3'b000: result=a+imm_i;
+                    3'b010: result=($signed(a)<$signed(imm_i)) ? 64'd1 : 64'd0;
+                    3'b011: result=(a<imm_i) ? 64'd1 : 64'd0;
+                    3'b100: result=a^imm_i;
+                    3'b110: result=a|imm_i;
+                    3'b111: result=a&imm_i;
+                    3'b001: begin
+                        legal=insn[31:26]==6'b000000;
+                        result=a<<insn[25:20];
+                    end
+                    3'b101: begin
+                        legal=insn[31:26]==6'b000000 || insn[31:26]==6'b010000;
+                        if (insn[30]) result=$signed(a)>>>insn[25:20];
+                        else result=a>>insn[25:20];
+                    end
+                    default: legal=0;
+                endcase
             end
-            7'h33: begin // ADD / SUB
-                legal = insn[14:12] == 0 && (insn[31:25] == 0 || insn[31:25] == 7'h20);
-                write_rd=1; result=insn[30] ? a-b : a+b;
+            7'h33: begin // RV64 OP: only rs2[5:0] is used as a shift amount.
+                write_rd=1;
+                legal=insn[31:25]==0;
+                case (insn[14:12])
+                    3'b000: begin
+                        legal=insn[31:25]==0 || insn[31:25]==7'h20;
+                        result=insn[30] ? a-b : a+b;
+                    end
+                    3'b001: result=a<<b[5:0];
+                    3'b010: result=($signed(a)<$signed(b)) ? 64'd1 : 64'd0;
+                    3'b011: result=(a<b) ? 64'd1 : 64'd0;
+                    3'b100: result=a^b;
+                    3'b101: begin
+                        legal=insn[31:25]==0 || insn[31:25]==7'h20;
+                        if (insn[30]) result=$signed(a)>>>b[5:0];
+                        else result=a>>b[5:0];
+                    end
+                    3'b110: result=a|b;
+                    3'b111: result=a&b;
+                    default: legal=0;
+                endcase
             end
             7'h37: begin // LUI, sign extended to XLEN
                 write_rd=1; result={{32{insn[31]}}, insn[31:12], 12'b0};

@@ -31,7 +31,8 @@ def run(name, latency, gap=0, fault=0, expected=None):
 
 rows = []
 for name, result, retired in [("sum", 2080, 325), ("dependency", 128, 260),
-                              ("pointer_chase", 2016, 325), ("load_add_store", 14, 30)]:
+                              ("pointer_chase", 2016, 325), ("load_add_store", 14, 30),
+                              ("bit_ops", 0x7ffffffffffffffc, 20)]:
     baseline = None
     for latency in [1, 5, 20]:
         stats = run(name, latency, expected=result)
@@ -90,7 +91,7 @@ if args.test:
         """, 0, 56),
         "lui_sign": ("lui t0, 0xfffff\nsd t0, 512(zero)\nebreak", 0, (1 << 64) - 4096),
         "illegal": (".word 0xffffffff", 1, 0),
-        "illegal_addi": (".word 0x00101093", 1, 0),  # SLLI is outside subset
+        "illegal_shift_imm": (".word 0x04001093", 1, 0),  # invalid SLLI upper six bits
         "misaligned_load": ("ld t0, 1(zero)", 2, 0),
         "misaligned_store": ("sd zero, 1(zero)", 2, 0),
         "misaligned_jump": (".word 0x0020006f", 2, 0),
@@ -100,6 +101,12 @@ if args.test:
         "wraparound": ("addi t0, zero, -1\naddi t0, t0, 1\nsd t0, 512(zero)\nebreak", 0, 0),
         "bad_branch": (".word 0x00002063", 1, 0),
         "bad_load": (".word 0x00002283", 1, 0),
+        "bad_srli": (".word 0x04005093", 1, 0),
+        "bad_srai": (".word 0x44005093", 1, 0),
+        "bad_slli_high": (".word 0x40001093", 1, 0),
+        "unsupported_mul": (".word 0x026283b3", 1, 0),
+        "bad_and": (".word 0x4062f3b3", 1, 0),
+        "unsupported_addiw": (".word 0x0012829b", 1, 0),
     }
     for name, (body, fault, expected) in cases.items():
         source = Path(f"build/{name}.S")

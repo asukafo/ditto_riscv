@@ -55,12 +55,41 @@ class Reference:
         address = None
         store = False
         stop = False
-        if opcode == 0x13 and function == 0:
-            result = source1 + signed(instruction >> 20, 12)
-            name = "addi"
-        elif opcode == 0x33 and function == 0 and upper in (0, 32):
-            result = source1 + source2 if upper == 0 else source1 - source2
-            name = "add" if upper == 0 else "sub"
+        if opcode == 0x13:
+            immediate = signed(instruction >> 20, 12)
+            amount = (instruction >> 20) % 64
+            if function == 1 and instruction >> 26 == 0:
+                result, name = source1 << amount, "slli"
+            elif function == 5 and instruction >> 26 in (0, 16):
+                arithmetic = instruction >> 26 == 16
+                result = (signed(source1, 64) if arithmetic else source1) >> amount
+                name = "srai" if arithmetic else "srli"
+            elif function in (0, 2, 3, 4, 6, 7):
+                operations = {0: (source1 + immediate, "addi"),
+                              2: (int(signed(source1, 64) < immediate), "slti"),
+                              3: (int(source1 < (immediate & MASK)), "sltiu"),
+                              4: (source1 ^ immediate, "xori"),
+                              6: (source1 | immediate, "ori"),
+                              7: (source1 & immediate, "andi")}
+                result, name = operations[function]
+            else:
+                raise Fault(1)
+        elif opcode == 0x33:
+            if upper == 32 and function in (0, 5):
+                result, name = ((source1 - source2, "sub") if function == 0 else
+                                (signed(source1, 64) >> (source2 % 64), "sra"))
+            elif upper == 0:
+                operations = {0: (source1 + source2, "add"),
+                              1: (source1 << (source2 % 64), "sll"),
+                              2: (int(signed(source1, 64) < signed(source2, 64)), "slt"),
+                              3: (int(source1 < source2), "sltu"),
+                              4: (source1 ^ source2, "xor"),
+                              5: (source1 >> (source2 % 64), "srl"),
+                              6: (source1 | source2, "or"),
+                              7: (source1 & source2, "and")}
+                result, name = operations[function]
+            else:
+                raise Fault(1)
         elif opcode == 0x37:
             result = signed(instruction & 0xfffff000, 32)
             name = "lui"
