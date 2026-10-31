@@ -18,7 +18,8 @@
 `make synth` 执行 Yosys 通用综合、`check -assert` 并导出 `build/core_netlist.v`。
 `make timing` 额外执行标准单元映射，生成 `build/core_mapped.v`、`mapping.log` 与 `timing.log`。
 时钟默认 10 ns，输入/输出延迟假设 1 ns，输入 transition 为 0.1、输出 load 为 0.01，单位依赖库。
-目前使用 Nangate45 typical 时分别为 ns 和 pF；换库必须重新审视约束。
+目前使用 Nangate45 typical 时分别为 ns 和 fF；因此 set_load 0.01 是 0.01 fF，并非 0.01 pF。
+这些 I/O 数值只是初始假设，换库或确定实际接口后必须重新审视约束。
 
 这只是布局前探索：没有实际布线寄生、时钟树、PVT 多角分析或 SRAM 宏映射。
 寄存器堆和调试计数器也计入综合。不能把结果当作真实芯片最高频率、面积或功耗签核。
