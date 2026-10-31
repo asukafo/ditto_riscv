@@ -9,7 +9,7 @@ set_input_transition 0.1 $inputs
 set_output_delay 1 -clock core_clk [all_outputs]
 set_load 0.01 [all_outputs]
 check_setup -verbose
-report_checks -path_delay max -group_path_count 5
+report_checks -path_delay max -group_path_count 5 -fields {slew cap fanout} -digits 4
 report_checks -path_delay min -group_path_count 5
 report_clock_min_period
 exit

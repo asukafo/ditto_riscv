@@ -17,6 +17,9 @@
 
 `make synth` 执行 Yosys 通用综合、`check -assert` 并导出 `build/core_netlist.v`。
 `make timing` 额外执行标准单元映射，生成 `build/core_mapped.v`、`mapping.log` 与 `timing.log`。
+ABC 通过 `-constr scripts/abc.constr` 开启缓冲与驱动尺寸优化，默认驱动单元为 BUF_X1。
+换工艺库时还应通过 `ABC_OPTIONS='-constr /path/to/abc.constr'` 指定匹配的单元和负载；
+`ABC_OPTIONS=` 可复现未开启该优化的映射流程。OpenSTA 的接口约束另在 scripts/timing.tcl 中维护。
 时钟默认 10 ns，输入/输出延迟假设 1 ns，输入 transition 为 0.1、输出 load 为 0.01，单位依赖库。
 目前使用 Nangate45 typical 时分别为 ns 和 fF；因此 set_load 0.01 是 0.01 fF，并非 0.01 pF。
 这些 I/O 数值只是初始假设，换库或确定实际接口后必须重新审视约束。
@@ -31,6 +34,8 @@
 这表明当前多周期教学 RTL 还需要时序优化；该数字仅对应此映射和约束，不能作为硅片频率承诺。
 特别是高扇出控制网络还没有经过物理优化。后续应比较流水线划分、扇出与关键路径，
 并区分“工具成功生成报告”和“设计满足时序约束”。
+当前已加入逻辑映射阶段的缓冲与尺寸优化，仍未进行实际物理优化。
+默认扩展核本轮估计为 4.32 ns，具体对照见 [时序优化实验](timing-optimization.md)。
 
 ```text
 rtl/rv64_core.sv       顶层连接、取指状态与提交控制

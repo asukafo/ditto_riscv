@@ -1,6 +1,7 @@
-# 当前时序估计从哪里来
+# 时序估计从哪里来：19.64 ns 基线
 
-19.64 ns 来自 Yosys 标准单元映射后的 OpenSTA 静态时序分析，不是 Verilator 运行程序测出的延迟。
+19.64 ns 是启用 ABC 缓冲/尺寸优化之前的历史基线，来自 Yosys 标准单元映射后的 OpenSTA 静态时序分析，不是 Verilator 运行程序测出的延迟。
+本轮默认流程已经改善到约 4.32 ns，见 [对照实验](timing-optimization.md)。下文保留原始数字用于讲解计算过程。
 程序仿真回答用了多少周期，STA 回答当前网表与约束下一个周期至少需要多长。
 
 ## 实际执行流程
@@ -66,7 +67,8 @@ core_clk period_min = 19.64, fmax = 50.91
 核采用多周期状态机，也不意味着可以任意把组合路径标记为 multicycle。
 只有实际设计允许跨多个时钟采样的路径，才有依据设置相应例外。
 
-重现命令：make timing，随后查看 build/timing.log。
+重现原始映射命令：`make timing ABC_OPTIONS=`，随后查看 build/timing.log。
+重现优化后的默认流程：`make timing`。
 
 ## 参考
 

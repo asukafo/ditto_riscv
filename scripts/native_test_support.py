@@ -1,5 +1,6 @@
 """Shared driver for actual native RTL simulation and independent reference checks."""
 import json
+import os
 from pathlib import Path
 import subprocess
 from reference import verify_files
@@ -8,6 +9,7 @@ from reference import verify_files
 class NativeSuite:
     def __init__(self,cross="riscv64-elf-"):
         self.cross=cross; self.runs=0; self.commits=0; self.traps=0
+        self.simulator=os.environ.get("SIMULATOR","build/full_obj/Vrv64_core")
 
     def compile(self,name,body,data="",compressed=False):
         mode="rvc" if compressed else "norvc"
@@ -24,7 +26,7 @@ class NativeSuite:
             if events:
                 event_file=f"build/{name}.irq.txt"
                 Path(event_file).write_text("\n".join(f"{cycle} {mask:#x}" for cycle,mask in events)+"\n")
-            process=subprocess.run(["build/full_obj/Vrv64_core",f"build/{name}.bin",str(latency),"-",str(gap),trace,event_file],capture_output=True,text=True)
+            process=subprocess.run([self.simulator,f"build/{name}.bin",str(latency),"-",str(gap),trace,event_file],capture_output=True,text=True)
             assert process.returncode==0,(name,latency,gap,process.stdout,process.stderr)
             count=verify_files(f"build/{name}.bin",trace)
             records=[json.loads(line) for line in Path(trace).read_text().splitlines()]

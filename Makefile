@@ -3,6 +3,7 @@ YOSYS ?= yosys
 STA ?= sta
 LIB ?= $(HOME)/.local/opt/opensta/share/lib/NangateOpenCellLibrary_typical.lib
 CLOCK_NS ?= 10
+ABC_OPTIONS ?= -constr scripts/abc.constr
 CROSS ?= riscv64-elf-
 PYTHON ?= python3
 PROGRAM ?= sum
@@ -13,10 +14,10 @@ IMAGES := $(addprefix build/,$(addsuffix .bin,$(PROGRAMS)))
 RTL := $(sort $(wildcard rtl/*.sv))
 SIMULATOR ?= build/full_obj/Vrv64_core
 .DEFAULT_GOAL := help
-.PHONY: help sim diff test test-base test-full test-alu test-rv64i sweep wave diagrams lint synth timing clean tools
+.PHONY: help sim diff test test-base test-full test-mapped test-alu test-rv64i sweep wave diagrams lint synth timing clean tools
 help:
 	@echo 'make sim / diff [PROGRAM=sum|c_demo|full_demo|machine_demo|...] [LATENCY=1] [GAP=0]'
-	@echo 'make test / test-base / test-full / test-alu / test-rv64i / sweep / wave / diagrams / lint / synth / timing / tools / clean'
+	@echo 'make test / test-base / test-full / test-mapped / test-alu / test-rv64i / sweep / wave / diagrams / lint / synth / timing / tools / clean'
 build:
 	mkdir -p build
 build/obj_dir/Vrv64_core: $(RTL) sim/main.cpp | build
@@ -62,6 +63,14 @@ test-full: build/full_obj/Vrv64_core build/full_demo.bin build/full_demo_o0.bin 
 	$(PYTHON) scripts/extension_tests.py --cross '$(CROSS)'
 	$(PYTHON) scripts/privileged_tests.py --cross '$(CROSS)'
 	$(PYTHON) scripts/test_full_reference.py
+# Functional gate simulation: Liberty supplies Boolean/FF models, not SDF delays.
+# Always remap so this target cannot silently simulate a stale netlist.
+test-mapped: timing build/full_demo.bin build/full_demo_o0.bin build/machine_demo.bin
+	$(YOSYS) -Q -T -p 'read_liberty -ignore_miss_func "$(LIB)"; proc; opt; write_verilog -noattr build/cell_models.v' > build/cell_models.log
+	$(VERILATOR) --cc --exe --build --trace --top-module rv64_core --Mdir build/mapped_obj -CFLAGS '-std=c++17' build/core_mapped.v build/cell_models.v $(abspath sim/main.cpp)
+	SIMULATOR=build/mapped_obj/Vrv64_core $(PYTHON) scripts/extension_tests.py --cross '$(CROSS)'
+	SIMULATOR=build/mapped_obj/Vrv64_core $(PYTHON) scripts/privileged_tests.py --cross '$(CROSS)'
+	$(PYTHON) scripts/test_full_reference.py
 test-alu: build/obj_dir/Vrv64_core
 	$(PYTHON) scripts/alu_tests.py --cross '$(CROSS)'
 test-rv64i: test-alu build/c_demo.bin build/c_demo_o0.bin
@@ -81,7 +90,7 @@ synth: | build
 	$(YOSYS) -Q -T -p 'read_verilog -sv $(RTL); synth -top rv64_core; check -assert; stat; write_verilog -noattr build/core_netlist.v' > build/synthesis.log
 timing: | build
 	test -f "$(LIB)"
-	$(YOSYS) -Q -T -p 'read_verilog -sv $(RTL); synth -top rv64_core; dfflibmap -liberty "$(LIB)"; abc -liberty "$(LIB)"; read_liberty -lib "$(LIB)"; clean; check -assert; stat -liberty "$(LIB)"; write_verilog -noattr -noexpr build/core_mapped.v' > build/mapping.log
+	$(YOSYS) -Q -T -p 'read_verilog -sv $(RTL); synth -top rv64_core; dfflibmap -liberty "$(LIB)"; abc -liberty "$(LIB)" $(ABC_OPTIONS); read_liberty -lib "$(LIB)"; clean; check -assert; stat -liberty "$(LIB)"; write_verilog -noattr -noexpr build/core_mapped.v' > build/mapping.log
 	LIB="$(LIB)" CLOCK_NS="$(CLOCK_NS)" $(STA) -exit scripts/timing.tcl > build/timing.log
 tools:
 	$(VERILATOR) --version

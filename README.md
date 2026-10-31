@@ -27,6 +27,7 @@ make sweep
 make diagrams
 make synth
 make timing
+make test-mapped
 ```
 
 `make sim` 生成 VCD、`build/<program>.trace.jsonl` 提交记录及其 `.ram` 内存快照，并输出 JSON 统计。
@@ -36,6 +37,9 @@ make timing
 `make test-full` 验证 M/A/C、CSR、软件异常返回、IRQ、Sv39、跨页取指及扩展 C 程序；另外检查故意损坏的执行记录。
 `make test-alu` / `make test-rv64i` 可单独运行对应测试；`make sweep` 生成 `build/results.csv`。
 `make timing` 默认使用之前安装的 Nangate45 typical 库；可覆盖 `LIB=/path/to/library.lib CLOCK_NS=10`。
+映射默认加入缓冲与单元尺寸优化，时序报告同时显示扇出、电容和转换时间。
+`make test-mapped` 重新映射并用 Liberty 生成的功能模型运行扩展/特权门级回归；不含 SDF 延迟。
+本次最小周期估计从 19.64 ns 改善到 4.32 ns，原理、代价和复现方法见 [时序优化实验](docs/timing-optimization.md)。
 `CROSS` 可覆盖交叉工具前缀，例如 Linux 上用 `CROSS=riscv64-unknown-elf-`。
 
 | 实验 | 命令参数 | 正确结果（RAM 0x200） |
