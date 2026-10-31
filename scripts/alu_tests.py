@@ -94,13 +94,13 @@ def main():
     assert expected("sltiu", SIGN, -1) == 1
     assert expected("slt", SIGN, 0) == 1 and expected("sltu", SIGN, 0) == 0
 
-    body = [".option norvc", ".section .text", ".global _start", "_start:", "lui x30, 8", "lui x31, 12"]
+    body = [".option norvc", '.include "sw/finish.inc"', ".section .text", ".global _start", "_start:", "lui x30, 8", "lui x31, 12"]
     for v in vectors:
         operand = f"x{v['rs2']}" if v["op"] in REGISTER_OPS else str(v["b"])
         body += ["ld x5, 0(x30)", "ld x6, 8(x30)",
                  f"{v['op']} x{v['rd']}, x{v['rs1']}, {operand}",
                  f"sd x{v['rd']}, 0(x31)", "addi x30, x30, 16", "addi x31, x31, 8"]
-    body += ["ebreak", ".org 0x8000"]
+    body += ["SIM_EXIT", ".org 0x8000"]
     body += [f".dword 0x{v['a']:016x}, 0x{v['b'] & MASK:016x}" for v in vectors]
     assert (2 + 6 * len(vectors) + 1) * 4 < 0x8000
     assert 0x8000 + 16 * len(vectors) <= 0xc000
@@ -117,7 +117,7 @@ def main():
                               capture_output=True, text=True)
         assert proc.returncode == 0, (proc.stdout, proc.stderr)
         count = verify_files("build/alu_vectors.bin", trace)
-        assert count == 3 + 6 * len(vectors)
+        assert count == 5 + 6 * len(vectors)
         total_commits += count
         memory = Path(trace + ".ram").read_bytes()
         records = [json.loads(line) for line in Path(trace).read_text().splitlines()]

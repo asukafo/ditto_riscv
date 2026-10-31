@@ -30,9 +30,9 @@ def run(name, latency, gap=0, fault=0, expected=None):
 
 
 rows = []
-for name, result, retired in [("sum", 2080, 325), ("dependency", 128, 260),
-                              ("pointer_chase", 2016, 325), ("load_add_store", 14, 30),
-                              ("bit_ops", 0x7ffffffffffffffc, 20)]:
+for name, result, retired in [("sum", 2080, 327), ("dependency", 128, 262),
+                              ("pointer_chase", 2016, 327), ("load_add_store", 14, 32),
+                              ("bit_ops", 0x7ffffffffffffffc, 22)]:
     baseline = None
     for latency in [1, 5, 20]:
         stats = run(name, latency, expected=result)
@@ -100,17 +100,21 @@ if args.test:
         "store_fault": ("lui t0, 16\nsd zero, 0(t0)", 3, 0),
         "wraparound": ("addi t0, zero, -1\naddi t0, t0, 1\nsd t0, 512(zero)\nebreak", 0, 0),
         "bad_branch": (".word 0x00002063", 1, 0),
-        "bad_load": (".word 0x00002283", 1, 0),
+        "bad_load": (".word 0x00007283", 1, 0),
         "bad_srli": (".word 0x04005093", 1, 0),
         "bad_srai": (".word 0x44005093", 1, 0),
         "bad_slli_high": (".word 0x40001093", 1, 0),
         "unsupported_mul": (".word 0x026283b3", 1, 0),
         "bad_and": (".word 0x4062f3b3", 1, 0),
-        "unsupported_addiw": (".word 0x0012829b", 1, 0),
+        "bad_slliw": (".word 0x0202929b", 1, 0),
+        "ecall": ("ecall", 4, 0),
+        "ebreak": ("ebreak", 5, 0),
     }
     for name, (body, fault, expected) in cases.items():
         source = Path(f"build/{name}.S")
-        source.write_text(".option norvc\n.section .text\n.global _start\n_start:\n" + body + "\n")
+        if fault == 0:
+            body = body.replace("ebreak", "SIM_EXIT")
+        source.write_text('.option norvc\n.include "sw/finish.inc"\n.section .text\n.global _start\n_start:\n' + body + "\n")
         subprocess.run([args.cross + "gcc", "-march=rv64i", "-mabi=lp64", "-nostdlib",
                         "-Wl,-Ttext=0,-e,_start,--no-relax", "-o", f"build/{name}.elf", str(source)], check=True)
         subprocess.run([args.cross + "objcopy", "-O", "binary", "-j", ".text",

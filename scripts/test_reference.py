@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 import unittest
 
-from reference import FIELDS, Reference, verify
+from reference import FIELDS, Fault, Reference, verify
 
 
 class CheckerTests(unittest.TestCase):
@@ -19,7 +19,7 @@ class CheckerTests(unittest.TestCase):
             verify(self.image, records, self.ram if memory is None else memory)
 
     def test_valid_trace_and_known_program_results(self):
-        self.assertEqual(verify(self.image, self.records, self.ram), 30)
+        self.assertEqual(verify(self.image, self.records, self.ram), 32)
         values = [int.from_bytes(self.ram[a:a+8], "little") for a in range(0x1000, 0x1020, 8)]
         self.assertEqual(values, [11, 12, 13, 14])
         branches = [r for r in self.records[:-1] if r["pc"] == 0x20]
@@ -56,7 +56,8 @@ class CheckerTests(unittest.TestCase):
         self.rejected(self.records[:-1] + [self.records[0], self.records[-1]])
 
     def test_halt_metadata(self):
-        for field, value in [("fault", 1), ("instret", 29), ("cycles", 0)]:
+        for field, value in [("fault", 1), ("instret", 29), ("cycles", 0),
+                             ("trap_pc",1), ("trap_cause",1), ("trap_value",1), ("exit_status",1)]:
             with self.subTest(field=field):
                 records = deepcopy(self.records)
                 records[-1][field] = value
@@ -94,6 +95,16 @@ class CheckerTests(unittest.TestCase):
         event, _ = model.step()
         self.assertEqual(event["wdata"], 0)
         self.assertEqual(model.regs[0], 0)
+
+    def test_ecall_and_ebreak_do_not_retire(self):
+        for instruction,code,cause in [(0x73,4,11),(0x100073,5,3)]:
+            with self.subTest(instruction=instruction):
+                model=Reference(instruction.to_bytes(4,"little"))
+                with self.assertRaises(Fault) as raised:
+                    model.step()
+                self.assertEqual((raised.exception.code,raised.exception.cause,raised.exception.pc),(code,cause,0))
+                self.assertEqual(model.pc,0)
+                self.assertEqual(model.regs,[0]*32)
 
 
 if __name__ == "__main__":

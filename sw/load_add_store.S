@@ -1,4 +1,5 @@
 .option norvc
+.include "sw/finish.inc"
 .section .text
 .global _start
 _start:
@@ -14,6 +15,6 @@ loop:
     bne t1, zero, loop       # taken three times, then falls through
     ld t3, -8(t0)            # read back last updated element: 14
     sd t3, 512(zero)         # result signature
-    ebreak
+    SIM_EXIT
 .org 0x1000
 .dword 1, 2, 3, 4

@@ -115,7 +115,7 @@ def draw(source, destination, title, latency, gap):
         samples.append(dict(edge=i, **{"pre_"+k: v for k, v in pre.items()},
                             **{"post_"+k: v for k, v in post.items()}))
     with csv_path.open("w", newline="") as stream:
-        writer = csv.DictWriter(stream, fieldnames=list(samples[0]))
+        writer = csv.DictWriter(stream, fieldnames=list(samples[0]), lineterminator="\n")
         writer.writeheader(); writer.writerows(samples)
     requests = [i for i, s in enumerate(samples) if s["pre_req_valid"] and s["pre_req_ready"]]
     responses = [i for i, s in enumerate(samples) if s["pre_rsp_valid"] and s["pre_rsp_ready"]]

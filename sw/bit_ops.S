@@ -1,4 +1,5 @@
 .option norvc
+.include "sw/finish.inc"
 .section .text
 .global _start
 _start:
@@ -21,4 +22,4 @@ _start:
     sd t6, 552(zero)
     sd a0, 560(zero)
     sd a2, 568(zero)
-    ebreak
+    SIM_EXIT

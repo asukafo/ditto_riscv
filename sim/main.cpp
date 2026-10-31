@@ -47,26 +47,35 @@ int main(int argc, char** argv) {
         top.rsp_error=0; top.rsp_rdata=0;
         evaluate(0); evaluate(1); evaluate(0);
         top.reset=0;
-        bool pending=false, error=false;
+        bool pending=false, error=false, host_exit=false;
+        uint64_t exit_status=0;
         uint64_t response=0, requests=0, reads=0, writes=0;
         int remaining=0;
         uint64_t snapshot_addr=0, snapshot_data=0;
         bool was_blocked=false, snapshot_write=false;
-        for (uint64_t tick=0; tick<1000000 && !top.halted; ++tick) {
+        unsigned snapshot_size=0;
+        for (uint64_t tick=0; tick<1000000 && !top.halted && !host_exit; ++tick) {
             top.req_ready=!pending && (gap==0 || tick % (gap+1)==0);
             top.rsp_valid=pending && remaining==0;
             top.rsp_rdata=response; top.rsp_error=error;
             evaluate(0);
             if (was_blocked && (!top.req_valid || top.req_addr!=snapshot_addr ||
-                top.req_write!=snapshot_write || top.req_wdata!=snapshot_data))
+                top.req_write!=snapshot_write || top.req_wdata!=snapshot_data || top.req_size!=snapshot_size))
                 throw std::runtime_error("request changed under backpressure");
             was_blocked=top.req_valid && !top.req_ready;
             snapshot_addr=top.req_addr; snapshot_data=top.req_wdata; snapshot_write=top.req_write;
+            snapshot_size=top.req_size;
             const bool accept=top.req_valid && top.req_ready;
             const bool consume=top.rsp_valid && top.rsp_ready;
             const uint64_t addr=top.req_addr, data=top.req_wdata;
             const bool write=top.req_write;
+            const unsigned bytes=1u << top.req_size;
             evaluate(1);
+            // The simulation exit mailbox is observed only after its SD commits.
+            if (top.commit_valid && top.commit_mem_valid && top.commit_mem_write &&
+                top.commit_mem_addr==0xfff0 && top.commit_mem_size==3) {
+                host_exit=true; exit_status=top.commit_mem_data;
+            }
             // Sample AFTER the rising edge so this record describes this edge's commit.
             if (trace.is_open() && top.commit_valid) {
                 trace << "{\"kind\":\"commit\",\"cycle\":" << top.cycles
@@ -77,15 +86,16 @@ int main(int argc, char** argv) {
                       << ",\"mem_valid\":" << unsigned(top.commit_mem_valid)
                       << ",\"mem_write\":" << unsigned(top.commit_mem_write)
                       << ",\"mem_addr\":" << top.commit_mem_addr << ",\"mem_data\":" << top.commit_mem_data
+                      << ",\"mem_size\":" << unsigned(top.commit_mem_size)
                       << "}\n";
             }
             if (consume) pending=false;
             if (accept) {
                 if (pending) throw std::runtime_error("more than one outstanding request");
                 ++requests; if (write) ++writes; else ++reads;
-                error=addr > ram.size()-8;
+                error=addr > ram.size()-bytes;
                 response=0;
-                if (!error) for (unsigned j=0; j<8; ++j) {
+                if (!error) for (unsigned j=0; j<bytes; ++j) {
                     if (write) ram[size_t(addr)+j]=uint8_t(data>>(8*j));
                     else response |= uint64_t(ram[size_t(addr)+j])<<(8*j);
                 }
@@ -93,10 +103,12 @@ int main(int argc, char** argv) {
             } else if (pending && remaining>0) --remaining;
         }
         top.final(); if (wave) wave->close();
-        if (!top.halted) throw std::runtime_error("simulation timeout");
+        if (!top.halted && !host_exit) throw std::runtime_error("simulation timeout");
         if (trace.is_open()) {
             trace << "{\"kind\":\"halt\",\"fault\":" << unsigned(top.fault)
-                  << ",\"instret\":" << top.instret << ",\"cycles\":" << top.cycles << "}\n";
+                  << ",\"instret\":" << top.instret << ",\"cycles\":" << top.cycles
+                  << ",\"trap_pc\":" << top.trap_pc << ",\"trap_cause\":" << top.trap_cause
+                  << ",\"trap_value\":" << top.trap_value << ",\"exit_status\":" << exit_status << "}\n";
             trace.close();
             if (!trace) throw std::runtime_error("cannot write commit trace");
             std::ofstream snapshot(trace_path + ".ram", std::ios::binary);
@@ -111,6 +123,6 @@ int main(int argc, char** argv) {
                   << ",\"requests\":" << requests << ",\"reads\":" << reads
                   << ",\"writes\":" << writes << ",\"result\":" << result
                   << ",\"fault\":" << unsigned(top.fault) << "}\n";
-        return top.fault ? 2 : 0;
+        return top.fault ? 2 : exit_status ? 3 : 0;
     } catch (const std::exception& e) { std::cerr << e.what() << '\n'; return 1; }
 }

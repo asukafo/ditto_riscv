@@ -1,7 +1,7 @@
-"""Instruction-level oracle for this project's documented RV64 subset.
+"""Instruction-level oracle for RV64I with this project's terminal-trap EEI.
 
 No RTL signals, simulation cycles, or simulator RAM are used to execute instructions.
-This is a small teaching model, not Spike or a complete RISC-V compliance model.
+This is an independent teaching model, not a replacement for ISA compliance tests.
 """
 import argparse
 import json
@@ -9,7 +9,7 @@ from pathlib import Path
 
 MASK = (1 << 64) - 1
 FIELDS = ("pc", "insn", "next_pc", "rd_wen", "rd", "wdata",
-          "mem_valid", "mem_write", "mem_addr", "mem_data")
+          "mem_valid", "mem_write", "mem_addr", "mem_data", "mem_size")
 
 
 def signed(value, width):
@@ -17,8 +17,9 @@ def signed(value, width):
 
 
 class Fault(Exception):
-    def __init__(self, code):
+    def __init__(self, code, cause, pc, value):
         self.code = code
+        self.cause, self.pc, self.value = cause, pc, value
 
 
 class Reference:
@@ -30,18 +31,18 @@ class Reference:
         self.regs = [0] * 32
         self.pc = 0
         self.stopped = False
+        self.exit_status = 0
 
-    def read(self, address):
-        # Match the documented bus boundary: every transaction returns eight bytes.
-        if not 0 <= address <= len(self.ram) - 8:
-            raise Fault(3)
-        return int.from_bytes(self.ram[address:address + 8], "little")
+    def read(self, address, size=8, store=False, fetch=False):
+        if not 0 <= address <= len(self.ram) - size:
+            raise Fault(3, 1 if fetch else 7 if store else 5, self.pc, address)
+        return int.from_bytes(self.ram[address:address + size], "little")
 
     def step(self):
         if self.stopped:
-            raise ValueError("extra commit after EBREAK")
+            raise ValueError("extra commit after simulation exit")
         pc = self.pc
-        instruction = self.read(pc) & 0xffffffff
+        instruction = self.read(pc, 4, fetch=True)
         opcode = instruction & 127
         destination = (instruction >> 7) & 31
         function = (instruction >> 12) & 7
@@ -55,6 +56,7 @@ class Reference:
         address = None
         store = False
         stop = False
+        size = 0
         if opcode == 0x13:
             immediate = signed(instruction >> 20, 12)
             amount = (instruction >> 20) % 64
@@ -73,7 +75,7 @@ class Reference:
                               7: (source1 & immediate, "andi")}
                 result, name = operations[function]
             else:
-                raise Fault(1)
+                raise Fault(1, 2, pc, instruction)
         elif opcode == 0x33:
             if upper == 32 and function in (0, 5):
                 result, name = ((source1 - source2, "sub") if function == 0 else
@@ -89,16 +91,39 @@ class Reference:
                               7: (source1 & source2, "and")}
                 result, name = operations[function]
             else:
-                raise Fault(1)
-        elif opcode == 0x37:
+                raise Fault(1, 2, pc, instruction)
+        elif opcode in (0x1b, 0x3b):
+            # W operations discard upper input bits and sign-extend the final word.
+            left = source1 & 0xffffffff
+            immediate_op = opcode == 0x1b
+            operand = signed(instruction >> 20, 12) if immediate_op else source2
+            amount = ((instruction >> 20) if immediate_op else source2) % 32
+            if immediate_op and function == 0:
+                value, name = left + operand, "addiw"
+            elif not immediate_op and function == 0 and upper in (0, 32):
+                value, name = (left + operand, "addw") if upper == 0 else (left - operand, "subw")
+            elif function == 1 and upper == 0:
+                value, name = left << amount, "slliw" if immediate_op else "sllw"
+            elif function == 5 and upper in (0, 32):
+                value = (signed(left, 32) if upper == 32 else left) >> amount
+                name = ("sraiw" if immediate_op else "sraw") if upper == 32 else ("srliw" if immediate_op else "srlw")
+            else:
+                raise Fault(1, 2, pc, instruction)
+            result = signed(value & 0xffffffff, 32)
+        elif opcode in (0x37, 0x17):
             result = signed(instruction & 0xfffff000, 32)
-            name = "lui"
+            if opcode == 0x17:
+                result += pc
+            name = "auipc" if opcode == 0x17 else "lui"
         elif opcode == 0x6f:
             offset = (((instruction >> 31) << 20) | (((instruction >> 12) & 255) << 12)
                       | (((instruction >> 20) & 1) << 11) | (((instruction >> 21) & 1023) << 1))
             following = (pc + signed(offset, 21)) & MASK
             result = pc + 4
             name = "jal"
+        elif opcode == 0x67 and function == 0:
+            following = ((source1 + signed(instruction >> 20, 12)) & MASK) & ~1
+            result, name = pc + 4, "jalr"
         elif opcode == 0x63 and function in (0, 1, 4, 5, 6, 7):
             predicates = {0: source1 == source2, 1: source1 != source2,
                           4: signed(source1, 64) < signed(source2, 64),
@@ -109,27 +134,34 @@ class Reference:
             if predicates[function]:
                 following = (pc + signed(offset, 13)) & MASK
             name = {0: "beq", 1: "bne", 4: "blt", 5: "bge", 6: "bltu", 7: "bgeu"}[function]
-        elif opcode in (0x03, 0x23) and function == 3:
+        elif (opcode == 0x03 and function in range(7)) or (opcode == 0x23 and function in range(4)):
             store = opcode == 0x23
             offset = ((instruction >> 25) << 5) | ((instruction >> 7) & 31) if store else instruction >> 20
             address = (source1 + signed(offset, 12)) & MASK
-            name = "sd" if store else "ld"
-        elif instruction == 0x00100073:
-            name = "ebreak"
-            stop = True
+            size = 1 << (function % 4)
+            name = ["sb", "sh", "sw", "sd"][function] if store else ["lb", "lh", "lw", "ld", "lbu", "lhu", "lwu"][function]
+        elif opcode == 0x0f and function == 0:
+            name = "fence"  # fully serialized transactions provide conservative ordering
+        elif instruction in (0x00000073, 0x00100073):
+            raise Fault(4 if instruction == 0x73 else 5, 11 if instruction == 0x73 else 3, pc, 0)
         else:
-            raise Fault(1)
+            raise Fault(1, 2, pc, instruction)
         # No register/PC/memory side effects before validation succeeds.
-        if following % 4 or (address is not None and address % 8):
-            raise Fault(2)
+        if following % 4:
+            raise Fault(2, 0, pc, following)
+        if address is not None and address % size:
+            raise Fault(2, 6 if store else 4, pc, address)
         if address is not None:
-            old = self.read(address)  # bounds validation applies to both LD and SD
-            data = source2 if store else old
-            event.update(mem_valid=1, mem_write=int(store), mem_addr=address, mem_data=data)
+            old = self.read(address, size, store=store)
+            data = source2 & ((1 << (size * 8)) - 1) if store else old
+            event.update(mem_valid=1, mem_write=int(store), mem_addr=address, mem_data=data, mem_size=size.bit_length()-1)
             if store:
-                self.ram[address:address + 8] = data.to_bytes(8, "little")
+                self.ram[address:address + size] = data.to_bytes(size, "little")
+                if address == 0xfff0 and size == 8:
+                    stop = True
+                    self.exit_status = data
             else:
-                result = data
+                result = signed(data, 8*size) if function < 4 else data
         if result is not None and destination != 0:
             self.regs[destination] = result & MASK
             event.update(rd_wen=1, rd=destination, wdata=result & MASK)
@@ -150,17 +182,22 @@ def verify(image, records, memory, show=0):
             raise ValueError("records present after halt")
         if record.get("kind") == "halt":
             terminal = True
+            trap = dict(trap_pc=0, trap_cause=0, trap_value=0)
             if not model.stopped:
                 try:
                     model.step()
                 except Fault as fault:
                     expected_fault = fault.code
+                    trap = dict(trap_pc=fault.pc, trap_cause=fault.cause, trap_value=fault.value)
                 else:
                     raise ValueError(f"trace ended before instruction at PC=0x{model.pc:x} committed")
             else:
                 expected_fault = 0
             if record.get("fault") != expected_fault:
                 raise ValueError(f"halt fault: RTL={record.get('fault')} reference={expected_fault}")
+            for field, expected in dict(trap, exit_status=model.exit_status).items():
+                if record.get(field) != expected:
+                    raise ValueError(f"halt {field}: RTL={record.get(field)}, reference={expected}")
             if record.get("instret") != commits:
                 raise ValueError("halt instret does not match number of commits")
             cycles = record.get("cycles")
