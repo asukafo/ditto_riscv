@@ -8,6 +8,11 @@
 工具沿用本机已配置环境：**Verilator + Surfer + Yosys + OpenSTA**。
 软件使用 `riscv64-elf-gcc` / `objcopy`，实验脚本使用 Python 3，无额外 Python 依赖。
 
+**版本演进已独立保存：** [v1 多周期基线](versions/v1_multicycle/README.md) 与
+[v2 单发射流水线](versions/v2_single_issue/README.md)。根目录继续保留原多周期核。
+各版拥有独立源码、构建目录和性能记录；从根目录运行 `python3 versions/benchmark.py` 对比，
+每次创建新结果目录，详见 [版本与实验管理](versions/README.md)。
+
 ```bash
 make tools
 make lint

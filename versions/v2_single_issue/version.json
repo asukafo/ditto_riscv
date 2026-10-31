@@ -1,0 +1,5 @@
+{
+  "name": "v2_single_issue",
+  "base_commit": "8adc22c2d484c8246c6aeaa5ad0865686f2d24ff",
+  "architecture": "single_issue_pipeline"
+}

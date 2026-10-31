@@ -3,3 +3,5 @@ __pycache__/
 *.vcd
 *.fst
 .DS_Store
+# Keep verbose local tool logs; commit compact reports and versioned measurements.
+versions/*/results/*/*.log

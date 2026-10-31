@@ -1,0 +1,5 @@
+{
+  "name": "v1_multicycle",
+  "base_commit": "8adc22c2d484c8246c6aeaa5ad0865686f2d24ff",
+  "architecture": "multicycle"
+}

@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "commands": [
+    "make lint test-full timing"
+  ],
+  "frozen_commit": "8adc22c",
+  "byte_identical_source_files": 38,
+  "extension_runs": 40,
+  "privileged_runs": 86,
+  "benchmark_runs": 27,
+  "benchmark_reference_check": "all commits and final RAM"
+}
