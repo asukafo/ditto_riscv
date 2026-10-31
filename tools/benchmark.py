@@ -12,8 +12,9 @@ import sys
 ROOT=Path(__file__).resolve().parent.parent
 sys.path.insert(0,str(ROOT/'versions'/'v1_multicycle'/'scripts'))
 from reference import verify_files
+from profile_stalls import profile
 
-VERSIONS=('v1_multicycle','v2_single_issue')
+VERSIONS=('v1_multicycle','v2_single_issue','v3_icache')
 PROGRAMS={'sum':2080,'dependency':128,'pointer_chase':2016,'load_add_store':14,
           'bit_ops':0x7ffffffffffffffc,'c_demo':1488,'full_demo':949,
           'independent':640,'compressed':128}
@@ -30,7 +31,9 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run-id',default=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ'))
     parser.add_argument('--cross',default='riscv64-elf-')
+    parser.add_argument('--versions',nargs='+',choices=VERSIONS,default=list(VERSIONS))
     args=parser.parse_args()
+    if len(set(args.versions))!=len(args.versions):parser.error('duplicate version')
     if not re.fullmatch(r'[A-Za-z0-9_-]+',args.run_id):parser.error('invalid run id')
     destination=ROOT/'results'/'comparisons'/args.run_id
     try:
@@ -38,11 +41,12 @@ def main():
     except FileExistsError:
         parser.error('run-id already exists; choose a new id to preserve previous measurements')
     all_rows=[];images={}
-    for version in VERSIONS:
+    for version in args.versions:
         folder=ROOT/'versions'/version
         results=folder/'results'/args.run_id
         results.mkdir(parents=True,exist_ok=False)
         targets=['build/full_obj/Vrv64_core']+[f'build/{name}.bin' for name in PROGRAMS if name not in ('independent','compressed')]+['timing']
+        if version=='v3_icache':targets.append('build/noicache_obj/Vrv64_core')
         with (results/'build.log').open('w') as log:
             subprocess.run(['make',*targets,f'CROSS={args.cross}'],cwd=folder,stdout=log,stderr=subprocess.STDOUT,check=True)
         for name in ('independent','compressed'):
@@ -62,7 +66,7 @@ def main():
                   'images':{},'tools':{}}
         for tool in (['verilator','--version'],['yosys','-V'],[args.cross+'gcc','--version']):
             manifest['tools'][tool[0]]=subprocess.check_output(tool,text=True).splitlines()[0]
-        rows=[]
+        rows=[];ablations=[]
         for name,expected in PROGRAMS.items():
             image=folder/'build'/f'{name}.bin'
             digest=hashlib.sha256(image.read_bytes()).hexdigest()
@@ -72,30 +76,56 @@ def main():
             for latency,gap in TIMINGS:
                 # Raw traces remain under each version's ignored build directory.
                 trace=folder/'build'/f'benchmark-{args.run_id}-{name}-l{latency}-g{gap}.trace.jsonl'
-                run=subprocess.run([str(folder/'build/full_obj/Vrv64_core'),str(image),str(latency),'-',str(gap),str(trace)],
+                capture_profile=version in ('v2_single_issue','v3_icache') and name=='sum' and (latency,gap)==(5,3)
+                wave=folder/'build'/f'benchmark-{args.run_id}-stall-profile.vcd' if capture_profile else '-'
+                run=subprocess.run([str(folder/'build/full_obj/Vrv64_core'),str(image),str(latency),str(wave),str(gap),str(trace)],
                                    cwd=folder,capture_output=True,text=True,check=True)
                 stats=json.loads(run.stdout)
                 assert stats['result']==expected,(version,name,stats)
                 count=verify_files(image,trace)
                 assert count==stats['instret']
+                if capture_profile:
+                    observed=profile(wave)
+                    assert observed['sampled_cycles']==stats['cycles'],observed
+                    for key,value in observed.items():
+                        if key in stats:assert stats[key]==value,(key,stats[key],value)
+                    stats.update(observed)
+                    (results/'stall-profile.json').write_text(json.dumps(observed,indent=2)+'\n')
                 row={'version':version,'program':name,'latency':latency,'gap':gap,
                      'cycles':stats['cycles'],'instret':stats['instret'],'cpi':round(stats['cycles']/count,6),
                      'period_ns':period,'estimated_time_ns':round(stats['cycles']*period,3),
                      'area_library_units':area,'requests':stats['requests'],
                      'overlap_cycles':stats.get('overlap_cycles',0),'xw_overlap_cycles':stats.get('xw_overlap_cycles',0),
                      'bypass_count':stats.get('bypass_count',0)}
+                for key in ('icache_hits','icache_misses','icache_refill_requests','icache_miss_wait','icache_invalidations'):
+                    row[key]=stats.get(key,0)
+                for key in ('frontend_starved_cycles','data_blocked_by_fetch_cycles',
+                            'fetch_blocked_by_data_cycles','discarded_fetch_responses'):
+                    row[key]=stats.get(key,'')
                 rows.append(row)
+                if version=='v3_icache':
+                    off_trace=folder/'build'/f'benchmark-{args.run_id}-{name}-off-l{latency}-g{gap}.trace.jsonl'
+                    off_run=subprocess.run([str(folder/'build/noicache_obj/Vrv64_core'),str(image),str(latency),'-',str(gap),str(off_trace)],
+                                           cwd=folder,capture_output=True,text=True,check=True)
+                    off=json.loads(off_run.stdout)
+                    assert off['result']==expected and verify_files(image,off_trace)==count and off['instret']==count
+                    assert off['icache_hits']==off['icache_misses']==0
+                    ablations.append(dict(program=name,latency=latency,gap=gap,instret=count,
+                        cache_cycles=stats['cycles'],disabled_cycles=off['cycles'],cache_requests=stats['requests'],disabled_requests=off['requests'],
+                        cache_frontend_starved=stats['frontend_starved_cycles'],disabled_frontend_starved=off['frontend_starved_cycles'],
+                        cache_data_fetch_contention=stats['data_blocked_by_fetch_cycles'],disabled_data_fetch_contention=off['data_blocked_by_fetch_cycles']))
         write_csv(results/'performance.csv',rows)
+        if ablations:write_csv(results/'icache-ablation.csv',ablations)
         (results/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
         all_rows+=rows
         print(f'{version}: {len(rows)} checked runs, period={period} ns, area={area}',flush=True)
     write_csv(destination/'comparison.csv',all_rows)
-    first={(r['program'],r['latency'],r['gap']):r for r in all_rows if r['version']==VERSIONS[0]}
+    first={(r['program'],r['latency'],r['gap']):r for r in all_rows if r['version']==args.versions[0]}
     for row in all_rows:
-        if row['version']==VERSIONS[1]:
+        if row['version']!=args.versions[0]:
             assert row['instret']==first[(row['program'],row['latency'],row['gap'])]['instret']
     (destination/'README.md').write_text('Generated by `python3 tools/benchmark.py`.\n\n'
-        'Both versions execute byte-identical programs. All commits and final RAM checked against the independent model.\n'
+        'Selected versions execute byte-identical programs. All commits and final RAM checked against the independent model.\n'
         'Timing is pre-layout Nangate45 typical with ideal clocks; estimated_time_ns is a model estimate, not measured hardware time.\n')
     print(destination,flush=True)
 

@@ -1,0 +1,7 @@
+{
+  "name": "v3_icache",
+  "base_commit": "431d414eda9d461690906d5b78a31c08983442d0",
+  "architecture": "single_issue_pipeline_pipt_icache",
+  "icache_bytes": 256,
+  "line_bytes": 16
+}

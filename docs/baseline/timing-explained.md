@@ -1,6 +1,6 @@
 # 时序估计从哪里来：19.64 ns 基线
 
-> v1 多周期基线与早期实验文档。本文中的相对路径和命令均以 `versions/v1_multicycle/` 为工作目录；当前默认 v2 见 [文档导航](../README.md)。
+> v1 多周期基线与早期实验文档。本文中的相对路径和命令均以 `versions/v1_multicycle/` 为工作目录；当前开发版本见 [文档导航](../README.md)。
 
 19.64 ns 是启用 ABC 缓冲/尺寸优化之前的历史基线，来自 Yosys 标准单元映射后的 OpenSTA 静态时序分析，不是 Verilator 运行程序测出的延迟。
 本轮默认流程已经改善到约 4.32 ns，见 [对照实验](timing-optimization.md)。下文保留原始数字用于讲解计算过程。

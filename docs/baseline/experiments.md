@@ -1,6 +1,6 @@
 # M0 实验说明
 
-> v1 多周期基线与早期实验文档。本文中的相对路径和命令均以 `versions/v1_multicycle/` 为工作目录；当前默认 v2 见 [文档导航](../README.md)。
+> v1 多周期基线与早期实验文档。本文中的相对路径和命令均以 `versions/v1_multicycle/` 为工作目录；当前开发版本见 [文档导航](../README.md)。
 
 本页的精确周期表对应 `make test-base/sweep/diagrams` 使用的 RV64I 兼容配置。
 默认 `make sim/diff` 已启用模块化 RV64IMAC 和特权系统，C 指令取指、M 运算和 MMU 会改变周期数；

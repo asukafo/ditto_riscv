@@ -5,6 +5,7 @@
 - [仓库结构、入口与产物位置](repository.md)
 - [版本清单与实际性能分析](../versions/README.md)
 - [v2 单发射流水线：阶段、前递、异常和仲裁](../versions/v2_single_issue/README.md)
+- [v3 物理指令缓存、FENCE.I 和性能诊断](../versions/v3_icache/README.md)
 - [v2 真实 VCD 阶段采样图](../versions/v2_single_issue/docs/waveforms/pipeline.svg)
 - [v1 冻结的多周期基线](../versions/v1_multicycle/README.md)
 - [永久性能实验记录](../results/README.md)
@@ -12,7 +13,7 @@
 ## v1 与早期教学实验
 
 以下资料对应多周期核及其早期配置，命令以 `versions/v1_multicycle/` 为工作目录，
-其中的周期数和状态机不能套到 v2 流水线上。
+其中的周期数和状态机不能套到 v2/v3 流水线上。
 
 - [多周期数据通路与架构目标](baseline/architecture.md)
 - [握手、Load 执行与真实波形逐周期讲解](baseline/design-walkthrough.md)

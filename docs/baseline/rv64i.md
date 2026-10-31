@@ -1,6 +1,6 @@
 # RV64I 执行范围、终止异常与裸机 C
 
-> v1 多周期基线与早期实验文档。本文中的相对路径和命令均以 `versions/v1_multicycle/` 为工作目录；当前默认 v2 见 [文档导航](../README.md)。
+> v1 多周期基线与早期实验文档。本文中的相对路径和命令均以 `versions/v1_multicycle/` 为工作目录；当前开发版本见 [文档导航](../README.md)。
 
 本节记录上一阶段的 RV64I 兼容配置（EXTENSIONS=0、HOST_TRAPS=1），其行为与回归仍保留。
 **当前默认已升级为模块化 RV64IMAC、CSR、软件异常/中断和 Sv39，参见 [默认实现](modular-core.md)。**

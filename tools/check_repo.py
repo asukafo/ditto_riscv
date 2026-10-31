@@ -41,12 +41,17 @@ def main():
                          'sw/finish.inc', 'scripts/reference.py'):
             require((folder / relative).is_file(), f'Missing version file: {folder / relative}')
 
-    frozen = ROOT / 'versions/v1_multicycle'
-    manifest = json.loads((frozen / 'frozen-files.json').read_text())
-    for relative, expected in manifest['files'].items():
-        path = frozen / relative
-        require(path.is_file(), f'Missing frozen source: {path}')
-        require(hashlib.sha256(path.read_bytes()).hexdigest() == expected, f'Frozen source changed: {path}')
+    frozen_count = 0
+    for metadata in versions:
+        frozen = metadata.parent
+        frozen_manifest = frozen / 'frozen-files.json'
+        if not frozen_manifest.exists():continue
+        manifest = json.loads(frozen_manifest.read_text())
+        for relative, expected in manifest['files'].items():
+            path = frozen / relative
+            require(path.is_file(), f'Missing frozen source: {path}')
+            require(hashlib.sha256(path.read_bytes()).hexdigest() == expected, f'Frozen source changed: {path}')
+        frozen_count += len(manifest['files'])
 
     comparisons = sorted((ROOT / 'results/comparisons').glob('*/comparison.csv'))
     rows_checked = 0
@@ -82,7 +87,7 @@ def main():
             path = document.parent / target
             require(path.exists(), f'Broken local link: {document.relative_to(ROOT)} -> {target}')
             links_checked += 1
-    print(f'REPOSITORY PASS: {len(versions)} versions, {len(manifest["files"])} frozen files, '
+    print(f'REPOSITORY PASS: {len(versions)} versions, {frozen_count} frozen files, '
           f'{len(comparisons)} comparison archives / {rows_checked} rows, {links_checked} local links')
 
 

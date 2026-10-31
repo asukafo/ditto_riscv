@@ -3,10 +3,11 @@
 | 目录 | 架构 | 用途 |
 |---|---|---|
 | [v1_multicycle](v1_multicycle/README.md) | 多周期顺序核 | 冻结提交 8adc22c 的基线 |
-| [v2_single_issue](v2_single_issue/README.md) | F / X / W 单发射顺序流水线 | 当前开发与实验 |
+| [v2_single_issue](v2_single_issue/README.md) | F / X / W 单发射顺序流水线 | 冻结的流水线基线 |
+| [v3_icache](v3_icache/README.md) | 流水线、256 字节物理指令缓存 | 当前开发与实验 |
 
 每版有独立的 rtl、sim、sw、scripts、Makefile、build 和 results。
-仓库根目录的 Makefile 默认转发至 v2；用 VERSION=v1_multicycle 选择基线。后续新架构使用新目录，旧架构不随之修改。
+仓库根目录的 Makefile 默认转发至 v3；用 VERSION=v1_multicycle 或 v2_single_issue 选择基线。后续新架构使用新目录，旧架构不随之修改。
 公共比较脚本只负责运行实验，不在不同版本之间共用会变化的 RTL。
 
 ```sh
@@ -16,9 +17,10 @@ python3 tools/benchmark.py
 python3 tools/benchmark.py --run-id my-experiment
 ```
 
-比较 9 个程序，在 (latency,gap)=(1,0)、(5,0)、(5,3) 下各跑一次，每版 27 次。
+默认比较三个版本的 9 个程序，在 (latency,gap)=(1,0)、(5,0)、(5,3) 下各跑一次，每版 27 次。
 包括求和、依赖链、指针追踪、访存、位操作、C、M/A/C C、直线 ALU 和压缩指令依赖链。
-脚本检查两版二进制 SHA-256 一致、退休指令数一致，且逐条提交和最终内存通过独立参考模型。
+脚本检查各版二进制 SHA-256 一致、退休指令数一致，且逐条提交和最终内存通过独立参考模型。
+v3 另有 27 组关闭缓存的对照，仅改变缓存使能参数，不把取指合并的收益算作缓存收益。
 
 每版的 `results/<run-id>/` 保存性能 CSV、RTL/程序哈希、工具版本、时序报告及构建摘要。
 合并表保存在 `results/comparisons/<run-id>/comparison.csv`。

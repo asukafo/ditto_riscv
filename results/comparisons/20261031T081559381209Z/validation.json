@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "commands": [
+    "make lint test",
+    "make test-mapped",
+    "make diagrams",
+    "make compare",
+    "make check"
+  ],
+  "icache_unit_checks": 69,
+  "icache_integration_runs": 30,
+  "icache_on_off_integration_runs": 6,
+  "mapped_full_core_runs": 181,
+  "mapped_commits_checked": 14346,
+  "rtl_gate_identical_trace_and_ram_files": 362,
+  "benchmark_main_runs": 81,
+  "benchmark_cache_disabled_runs": 27,
+  "immutable_baseline_source_files": 80,
+  "historical_measurements_preserved_byte_for_byte": true,
+  "profiles": "v2 measured through VCD without RTL edits; v3 VCD and host metrics matched",
+  "timing": "pre-layout Nangate45 typical; no routed parasitics or real clock tree",
+  "notes": "Includes low-latency regressions; cache-disabled timing/area not measured."
+}

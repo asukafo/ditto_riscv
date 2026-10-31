@@ -1,6 +1,6 @@
 # 第一批整数指令扩展：位运算、移位与比较
 
-> v1 多周期基线与早期实验文档。本文中的相对路径和命令均以 `versions/v1_multicycle/` 为工作目录；当前默认 v2 见 [文档导航](../README.md)。
+> v1 多周期基线与早期实验文档。本文中的相对路径和命令均以 `versions/v1_multicycle/` 为工作目录；当前开发版本见 [文档导航](../README.md)。
 
 本页说明保留在 test-base 中的第一批 ALU 实验。默认配置现已支持 M/A/C、CSR 与 Sv39，见 [模块化实现](modular-core.md)。
 

@@ -1,0 +1,81 @@
+// One complete instruction buffer; outstanding speculative reads are always drained.
+// Faults travel with the instruction and only become architectural at commit.
+module rv64_fetch # (parameter EXTENSIONS=1) (
+    input wire clk,reset,redirect,
+    input wire [63:0] redirect_pc,
+    output wire req_valid,input wire req_ready,
+    output wire [63:0] req_addr,output wire [1:0] req_size,
+    input wire rsp_valid,output wire rsp_ready,
+    input wire [63:0] rsp_data,rsp_cause,input wire rsp_error,
+    output reg valid,input wire ready,
+    output reg [63:0] pc,fault_cause,fault_value,
+    output reg [31:0] insn,raw_insn,
+    output reg [2:0] bytes,
+    output reg illegal,fetch_fault,
+    output wire waiting,active,discard_event
+);
+    localparam [2:0] REQUEST=0,RESPONSE=1,HIGH_REQUEST=2,HIGH_RESPONSE=3,HOLD=4;
+    reg [2:0] state;
+    reg [63:0] next_pc;
+    reg [15:0] low_half;
+    reg killed;
+    wire [31:0] expanded;
+    wire bad_compressed;
+    wire unused_response=^rsp_data[63:32];
+    rv64_decompress decompress(.c(rsp_data[15:0]),.instruction(expanded),.illegal(bad_compressed));
+    assign req_valid=!reset && !redirect && ((state==REQUEST && (!valid || ready)) || state==HIGH_REQUEST);
+    assign req_addr=next_pc+(state==HIGH_REQUEST ? 64'd2 : 64'd0);
+    // A word-aligned first read stays within one page and one cache line.
+    // Halfword-aligned 32-bit instructions still translate each half separately.
+    assign req_size=EXTENSIONS==0 || (state==REQUEST && next_pc[1:0]==0) ? 2'd2 : 2'd1;
+    assign rsp_ready=state==RESPONSE || state==HIGH_RESPONSE;
+    assign waiting=rsp_ready && !rsp_valid;
+    assign discard_event=rsp_ready && rsp_valid && (killed || redirect);
+    // Occupancy is registered state, not request gating through branch/CSR logic.
+    // HIGH_REQUEST also owns a partially assembled instruction.
+    assign active=valid || state==RESPONSE || state==HIGH_REQUEST || state==HIGH_RESPONSE;
+    always @(posedge clk) begin
+        if (reset) begin
+            state<=REQUEST; next_pc<=0; low_half<=0; killed<=0; valid<=0;
+            pc<=0; insn<=0; raw_insn<=0; bytes<=4; illegal<=0;
+            fetch_fault<=0; fault_cause<=0; fault_value<=0;
+        end else if (redirect) begin
+            valid<=0; next_pc<=redirect_pc; low_half<=0;
+            // Once accepted by the arbiter, a read cannot be withdrawn.
+            if (rsp_ready && !rsp_valid) killed<=1;
+            else begin state<=REQUEST; killed<=0; end
+        end else begin
+            if (valid && ready) valid<=0;
+            case (state)
+                REQUEST: if (req_valid && req_ready) state<=RESPONSE;
+                HIGH_REQUEST: if (req_valid && req_ready) state<=HIGH_RESPONSE;
+                RESPONSE,HIGH_RESPONSE: if (rsp_valid) begin
+                    if (killed) begin killed<=0; state<=REQUEST; end
+                    else if (rsp_error) begin
+                        valid<=1; state<=HOLD; pc<=next_pc; insn<=0; raw_insn<=0;
+                        bytes<=state==HIGH_RESPONSE ? 3'd4 : EXTENSIONS!=0 ? 3'd2 : 3'd4;
+                        illegal<=0; fetch_fault<=1; fault_cause<=rsp_cause;
+                        fault_value<=next_pc+(state==HIGH_RESPONSE ? 64'd2 : 64'd0);
+                    end else if (state==RESPONSE && EXTENSIONS!=0 && rsp_data[1:0]==3 && next_pc[1:0]!=0) begin
+                        low_half<=rsp_data[15:0]; state<=HIGH_REQUEST;
+                    end else begin
+                        valid<=1; state<=REQUEST; pc<=next_pc; fetch_fault<=0; fault_cause<=0; fault_value<=0;
+                        if (state==HIGH_RESPONSE || (EXTENSIONS!=0 && rsp_data[1:0]==3)) begin
+                            insn<=state==HIGH_RESPONSE ? {rsp_data[15:0],low_half} : rsp_data[31:0];
+                            raw_insn<=state==HIGH_RESPONSE ? {rsp_data[15:0],low_half} : rsp_data[31:0];
+                            bytes<=4; illegal<=0; next_pc<=next_pc+4;
+                        end else begin
+                            insn<=EXTENSIONS!=0 ? expanded : rsp_data[31:0];
+                            raw_insn<=EXTENSIONS!=0 ? {16'd0,rsp_data[15:0]} : rsp_data[31:0];
+                            bytes<=EXTENSIONS!=0 ? 3'd2 : 3'd4;
+                            illegal<=EXTENSIONS!=0 && bad_compressed;
+                            next_pc<=next_pc+(EXTENSIONS!=0 ? 64'd2 : 64'd4);
+                        end
+                    end
+                end
+                HOLD: if (valid && ready) state<=REQUEST;
+                default: state<=REQUEST;
+            endcase
+        end
+    end
+endmodule

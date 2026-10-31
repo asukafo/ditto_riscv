@@ -1,6 +1,6 @@
 # 工具与目录
 
-> v1 多周期基线与早期实验文档。本文中的相对路径和命令均以 `versions/v1_multicycle/` 为工作目录；当前默认 v2 见 [文档导航](../README.md)。
+> v1 多周期基线与早期实验文档。本文中的相对路径和命令均以 `versions/v1_multicycle/` 为工作目录；当前开发版本见 [文档导航](../README.md)。
 
 本项目按“在这个电脑上安装verilator”对话中配置的工具开发。
 不依赖 Icarus Verilog 或 GTKWave。用 `make tools` 检查本机命令。

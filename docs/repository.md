@@ -2,12 +2,13 @@
 
 ```text
 ditto_riscv/
-├── Makefile                  统一入口，默认选择 v2
+├── Makefile                  统一入口，默认选择 v3
 ├── README.md                 快速开始
 ├── CONTRIBUTING.md           开发、冻结和记录约定
 ├── versions/
 │   ├── v1_multicycle/        冻结基线
-│   └── v2_single_issue/      当前流水线
+│   ├── v2_single_issue/      冻结的流水线基线
+│   └── v3_icache/            当前流水线与指令缓存
 ├── benchmarks/              公共比较程序
 ├── tools/                   仓库检查、跨版本比较
 ├── results/comparisons/     不覆盖的历史对比表
@@ -31,7 +32,7 @@ ditto_riscv/
 ## 根目录命令
 
 ```sh
-make lint                         # 默认 v2
+make lint                         # 默认 v3
 make test
 make diff PROGRAM=full_demo LATENCY=5 GAP=3
 make timing
@@ -44,13 +45,13 @@ make compare BENCHMARK_ARGS="--run-id my-experiment"
 递归 make 在所选版本目录执行，因此仿真输出为 `versions/<version>/build/`。
 `make clean VERSION=v2_single_issue` 只清理 v2 的 build，不触碰其他版本或任何 results。
 直接进入版本目录运行命令仍受支持，v1 的原 Makefile 保持冻结。
-v2 的 `test-pipeline` 是流水线专用目标，v1 不提供该目标。
+v2/v3 的 `test-pipeline` 是流水线专用目标，v1 不提供该目标；`test-icache` 仅 v3 提供。
 
 ## 源码与记录保护
 
-根目录不再复制一套硬件源码。v1 与 v2 内部的重复模块是版本快照的一部分，
+根目录不再复制一套硬件源码。各版内部的重复模块是版本快照的一部分，
 不会抽成可变的公共 RTL，以免修改新版时改变旧版。
-`versions/v1_multicycle/frozen-files.json` 记录完整的 38 个冻结源码/构建文件哈希；`make check` 会校验。
+v1、v2 的 frozen-files.json 分别记录 38、42 个冻结源码/构建文件哈希；`make check` 会校验。
 各版的历史 results 和公共对比表迁移时保持内容不变，历史 manifest 中的原始信息仍有效。
 
 旧根目录的本地 build 已移入忽略目录 `.local/legacy-root-build-<timestamp>/`，未删除。
