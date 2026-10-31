@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "commands": [
+    "make lint test",
+    "make test-mapped",
+    "make diagrams",
+    "make compare BENCHMARK_ARGS=\"--versions v3_icache v4_fetch_buffer\"",
+    "make check"
+  ],
+  "frontend_unit_checks": 84,
+  "cache_unit_checks": 69,
+  "fetch_buffer_integration_runs": 40,
+  "buffer_on_off_integration_runs": 12,
+  "mapped_full_core_runs": 221,
+  "mapped_commits_checked": 16216,
+  "rtl_gate_identical_trace_and_ram_files": 442,
+  "benchmark_main_runs": 54,
+  "benchmark_cache_disabled_runs": 54,
+  "benchmark_buffer_disabled_runs": 27,
+  "v4_buffer_disabled_matches_v3_cycles_and_requests": 27,
+  "immutable_baseline_source_files": 126,
+  "historical_measurements_preserved_byte_for_byte": true,
+  "timing": "pre-layout Nangate45 typical, no extracted parasitics or real clock tree",
+  "notes": "32-bit workloads retain cycle counts; estimated clock period increases slightly; all raw data retained."
+}

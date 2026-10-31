@@ -1,5 +1,7 @@
 # v3：单发射流水线与物理指令缓存
 
+本版已冻结；当前开发为 [v4 半字取指缓冲版](../v4_fetch_buffer/README.md)。
+
 沿用 v2 的 F / X / W 顺序流水线，增加指令缓存、对齐指令合并取指和等待原因统计。
 v1、v2 的实现独立冻结。保留 RV64IMAC、Zicsr/Zifencei、M/S/U、精确异常、中断与 Sv39/Svade。
 
@@ -81,12 +83,12 @@ v2 的同类指标从原始 VCD 中采样，使用 tools/profile_stalls.py，不
 ## 验证与实验
 
 ```sh
-# 仓库根目录默认选 v3
-make lint test
-make test-icache
-make test-mapped
-make diagrams
-make diff PROGRAM=full_demo LATENCY=5 GAP=3
+# 仓库根目录复查本版时显式选择 v3
+make lint test VERSION=v3_icache
+make test-icache VERSION=v3_icache
+make test-mapped VERSION=v3_icache
+make diagrams VERSION=v3_icache
+make diff VERSION=v3_icache PROGRAM=full_demo LATENCY=5 GAP=3
 make compare
 # 只比较流水线两版
 make compare BENCHMARK_ARGS="--versions v2_single_issue v3_icache"

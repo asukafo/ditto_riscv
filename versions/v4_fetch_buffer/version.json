@@ -1,0 +1,8 @@
+{
+  "name": "v4_fetch_buffer",
+  "base_commit": "2f2eb0dc120aa55acb29941ac36d4e4a69f0c936",
+  "architecture": "single_issue_pipt_icache_halfword_buffer",
+  "icache_bytes": 256,
+  "line_bytes": 16,
+  "fetch_buffer_halfwords": 1
+}
