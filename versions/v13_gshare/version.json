@@ -1,0 +1,13 @@
+{
+  "name": "v13_gshare",
+  "base_commit": "50bcb53",
+  "architecture": "single_issue_committed_history_4bit_gshare_32_counters",
+  "icache_bytes": 256,
+  "dcache_bytes": 256,
+  "line_bytes": 16,
+  "tlb_entries_per_side": 8,
+  "tlb_page_bytes": 4096,
+  "bht_entries": 32,
+  "bht_counter_bits": 2,
+  "ghr_bits": 4
+}

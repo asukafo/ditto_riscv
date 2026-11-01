@@ -2,6 +2,8 @@
 
 ## 当前工程
 
+- [v13 gshare全局历史预测、保存索引与学习波形](../versions/v13_gshare/README.md)
+
 - [v12 动态条件分支预测、提交训练与表项冲突](../versions/v12_dynamic_predict/README.md)
 
 - [v11 I/D TLB、分页性能、权限与IMEM/DMEM区别](../versions/v11_tlb/README.md)

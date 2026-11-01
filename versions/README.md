@@ -13,10 +13,11 @@
 | [v9_static_predict](v9_static_predict/README.md) | BTFNT静态分支预测，JAL目标预测 | 冻结的静态预测基线 |
 | [v10_return_stack](v10_return_stack/README.md) | 8项返回地址栈，提交时更新 | 冻结的提交RAS基线 |
 | [v11_tlb](v11_tlb/README.md) | I/D各8项全相联4KiB TLB | 冻结的翻译缓存基线 |
-| [v12_dynamic_predict](v12_dynamic_predict/README.md) | 32项两位BHT，提交时训练 | 当前开发与实验 |
+| [v12_dynamic_predict](v12_dynamic_predict/README.md) | 32项两位BHT，提交时训练 | 冻结的bimodal预测基线 |
+| [v13_gshare](v13_gshare/README.md) | 4位GHR与32项PHT，提交历史和保存索引 | 当前开发与实验 |
 
 每版有独立的 rtl、sim、sw、scripts、Makefile、build 和 results。
-仓库根目录的 Makefile 默认转发至 v12；用 VERSION=<目录名> 选择其他版本。后续新架构使用新目录，旧架构不随之修改。
+仓库根目录的 Makefile 默认转发至 v13；用 VERSION=<目录名> 选择其他版本。后续新架构使用新目录，旧架构不随之修改。
 公共比较脚本只负责运行实验，不在不同版本之间共用会变化的 RTL。
 
 ```sh
@@ -26,7 +27,7 @@ python3 tools/benchmark.py
 python3 tools/benchmark.py --run-id my-experiment
 ```
 
-默认比较十二个版本的16个程序，在(latency,gap)=(1,0)、(5,0)、(5,3)下各跑一次，每版48次。
+默认比较十三个版本的17个程序，在(latency,gap)=(1,0)、(5,0)、(5,3)下各跑一次，每版51次。
 包括求和、依赖链、指针追踪、访存、位操作、C、M/A/C C、直线 ALU 、压缩指令依赖链和重复数据读取。
 脚本检查各版二进制 SHA-256 一致、退休指令数一致，且逐条提交和最终内存通过独立参考模型。
 v3/v4 另有关闭缓存的对照；v4 另有 27 组关闭取指缓冲的对照，分别隔离不同改动的收益。
