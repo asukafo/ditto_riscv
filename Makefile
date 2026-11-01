@@ -1,8 +1,8 @@
 # Repository entry point; each hardware version owns its build directory.
-VERSION ?= v11_tlb
+VERSION ?= v12_dynamic_predict
 PYTHON ?= python3
 BENCHMARK_ARGS ?=
-VERSIONS := v1_multicycle v2_single_issue v3_icache v4_fetch_buffer v5_early_restart v6_dcache v7_dcache_early v8_split_memory v9_static_predict v10_return_stack v11_tlb
+VERSIONS := v1_multicycle v2_single_issue v3_icache v4_fetch_buffer v5_early_restart v6_dcache v7_dcache_early v8_split_memory v9_static_predict v10_return_stack v11_tlb v12_dynamic_predict
 VERSION_DIR := versions/$(VERSION)
 
 ifeq ($(filter $(VERSION),$(VERSIONS)),)
@@ -10,7 +10,7 @@ $(error Unknown VERSION '$(VERSION)'; choose one of: $(VERSIONS))
 endif
 
 .DEFAULT_GOAL := help
-FORWARDED := tools lint test test-base test-full test-pipeline test-icache test-fetch test-early test-dcache test-data-early test-split test-predict test-ras test-tlb test-mapped test-alu test-rv64i sim diff wave sweep diagrams synth timing clean
+FORWARDED := tools lint test test-base test-full test-pipeline test-icache test-fetch test-early test-dcache test-data-early test-split test-predict test-ras test-tlb test-bht test-mapped test-alu test-rv64i sim diff wave sweep diagrams synth timing clean
 .PHONY: help versions check compare benchmark $(FORWARDED)
 
 help:
@@ -33,7 +33,9 @@ versions:
 	@echo 'v8_split_memory   frozen independent I/D translation and cache paths'
 	@echo 'v9_static_predict   frozen static branch and direct jump prediction'
 	@echo 'v10_return_stack   frozen committed return-address stack'
-	@echo 'v11_tlb   independent 8-entry I/D translation caches (default)'
+	@echo 'v11_tlb   frozen independent I/D translation caches'
+
+	@echo 'v12_dynamic_predict   32-entry 2-bit conditional branch prediction (default)'
 
 $(FORWARDED):
 	$(MAKE) -C "$(VERSION_DIR)" $@

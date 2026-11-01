@@ -2,6 +2,8 @@
 
 ## 当前工程
 
+- [v12 动态条件分支预测、提交训练与表项冲突](../versions/v12_dynamic_predict/README.md)
+
 - [v11 I/D TLB、分页性能、权限与IMEM/DMEM区别](../versions/v11_tlb/README.md)
 - [v10 提交时返回地址栈、错误预测恢复与时序代价](../versions/v10_return_stack/README.md)
 - [v9 静态分支预测、错误路径恢复与循环退出波形](../versions/v9_static_predict/README.md)

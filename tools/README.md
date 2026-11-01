@@ -32,3 +32,11 @@ v10保存RAS_ENABLE=0的33组对照，与同轮v9核对周期数/请求数。新
 
 v11保存TLB_ENABLE=0的36组对照，与同轮v10核对周期数/请求数；新增paged_loop.S分页基准。
 新增I/D TLB命中/缺失/填入、I/D页表读取和失效事件；旧版缺少指标时留空。
+
+只测周期、不运行综合/STA：
+
+```sh
+python3 tools/benchmark.py --versions v11_tlb v12_dynamic_predict --cycles-only
+```
+
+v12额外关闭BHT，并检查周期、外部请求和控制失误与v11完全一致。
