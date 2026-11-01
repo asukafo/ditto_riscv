@@ -1,0 +1,63 @@
+#define main legacy_cache_test_main
+#include "icache_test.cpp"
+#undef main
+
+static void drain(Memory& m) {
+    m.top.u_valid=0;m.top.u_rsp_ready=1;
+    for (unsigned i=0;i<1000;++i) {
+        m.step();
+        if (m.top.u_ready) return;
+    }
+    throw std::runtime_error("background refill did not drain");
+}
+int main() {
+    try {
+        unsigned checks=0;
+        for (auto config:std::array<std::array<int,2>,3>{{{{1,0}},{{5,3}},{{20,7}}}}) {
+            for (uint64_t address:{0x20ull,0x2cull}) {
+                Memory m(config[0],config[1]);
+                Result r=m.access(address);
+                check(!r.error && r.data==m.read(address,2),"wrong critical word");++checks;
+                check(m.requests.front().address==(address&~7ull),"critical beat was not first");++checks;
+                // For long latency the response must precede the remaining response.
+                if (config[0]>=5) {check(m.pending || m.requests.size()==1,"did not restart before refill finished");++checks;}
+                drain(m);
+                check(m.requests.size()==2 && m.requests[1].address==((address&~15ull)+(address&8 ? 0:8)),"wrong remainder beat");++checks;
+                for (unsigned offset=0;offset<16;offset+=2) {
+                    auto hit=m.access((address&~15ull)+offset,1);
+                    check(!hit.error && hit.data==m.read((address&~15ull)+offset,1),"reordered line assembled incorrectly");++checks;
+                }
+                check(m.requests.size()==2,"completed line did not hit");++checks;
+            }
+            // An error in the requested beat faults; the speculative remainder does not.
+            for (bool critical_failure:{false,true}) {
+                Memory m(config[0],config[1]);m.fail_address=critical_failure ? 0x48:0x40;
+                Result r=m.access(0x4c);
+                check(r.error==critical_failure,"wrong error ownership");++checks;
+                if (!r.error) check(r.data==m.read(0x4c,2),"bad early response");
+                drain(m);size_t before=m.requests.size();m.fail_address=~uint64_t(0);
+                r=m.access(0x4c);drain(m);
+                check(!r.error && m.requests.size()==before+2,"failed refill allocated valid line");++checks;
+            }
+            // A request straddling the 8-byte boundary must wait for both beats.
+            Memory cross(config[0],config[1]);auto r=cross.access(0x56,2);drain(cross);
+            check(!r.error && r.data==cross.read(0x56,2) && cross.requests[0].address==0x50,"cross-beat fallback failed");++checks;
+            // Invalidate after early response but while remainder is in flight.
+            Memory poison(20,7);r=poison.access(0x60);poison.invalidate();drain(poison);
+            size_t before=poison.requests.size();r=poison.access(0x60);drain(poison);
+            check(!r.error && poison.requests.size()==before+2,"invalidated remainder revalidated line");++checks;
+            // Hold the first response until well after the background refill finishes.
+            Memory blocked(config[0],config[1]);blocked.top.u_addr=0x78;blocked.top.u_valid=1;blocked.top.u_rsp_ready=0;
+            bool accepted=false;
+            for (unsigned i=0;i<1000 && !accepted;++i) accepted=blocked.step().accepted;
+            check(accepted,"held-response request not accepted");blocked.top.u_valid=0;
+            for (unsigned i=0;i<200;++i) blocked.step();
+            check(blocked.top.u_rsp_valid && !blocked.top.u_ready,"lost held response or accepted new request");++checks;
+            blocked.top.u_rsp_ready=1;auto edge=blocked.step();
+            check(edge.returned && edge.result.data==blocked.read(0x78,2) && !edge.result.error,"held response corrupted");++checks;
+            drain(blocked);check(blocked.requests.size()==2,"backpressure repeated refill");++checks;
+        }
+        std::cout<<"EARLY RESTART UNIT PASS: "<<checks<<" checks across 3 latency/backpressure configurations\n";
+        return 0;
+    } catch (const std::exception& e) {std::cerr<<e.what()<<'\n';return 1;}
+}

@@ -1,9 +1,9 @@
 # ditto_riscv
 
 通过可运行的 RTL、逐条参考对照、真实波形与性能实验学习 RISC-V core 设计。
-当前开发版本是 **v10 单发射流水线、静态分支预测与提交时维护的返回地址栈**；v1–v9 独立冻结。
-十版均支持 RV64IMAC、Zicsr/Zifencei、M/S/U、软件异常、中断与 Sv39/Svade。
-后续目标是共享总线等待优化、TLB、动态条件分支预测、双发射、乱序与双核，目前尚未实现这些功能。
+当前开发版本是 **v11 单发射流水线、独立I/D TLB与缓存**；v1–v10 独立冻结。
+十一版均支持 RV64IMAC、Zicsr/Zifencei、M/S/U、软件异常、中断与 Sv39/Svade。
+后续目标是共享总线等待优化、大页TLB、动态条件分支预测、双发射、乱序与双核，目前尚未实现这些功能。
 
 ## 快速开始
 
@@ -24,12 +24,13 @@ make test-data-early
 make test-split
 make test-predict
 make test-ras
+make test-tlb
 make diff PROGRAM=full_demo
 make diagrams
 make timing
 ```
 
-根目录命令默认转发到 `versions/v10_return_stack/`，输出位于该版的 `build/`。
+根目录命令默认转发到 `versions/v11_tlb/`，输出位于该版的 `build/`。
 `make diagrams` 导出真实流水线 VCD 的阶段采样图；`make wave PROGRAM=full_demo` 用 Surfer 打开波形。
 选择旧版使用 `make test VERSION=v1_multicycle`，或进入该版本目录运行其 Makefile。
 `PROGRAM`、`LATENCY`、`GAP`、`CROSS`、`LIB`、`CLOCK_NS` 等命令行参数会传给所选版本。
@@ -48,7 +49,8 @@ make timing
 | [versions/v7_dcache_early](versions/v7_dcache_early/README.md) | 冻结的D-cache关键数据优先与提前重启 |
 | [versions/v8_split_memory](versions/v8_split_memory/README.md) | 冻结的独立I/D翻译、缓存命中与共享物理仲裁 |
 | [versions/v9_static_predict](versions/v9_static_predict/README.md) | 冻结的向后分支预测跳转与JAL目标预测 |
-| [versions/v10_return_stack](versions/v10_return_stack/README.md) | 当前开发：8项提交时维护的返回地址栈 |
+| [versions/v10_return_stack](versions/v10_return_stack/README.md) | 冻结的8项提交时维护的返回地址栈 |
+| [versions/v11_tlb](versions/v11_tlb/README.md) | 当前开发：各8项I/D TLB、权限复查与失效 |
 | [benchmarks](benchmarks/README.md) | 两版执行相同二进制的公共基准程序 |
 | [tools](tools/README.md) | 仓库检查与跨版本性能比较工具 |
 | [results](results/README.md) | 跨版本对比记录，各版详细记录保留在各自 results/ |
@@ -75,6 +77,7 @@ make timing
 | v8 分离I/D路径 | D-cache补数期间，I-cache命中也被串行路径阻塞 | 独立MMU/缓存路径，仅页表读取与外部缺失请求经四路轮转仲裁；外部仍单笔事务 | 延迟5/间隔3求和1499→1111，前端等待449→168；面积约+2.47%，布局前周期4.66→4.83ns |
 | v9 静态分支预测 | 循环向后跳转反复冲刷顺序取指，求和64条分支产生63次冲刷 | 完整指令在F预测下一PC，向后条件分支预测跳转、向前不跳、JAL直接预测；预测随指令送X核对 | 延迟5/间隔3求和1111→983、冲刷63→1；面积约+1.71%，本轮布局前周期4.83→4.64ns；短访存程序195→199周期 |
 | v10 返回地址栈 | v9仍不预测函数返回，裸机C有6次返回失误 | 8项RAS在调用/返回提交时更新，F用栈顶预测常见ret；异常和串行化时清空，错误预测仍由X恢复 | 延迟5/间隔3调用基准379→343、返回失误16→0；裸机C955→943，但布局前周期4.64→4.86ns，C程序估计时间反而退步，面积约+3.70% |
+| v11 I/D TLB | 分页访问即使缓存命中，也要重复读取多级页表 | 两侧各8项全相联4KiB翻译，保存VPN/物理页/权限/完整satp标签；命中复查权限，SFENCE.VMA全部失效 | 分页循环延迟5/间隔3：8859→1131周期，页表读取978→6，外部请求1003→31；裸地址程序周期不变；面积约+19.75% |
 
 v6 首先建立写穿透 D-cache 的可验证基线。重复数据访问受益，顺序读取与冲突访问可能因完整补行变慢。
 v6轮次的布局前最小周期估计为4.54ns（v5为4.32ns），面积约+21.2%；因此应同时检查周期数、时序和面积。
@@ -98,7 +101,7 @@ make compare BENCHMARK_ARGS="--run-id my-experiment"
 ## 功能与学习入口
 
 程序通过已提交的退出邮箱存储结束；EBREAK、ECALL 由软件异常处理程序接收。
-MMU 没有 TLB，采用 Svade 软件管理 A/D 位。尚无 F/D/V/H、PMP 或多核，未进行正式 ISA 合规认证或 Linux 启动验证。
+MMU 配有各8项I/D TLB，只缓存4KiB映射，采用Svade软件管理A/D位；大页仍由遍历器处理。尚无F/D/V/H、PMP或多核，未进行正式ISA合规认证或Linux启动验证。
 
 - [单发射流水线、前递与精确异常](versions/v2_single_issue/README.md)
 - [指令缓存、权限、FENCE.I 与等待测量](versions/v3_icache/README.md)

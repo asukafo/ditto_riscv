@@ -2,7 +2,7 @@
 
 ```text
 ditto_riscv/
-├── Makefile                  统一入口，默认选择 v10
+├── Makefile                  统一入口，默认选择 v11
 ├── README.md                 快速开始
 ├── CONTRIBUTING.md           开发、冻结和记录约定
 ├── versions/
@@ -15,7 +15,8 @@ ditto_riscv/
 │   ├── v7_dcache_early/      冻结的数据缓存提前重启
 │   ├── v8_split_memory/      冻结的独立I/D翻译和缓存命中路径
 │   ├── v9_static_predict/    冻结的静态分支与直接跳转预测
-│   └── v10_return_stack/    提交时维护的返回地址栈
+│   ├── v10_return_stack/    冻结的提交时返回地址栈
+│   └── v11_tlb/            独立I/D翻译缓存
 ├── benchmarks/              公共比较程序
 ├── tools/                   仓库检查、跨版本比较
 ├── results/comparisons/     不覆盖的历史对比表
@@ -39,7 +40,7 @@ ditto_riscv/
 ## 根目录命令
 
 ```sh
-make lint                         # 默认 v10
+make lint                         # 默认 v11
 make test
 make diff PROGRAM=full_demo LATENCY=5 GAP=3
 make timing
@@ -58,7 +59,7 @@ make compare BENCHMARK_ARGS="--run-id my-experiment"
 
 根目录不再复制一套硬件源码。各版内部的重复模块是版本快照的一部分，
 不会抽成可变的公共 RTL，以免修改新版时改变旧版。
-v1–v9 的 frozen-files.json 记录各版冻结源码/构建文件哈希；`make check` 会校验。
+v1–v10的frozen-files.json记录各版冻结源码/构建文件哈希；`make check`会校验。
 各版的历史 results 和公共对比表迁移时保持内容不变，历史 manifest 中的原始信息仍有效。
 
 旧根目录的本地 build 已移入忽略目录 `.local/legacy-root-build-<timestamp>/`，未删除。
@@ -73,3 +74,5 @@ v1–v9 的 frozen-files.json 记录各版冻结源码/构建文件哈希；`mak
 `test-predict`从v9开始提供，覆盖静态方向/目标计算、压缩指令预测、失误恢复与错误路径故障。
 
 `test-ras`从v10开始提供，检查提交提示、容量边界、取指元数据、嵌套和错误返回恢复。
+
+`test-tlb`从v11开始提供，检查翻译存储、MMU命中权限、失效、分页容量及整核对照。

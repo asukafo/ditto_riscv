@@ -2,7 +2,7 @@
 
 目标是改善v9未预测的函数返回。v9裸机C有12次间接跳转失误，其中包括6次间接调用和6次返回，
 不能把12次都叫作返回。v10加入8项返回地址栈（RAS），用已提交调用的返回地址预测常见ret。
-v1–v9分别冻结；所有版本的动机、结果与成本见[根README](../../README.md)。
+本版现已冻结，默认开发入口为v11；所有版本的动机、结果与成本见[根README](../../README.md)。
 
 ## 保存什么、何时更新
 
@@ -107,11 +107,11 @@ ras_pushes/ras_pops在提交更新时统计，ras_overflows/ras_underflows记录
 832份提交/最终内存文件逐字节一致。门级使用无SDF的标准单元逻辑模型。
 
 ```sh
-# 仓库根目录默认v10
-make lint test
-make test-ras
-make test-mapped
-make diagrams
+# 仓库根目录，明确选择冻结的v10
+make lint test VERSION=v10_return_stack
+make test-ras VERSION=v10_return_stack
+make test-mapped VERSION=v10_return_stack
+make diagrams VERSION=v10_return_stack
 make compare BENCHMARK_ARGS="--versions v9_static_predict v10_return_stack"
 make test VERSION=v9_static_predict
 ```

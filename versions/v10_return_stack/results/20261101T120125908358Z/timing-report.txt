@@ -1,0 +1,678 @@
+OpenSTA 3.1.0 GITDIR-NOT Copyright (c) 2026, Parallax Software, Inc.
+License GPLv3: GNU GPL version 3 <http://gnu.org/licenses/gpl.html>
+
+This is free software, and you are free to change and redistribute it
+under certain conditions; type `show_copying' for details.
+This program comes with ABSOLUTELY NO WARRANTY; for details type `show_warranty'.
+Startpoint: _24746_ (rising edge-triggered flip-flop clocked by core_clk)
+Endpoint: dcache_hit_during_instruction_fill (output port clocked by core_clk)
+Path Group: core_clk
+Path Type: max
+
+Fanout       Cap      Slew     Delay      Time   Description
+-------------------------------------------------------------------------------------
+                    0.0000    0.0000    0.0000   clock core_clk (rise edge)
+                              0.0000    0.0000   clock network delay (ideal)
+                    0.0000    0.0000    0.0000 ^ _24746_/CK (DFF_X1)
+   132  203.7483    0.4676    0.5658    0.5658 ^ _24746_/Q (DFF_X1)
+    10   19.9737    0.0521    0.0834    0.6492 ^ decoder/_4228_/Z (BUF_X1)
+    10   20.5037    0.0496    0.0765    0.7257 ^ decoder/_4229_/Z (BUF_X1)
+    10   17.3908    0.0425    0.0688    0.7945 ^ decoder/_4230_/Z (BUF_X1)
+    10   16.1486    0.0397    0.0652    0.8596 ^ decoder/_4231_/Z (BUF_X1)
+    10   17.3903    0.0425    0.0677    0.9274 ^ decoder/_4232_/Z (BUF_X1)
+    10   18.5415    0.0451    0.0709    0.9983 ^ decoder/_4233_/Z (BUF_X1)
+    10   19.7536    0.0479    0.0741    1.0723 ^ decoder/_4235_/Z (BUF_X1)
+    10   16.3234    0.0401    0.0661    1.1384 ^ decoder/_4236_/Z (BUF_X1)
+    10   19.9491    0.0483    0.0740    1.2124 ^ decoder/_4237_/Z (BUF_X1)
+    10   19.9429    0.0483    0.0748    1.2872 ^ decoder/_4238_/Z (BUF_X1)
+    10   19.3870    0.0471    0.0735    1.3606 ^ decoder/_4239_/Z (BUF_X1)
+    10   18.8201    0.0458    0.0720    1.4326 ^ decoder/_4240_/Z (BUF_X1)
+    10   16.1417    0.0397    0.0654    1.4981 ^ decoder/_4241_/Z (BUF_X1)
+    10   18.1414    0.0442    0.0695    1.5676 ^ decoder/_4242_/Z (BUF_X1)
+    10   15.5167    0.0382    0.0638    1.6314 ^ decoder/_4243_/Z (BUF_X1)
+    10   16.8744    0.0413    0.0662    1.6976 ^ decoder/_4246_/Z (BUF_X1)
+     1    1.4863    0.0123    0.0106    1.7082 v decoder/_3997_/ZN (NOR2_X1)
+     1    1.6059    0.0117    0.0213    1.7294 ^ decoder/_3998_/ZN (NAND3_X1)
+     5    5.4726    0.0110    0.0176    1.7470 v decoder/_3999_/ZN (NOR4_X1)
+     1    0.8752    0.0091    0.0565    1.8035 v _12960_/Z (MUX2_X1)
+     5    6.0964    0.0099    0.0342    1.8377 v csrs/_09118_/Z (BUF_X1)
+    10   13.4038    0.0169    0.0445    1.8822 v csrs/_06280_/Z (BUF_X1)
+    10   18.0550    0.0216    0.0541    1.9363 v csrs/_08736_/Z (BUF_X1)
+     1    0.9070    0.0091    0.0499    1.9862 v csrs/_08778_/Z (MUX2_X1)
+     2    3.0566    0.0116    0.0614    2.0476 v _18951_/Z (MUX2_X1)
+     1    1.6264    0.0261    0.0493    2.0969 ^ _18962_/ZN (NOR3_X1)
+     2    3.9320    0.0158    0.0208    2.1178 v _18984_/ZN (AOI21_X1)
+     1    1.5527    0.0134    0.0413    2.1591 v _18995_/ZN (XNOR2_X1)
+     1    1.6381    0.0262    0.0501    2.2092 ^ _19006_/ZN (NOR3_X1)
+     1    1.4899    0.0158    0.0321    2.2414 v _19073_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0763    2.3176 ^ _19140_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.3514 v _19151_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.4321 ^ _19162_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.4658 v _19173_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.5466 ^ _19184_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.5803 v _19195_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.6610 ^ _19206_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.6948 v _19217_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.7755 ^ _19228_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.8093 v _19239_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.8900 ^ _19251_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.9238 v _19262_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    3.0045 ^ _19273_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    3.0382 v _19284_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    3.1190 ^ _19295_/ZN (NOR4_X1)
+     1    3.4968    0.0228    0.0418    3.1608 v _19306_/ZN (NAND4_X1)
+     1    1.6599    0.0342    0.0738    3.2345 ^ _19317_/ZN (NOR4_X2)
+     1    1.5872    0.0163    0.0331    3.2676 v _19328_/ZN (NAND4_X1)
+     1    6.4234    0.0184    0.1167    3.3843 v _19339_/ZN (OR4_X2)
+     8   19.4899    0.0363    0.0552    3.4395 ^ _19350_/ZN (OAI211_X4)
+     5   18.2832    0.0225    0.0371    3.4766 v _19495_/ZN (NAND3_X4)
+     2    4.3042    0.0087    0.0159    3.4925 ^ _20584_/ZN (INV_X4)
+    10   13.4320    0.0107    0.0249    3.5174 ^ _20595_/Z (BUF_X4)
+    10   10.1192    0.0146    0.0304    3.5478 ^ _20606_/Z (BUF_X2)
+    12   19.5888    0.0475    0.0676    3.6154 ^ _21173_/Z (BUF_X1)
+     4    5.0993    0.0205    0.0318    3.6472 v frontend/_6016_/ZN (OAI21_X1)
+     1    1.6470    0.0094    0.0173    3.6645 ^ frontend/_3569_/ZN (INV_X1)
+     1    1.5638    0.0127    0.0133    3.6779 v frontend/_3570_/ZN (AOI21_X1)
+     2    2.5823    0.0207    0.0342    3.7120 ^ frontend/_3571_/ZN (NOR2_X1)
+     2    3.3145    0.0127    0.0392    3.7512 ^ _12603_/ZN (AND2_X1)
+     1    1.5583    0.0048    0.0079    3.7590 v memory_system/split.fmmu/_1540_/ZN (INV_X1)
+     3    4.2739    0.0303    0.0431    3.8021 ^ memory_system/split.fmmu/_1551_/ZN (OAI21_X1)
+     3    4.8535    0.0153    0.0455    3.8476 ^ memory_system/_118_/ZN (AND2_X1)
+     5    7.2140    0.0168    0.0267    3.8744 v memory_system/split.icache/_09775_/ZN (NAND2_X1)
+     3    3.4159    0.0382    0.0496    3.9240 ^ memory_system/split.icache/_16978_/ZN (OAI22_X1)
+     3    6.6869    0.0196    0.0575    3.9815 ^ memory_system/split.physical_arbiter/_1375_/Z (MUX2_X1)
+     3    6.7770    0.0129    0.0469    4.0284 ^ memory_system/split.physical_arbiter/_1552_/Z (MUX2_X2)
+     2    2.4030    0.0094    0.0136    4.0420 v memory_system/split.physical_arbiter/_1586_/ZN (AOI211_X2)
+     1    5.6131    0.0178    0.0867    4.1287 v memory_system/split.physical_arbiter/_1619_/ZN (OR3_X1)
+     7   17.8963    0.0349    0.0441    4.1728 ^ memory_system/split.physical_arbiter/_1652_/ZN (AOI21_X4)
+     3    8.5345    0.0099    0.0383    4.2111 ^ memory_system/split.physical_arbiter/_1752_/ZN (AND2_X4)
+    10   26.0209    0.0107    0.0258    4.2368 ^ memory_system/split.physical_arbiter/_1763_/Z (BUF_X8)
+    10   26.7313    0.0109    0.0263    4.2631 ^ memory_system/split.physical_arbiter/_1774_/Z (BUF_X8)
+    10   16.1725    0.0214    0.0378    4.3010 ^ memory_system/split.physical_arbiter/_1330_/Z (BUF_X2)
+     3    4.8985    0.0172    0.0555    4.3564 ^ memory_system/split.physical_arbiter/_1565_/ZN (AND3_X1)
+     3    3.9925    0.0134    0.0240    4.3804 v memory_system/split.dcache/_14418_/ZN (OAI21_X1)
+    10    8.7525    0.0125    0.0402    4.4206 v memory_system/split.dcache/_14596_/Z (BUF_X1)
+    10    9.2595    0.0129    0.0404    4.4610 v memory_system/split.dcache/_19706_/Z (BUF_X1)
+    10   14.4345    0.0179    0.0475    4.5085 v memory_system/split.dcache/_19707_/Z (BUF_X1)
+     2    0.9281    0.0128    0.0234    4.5319 ^ memory_system/split.dcache/_15323_/ZN (NOR2_X1)
+     1    0.0100    0.0050    0.0263    4.5582 ^ _12582_/ZN (AND2_X1)
+                    0.0050    0.0000    4.5582 ^ dcache_hit_during_instruction_fill (out)
+                                        4.5582   data arrival time
+
+                    0.0000   10.0000   10.0000   clock core_clk (rise edge)
+                              0.0000   10.0000   clock network delay (ideal)
+                              0.0000   10.0000   clock reconvergence pessimism
+                             -1.0000    9.0000   output external delay
+                                        9.0000   data required time
+-------------------------------------------------------------------------------------
+                                        9.0000   data required time
+                                       -4.5582   data arrival time
+-------------------------------------------------------------------------------------
+                                        4.4418   slack (MET)
+
+
+Startpoint: _24746_ (rising edge-triggered flip-flop clocked by core_clk)
+Endpoint: dcache_bypass_event (output port clocked by core_clk)
+Path Group: core_clk
+Path Type: max
+
+Fanout       Cap      Slew     Delay      Time   Description
+-------------------------------------------------------------------------------------
+                    0.0000    0.0000    0.0000   clock core_clk (rise edge)
+                              0.0000    0.0000   clock network delay (ideal)
+                    0.0000    0.0000    0.0000 ^ _24746_/CK (DFF_X1)
+   132  203.7483    0.4676    0.5658    0.5658 ^ _24746_/Q (DFF_X1)
+    10   19.9737    0.0521    0.0834    0.6492 ^ decoder/_4228_/Z (BUF_X1)
+    10   20.5037    0.0496    0.0765    0.7257 ^ decoder/_4229_/Z (BUF_X1)
+    10   17.3908    0.0425    0.0688    0.7945 ^ decoder/_4230_/Z (BUF_X1)
+    10   16.1486    0.0397    0.0652    0.8596 ^ decoder/_4231_/Z (BUF_X1)
+    10   17.3903    0.0425    0.0677    0.9274 ^ decoder/_4232_/Z (BUF_X1)
+    10   18.5415    0.0451    0.0709    0.9983 ^ decoder/_4233_/Z (BUF_X1)
+    10   19.7536    0.0479    0.0741    1.0723 ^ decoder/_4235_/Z (BUF_X1)
+    10   16.3234    0.0401    0.0661    1.1384 ^ decoder/_4236_/Z (BUF_X1)
+    10   19.9491    0.0483    0.0740    1.2124 ^ decoder/_4237_/Z (BUF_X1)
+    10   19.9429    0.0483    0.0748    1.2872 ^ decoder/_4238_/Z (BUF_X1)
+    10   19.3870    0.0471    0.0735    1.3606 ^ decoder/_4239_/Z (BUF_X1)
+    10   18.8201    0.0458    0.0720    1.4326 ^ decoder/_4240_/Z (BUF_X1)
+    10   16.1417    0.0397    0.0654    1.4981 ^ decoder/_4241_/Z (BUF_X1)
+    10   18.1414    0.0442    0.0695    1.5676 ^ decoder/_4242_/Z (BUF_X1)
+    10   15.5167    0.0382    0.0638    1.6314 ^ decoder/_4243_/Z (BUF_X1)
+    10   16.8744    0.0413    0.0662    1.6976 ^ decoder/_4246_/Z (BUF_X1)
+     1    1.4863    0.0123    0.0106    1.7082 v decoder/_3997_/ZN (NOR2_X1)
+     1    1.6059    0.0117    0.0213    1.7294 ^ decoder/_3998_/ZN (NAND3_X1)
+     5    5.4726    0.0110    0.0176    1.7470 v decoder/_3999_/ZN (NOR4_X1)
+     1    0.8752    0.0091    0.0565    1.8035 v _12960_/Z (MUX2_X1)
+     5    6.0964    0.0099    0.0342    1.8377 v csrs/_09118_/Z (BUF_X1)
+    10   13.4038    0.0169    0.0445    1.8822 v csrs/_06280_/Z (BUF_X1)
+    10   18.0550    0.0216    0.0541    1.9363 v csrs/_08736_/Z (BUF_X1)
+     1    0.9070    0.0091    0.0499    1.9862 v csrs/_08778_/Z (MUX2_X1)
+     2    3.0566    0.0116    0.0614    2.0476 v _18951_/Z (MUX2_X1)
+     1    1.6264    0.0261    0.0493    2.0969 ^ _18962_/ZN (NOR3_X1)
+     2    3.9320    0.0158    0.0208    2.1178 v _18984_/ZN (AOI21_X1)
+     1    1.5527    0.0134    0.0413    2.1591 v _18995_/ZN (XNOR2_X1)
+     1    1.6381    0.0262    0.0501    2.2092 ^ _19006_/ZN (NOR3_X1)
+     1    1.4899    0.0158    0.0321    2.2414 v _19073_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0763    2.3176 ^ _19140_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.3514 v _19151_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.4321 ^ _19162_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.4658 v _19173_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.5466 ^ _19184_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.5803 v _19195_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.6610 ^ _19206_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.6948 v _19217_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.7755 ^ _19228_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.8093 v _19239_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.8900 ^ _19251_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.9238 v _19262_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    3.0045 ^ _19273_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    3.0382 v _19284_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    3.1190 ^ _19295_/ZN (NOR4_X1)
+     1    3.4968    0.0228    0.0418    3.1608 v _19306_/ZN (NAND4_X1)
+     1    1.6599    0.0342    0.0738    3.2345 ^ _19317_/ZN (NOR4_X2)
+     1    1.5872    0.0163    0.0331    3.2676 v _19328_/ZN (NAND4_X1)
+     1    6.4234    0.0184    0.1167    3.3843 v _19339_/ZN (OR4_X2)
+     8   19.4899    0.0363    0.0552    3.4395 ^ _19350_/ZN (OAI211_X4)
+     5   18.2832    0.0225    0.0371    3.4766 v _19495_/ZN (NAND3_X4)
+     2    4.3042    0.0087    0.0159    3.4925 ^ _20584_/ZN (INV_X4)
+    10   13.4320    0.0107    0.0249    3.5174 ^ _20595_/Z (BUF_X4)
+    10   10.1192    0.0146    0.0304    3.5478 ^ _20606_/Z (BUF_X2)
+    12   19.5888    0.0475    0.0676    3.6154 ^ _21173_/Z (BUF_X1)
+     4    5.0993    0.0205    0.0318    3.6472 v frontend/_6016_/ZN (OAI21_X1)
+     1    1.6470    0.0094    0.0173    3.6645 ^ frontend/_3569_/ZN (INV_X1)
+     1    1.5638    0.0127    0.0133    3.6779 v frontend/_3570_/ZN (AOI21_X1)
+     2    2.5823    0.0207    0.0342    3.7120 ^ frontend/_3571_/ZN (NOR2_X1)
+     2    3.3145    0.0127    0.0392    3.7512 ^ _12603_/ZN (AND2_X1)
+     1    1.5583    0.0048    0.0079    3.7590 v memory_system/split.fmmu/_1540_/ZN (INV_X1)
+     3    4.2739    0.0303    0.0431    3.8021 ^ memory_system/split.fmmu/_1551_/ZN (OAI21_X1)
+     3    4.8535    0.0153    0.0455    3.8476 ^ memory_system/_118_/ZN (AND2_X1)
+     5    7.2140    0.0168    0.0267    3.8744 v memory_system/split.icache/_09775_/ZN (NAND2_X1)
+     3    3.4159    0.0382    0.0496    3.9240 ^ memory_system/split.icache/_16978_/ZN (OAI22_X1)
+     3    6.6869    0.0196    0.0575    3.9815 ^ memory_system/split.physical_arbiter/_1375_/Z (MUX2_X1)
+     3    6.7770    0.0129    0.0469    4.0284 ^ memory_system/split.physical_arbiter/_1552_/Z (MUX2_X2)
+     2    2.4030    0.0094    0.0136    4.0420 v memory_system/split.physical_arbiter/_1586_/ZN (AOI211_X2)
+     1    5.6131    0.0178    0.0867    4.1287 v memory_system/split.physical_arbiter/_1619_/ZN (OR3_X1)
+     7   17.8963    0.0349    0.0441    4.1728 ^ memory_system/split.physical_arbiter/_1652_/ZN (AOI21_X4)
+     3    8.5345    0.0099    0.0383    4.2111 ^ memory_system/split.physical_arbiter/_1752_/ZN (AND2_X4)
+    10   26.0209    0.0107    0.0258    4.2368 ^ memory_system/split.physical_arbiter/_1763_/Z (BUF_X8)
+    10   26.7313    0.0109    0.0263    4.2631 ^ memory_system/split.physical_arbiter/_1774_/Z (BUF_X8)
+    10   16.1725    0.0214    0.0378    4.3010 ^ memory_system/split.physical_arbiter/_1330_/Z (BUF_X2)
+     3    4.8985    0.0172    0.0555    4.3564 ^ memory_system/split.physical_arbiter/_1565_/ZN (AND3_X1)
+     3    3.9925    0.0134    0.0240    4.3804 v memory_system/split.dcache/_14418_/ZN (OAI21_X1)
+    10    8.7525    0.0125    0.0402    4.4206 v memory_system/split.dcache/_14596_/Z (BUF_X1)
+    10   12.1679    0.0158    0.0442    4.4648 v memory_system/split.dcache/_14607_/Z (BUF_X1)
+    10   14.6518    0.0182    0.0492    4.5140 v memory_system/split.dcache/_14618_/Z (BUF_X1)
+     1    0.0100    0.0150    0.0388    4.5529 ^ memory_system/split.dcache/_19489_/ZN (NOR3_X1)
+                    0.0150    0.0000    4.5529 ^ dcache_bypass_event (out)
+                                        4.5529   data arrival time
+
+                    0.0000   10.0000   10.0000   clock core_clk (rise edge)
+                              0.0000   10.0000   clock network delay (ideal)
+                              0.0000   10.0000   clock reconvergence pessimism
+                             -1.0000    9.0000   output external delay
+                                        9.0000   data required time
+-------------------------------------------------------------------------------------
+                                        9.0000   data required time
+                                       -4.5529   data arrival time
+-------------------------------------------------------------------------------------
+                                        4.4471   slack (MET)
+
+
+Startpoint: _24746_ (rising edge-triggered flip-flop clocked by core_clk)
+Endpoint: dcache_hit_event (output port clocked by core_clk)
+Path Group: core_clk
+Path Type: max
+
+Fanout       Cap      Slew     Delay      Time   Description
+-------------------------------------------------------------------------------------
+                    0.0000    0.0000    0.0000   clock core_clk (rise edge)
+                              0.0000    0.0000   clock network delay (ideal)
+                    0.0000    0.0000    0.0000 ^ _24746_/CK (DFF_X1)
+   132  203.7483    0.4676    0.5658    0.5658 ^ _24746_/Q (DFF_X1)
+    10   19.9737    0.0521    0.0834    0.6492 ^ decoder/_4228_/Z (BUF_X1)
+    10   20.5037    0.0496    0.0765    0.7257 ^ decoder/_4229_/Z (BUF_X1)
+    10   17.3908    0.0425    0.0688    0.7945 ^ decoder/_4230_/Z (BUF_X1)
+    10   16.1486    0.0397    0.0652    0.8596 ^ decoder/_4231_/Z (BUF_X1)
+    10   17.3903    0.0425    0.0677    0.9274 ^ decoder/_4232_/Z (BUF_X1)
+    10   18.5415    0.0451    0.0709    0.9983 ^ decoder/_4233_/Z (BUF_X1)
+    10   19.7536    0.0479    0.0741    1.0723 ^ decoder/_4235_/Z (BUF_X1)
+    10   16.3234    0.0401    0.0661    1.1384 ^ decoder/_4236_/Z (BUF_X1)
+    10   19.9491    0.0483    0.0740    1.2124 ^ decoder/_4237_/Z (BUF_X1)
+    10   19.9429    0.0483    0.0748    1.2872 ^ decoder/_4238_/Z (BUF_X1)
+    10   19.3870    0.0471    0.0735    1.3606 ^ decoder/_4239_/Z (BUF_X1)
+    10   18.8201    0.0458    0.0720    1.4326 ^ decoder/_4240_/Z (BUF_X1)
+    10   16.1417    0.0397    0.0654    1.4981 ^ decoder/_4241_/Z (BUF_X1)
+    10   18.1414    0.0442    0.0695    1.5676 ^ decoder/_4242_/Z (BUF_X1)
+    10   15.5167    0.0382    0.0638    1.6314 ^ decoder/_4243_/Z (BUF_X1)
+    10   16.8744    0.0413    0.0662    1.6976 ^ decoder/_4246_/Z (BUF_X1)
+     1    1.4863    0.0123    0.0106    1.7082 v decoder/_3997_/ZN (NOR2_X1)
+     1    1.6059    0.0117    0.0213    1.7294 ^ decoder/_3998_/ZN (NAND3_X1)
+     5    5.4726    0.0110    0.0176    1.7470 v decoder/_3999_/ZN (NOR4_X1)
+     1    0.8752    0.0091    0.0565    1.8035 v _12960_/Z (MUX2_X1)
+     5    6.0964    0.0099    0.0342    1.8377 v csrs/_09118_/Z (BUF_X1)
+    10   13.4038    0.0169    0.0445    1.8822 v csrs/_06280_/Z (BUF_X1)
+    10   18.0550    0.0216    0.0541    1.9363 v csrs/_08736_/Z (BUF_X1)
+     1    0.9070    0.0091    0.0499    1.9862 v csrs/_08778_/Z (MUX2_X1)
+     2    3.0566    0.0116    0.0614    2.0476 v _18951_/Z (MUX2_X1)
+     1    1.6264    0.0261    0.0493    2.0969 ^ _18962_/ZN (NOR3_X1)
+     2    3.9320    0.0158    0.0208    2.1178 v _18984_/ZN (AOI21_X1)
+     1    1.5527    0.0134    0.0413    2.1591 v _18995_/ZN (XNOR2_X1)
+     1    1.6381    0.0262    0.0501    2.2092 ^ _19006_/ZN (NOR3_X1)
+     1    1.4899    0.0158    0.0321    2.2414 v _19073_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0763    2.3176 ^ _19140_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.3514 v _19151_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.4321 ^ _19162_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.4658 v _19173_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.5466 ^ _19184_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.5803 v _19195_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.6610 ^ _19206_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.6948 v _19217_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.7755 ^ _19228_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.8093 v _19239_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.8900 ^ _19251_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.9238 v _19262_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    3.0045 ^ _19273_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    3.0382 v _19284_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    3.1190 ^ _19295_/ZN (NOR4_X1)
+     1    3.4968    0.0228    0.0418    3.1608 v _19306_/ZN (NAND4_X1)
+     1    1.6599    0.0342    0.0738    3.2345 ^ _19317_/ZN (NOR4_X2)
+     1    1.5872    0.0163    0.0331    3.2676 v _19328_/ZN (NAND4_X1)
+     1    6.4234    0.0184    0.1167    3.3843 v _19339_/ZN (OR4_X2)
+     8   19.4899    0.0363    0.0552    3.4395 ^ _19350_/ZN (OAI211_X4)
+     5   18.2832    0.0225    0.0371    3.4766 v _19495_/ZN (NAND3_X4)
+     2    4.3042    0.0087    0.0159    3.4925 ^ _20584_/ZN (INV_X4)
+    10   13.4320    0.0107    0.0249    3.5174 ^ _20595_/Z (BUF_X4)
+    10   10.1192    0.0146    0.0304    3.5478 ^ _20606_/Z (BUF_X2)
+    12   19.5888    0.0475    0.0676    3.6154 ^ _21173_/Z (BUF_X1)
+     4    5.0993    0.0205    0.0318    3.6472 v frontend/_6016_/ZN (OAI21_X1)
+     1    1.6470    0.0094    0.0173    3.6645 ^ frontend/_3569_/ZN (INV_X1)
+     1    1.5638    0.0127    0.0133    3.6779 v frontend/_3570_/ZN (AOI21_X1)
+     2    2.5823    0.0207    0.0342    3.7120 ^ frontend/_3571_/ZN (NOR2_X1)
+     2    3.3145    0.0127    0.0392    3.7512 ^ _12603_/ZN (AND2_X1)
+     1    1.5583    0.0048    0.0079    3.7590 v memory_system/split.fmmu/_1540_/ZN (INV_X1)
+     3    4.2739    0.0303    0.0431    3.8021 ^ memory_system/split.fmmu/_1551_/ZN (OAI21_X1)
+     3    4.8535    0.0153    0.0455    3.8476 ^ memory_system/_118_/ZN (AND2_X1)
+     5    7.2140    0.0168    0.0267    3.8744 v memory_system/split.icache/_09775_/ZN (NAND2_X1)
+     3    3.4159    0.0382    0.0496    3.9240 ^ memory_system/split.icache/_16978_/ZN (OAI22_X1)
+     3    6.6869    0.0196    0.0575    3.9815 ^ memory_system/split.physical_arbiter/_1375_/Z (MUX2_X1)
+     3    6.7770    0.0129    0.0469    4.0284 ^ memory_system/split.physical_arbiter/_1552_/Z (MUX2_X2)
+     2    2.4030    0.0094    0.0136    4.0420 v memory_system/split.physical_arbiter/_1586_/ZN (AOI211_X2)
+     1    5.6131    0.0178    0.0867    4.1287 v memory_system/split.physical_arbiter/_1619_/ZN (OR3_X1)
+     7   17.8963    0.0349    0.0441    4.1728 ^ memory_system/split.physical_arbiter/_1652_/ZN (AOI21_X4)
+     3    8.5345    0.0099    0.0383    4.2111 ^ memory_system/split.physical_arbiter/_1752_/ZN (AND2_X4)
+    10   26.0209    0.0107    0.0258    4.2368 ^ memory_system/split.physical_arbiter/_1763_/Z (BUF_X8)
+    10   26.7313    0.0109    0.0263    4.2631 ^ memory_system/split.physical_arbiter/_1774_/Z (BUF_X8)
+    10   16.1725    0.0214    0.0378    4.3010 ^ memory_system/split.physical_arbiter/_1330_/Z (BUF_X2)
+     3    4.8985    0.0172    0.0555    4.3564 ^ memory_system/split.physical_arbiter/_1565_/ZN (AND3_X1)
+     3    3.9925    0.0134    0.0240    4.3804 v memory_system/split.dcache/_14418_/ZN (OAI21_X1)
+    10    8.7525    0.0125    0.0402    4.4206 v memory_system/split.dcache/_14596_/Z (BUF_X1)
+    10    9.2595    0.0129    0.0404    4.4610 v memory_system/split.dcache/_19706_/Z (BUF_X1)
+    10   14.4345    0.0179    0.0475    4.5085 v memory_system/split.dcache/_19707_/Z (BUF_X1)
+     2    0.9281    0.0128    0.0234    4.5319 ^ memory_system/split.dcache/_15323_/ZN (NOR2_X1)
+                    0.0128    0.0000    4.5319 ^ dcache_hit_event (out)
+                                        4.5319   data arrival time
+
+                    0.0000   10.0000   10.0000   clock core_clk (rise edge)
+                              0.0000   10.0000   clock network delay (ideal)
+                              0.0000   10.0000   clock reconvergence pessimism
+                             -1.0000    9.0000   output external delay
+                                        9.0000   data required time
+-------------------------------------------------------------------------------------
+                                        9.0000   data required time
+                                       -4.5319   data arrival time
+-------------------------------------------------------------------------------------
+                                        4.4681   slack (MET)
+
+
+Startpoint: _24746_ (rising edge-triggered flip-flop clocked by core_clk)
+Endpoint: req_store_check (output port clocked by core_clk)
+Path Group: core_clk
+Path Type: max
+
+Fanout       Cap      Slew     Delay      Time   Description
+-------------------------------------------------------------------------------------
+                    0.0000    0.0000    0.0000   clock core_clk (rise edge)
+                              0.0000    0.0000   clock network delay (ideal)
+                    0.0000    0.0000    0.0000 ^ _24746_/CK (DFF_X1)
+   132  203.7483    0.4676    0.5658    0.5658 ^ _24746_/Q (DFF_X1)
+    10   19.9737    0.0521    0.0834    0.6492 ^ decoder/_4228_/Z (BUF_X1)
+    10   20.5037    0.0496    0.0765    0.7257 ^ decoder/_4229_/Z (BUF_X1)
+    10   17.3908    0.0425    0.0688    0.7945 ^ decoder/_4230_/Z (BUF_X1)
+    10   16.1486    0.0397    0.0652    0.8596 ^ decoder/_4231_/Z (BUF_X1)
+    10   17.3903    0.0425    0.0677    0.9274 ^ decoder/_4232_/Z (BUF_X1)
+    10   18.5415    0.0451    0.0709    0.9983 ^ decoder/_4233_/Z (BUF_X1)
+    10   19.7536    0.0479    0.0741    1.0723 ^ decoder/_4235_/Z (BUF_X1)
+    10   16.3234    0.0401    0.0661    1.1384 ^ decoder/_4236_/Z (BUF_X1)
+    10   19.9491    0.0483    0.0740    1.2124 ^ decoder/_4237_/Z (BUF_X1)
+    10   19.9429    0.0483    0.0748    1.2872 ^ decoder/_4238_/Z (BUF_X1)
+    10   19.3870    0.0471    0.0735    1.3606 ^ decoder/_4239_/Z (BUF_X1)
+    10   18.8201    0.0458    0.0720    1.4326 ^ decoder/_4240_/Z (BUF_X1)
+    10   16.1417    0.0397    0.0654    1.4981 ^ decoder/_4241_/Z (BUF_X1)
+    10   18.1414    0.0442    0.0695    1.5676 ^ decoder/_4242_/Z (BUF_X1)
+    10   15.5167    0.0382    0.0638    1.6314 ^ decoder/_4243_/Z (BUF_X1)
+    10   16.8744    0.0413    0.0662    1.6976 ^ decoder/_4246_/Z (BUF_X1)
+     1    1.4863    0.0123    0.0106    1.7082 v decoder/_3997_/ZN (NOR2_X1)
+     1    1.6059    0.0117    0.0213    1.7294 ^ decoder/_3998_/ZN (NAND3_X1)
+     5    5.4726    0.0110    0.0176    1.7470 v decoder/_3999_/ZN (NOR4_X1)
+     1    0.8752    0.0091    0.0565    1.8035 v _12960_/Z (MUX2_X1)
+     5    6.0964    0.0099    0.0342    1.8377 v csrs/_09118_/Z (BUF_X1)
+    10   13.4038    0.0169    0.0445    1.8822 v csrs/_06280_/Z (BUF_X1)
+    10   18.0550    0.0216    0.0541    1.9363 v csrs/_08736_/Z (BUF_X1)
+     1    0.9070    0.0091    0.0499    1.9862 v csrs/_08778_/Z (MUX2_X1)
+     2    3.0566    0.0116    0.0614    2.0476 v _18951_/Z (MUX2_X1)
+     1    1.6264    0.0261    0.0493    2.0969 ^ _18962_/ZN (NOR3_X1)
+     2    3.9320    0.0158    0.0208    2.1178 v _18984_/ZN (AOI21_X1)
+     1    1.5527    0.0134    0.0413    2.1591 v _18995_/ZN (XNOR2_X1)
+     1    1.6381    0.0262    0.0501    2.2092 ^ _19006_/ZN (NOR3_X1)
+     1    1.4899    0.0158    0.0321    2.2414 v _19073_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0763    2.3176 ^ _19140_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.3514 v _19151_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.4321 ^ _19162_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.4658 v _19173_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.5466 ^ _19184_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.5803 v _19195_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.6610 ^ _19206_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.6948 v _19217_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.7755 ^ _19228_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.8093 v _19239_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.8900 ^ _19251_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.9238 v _19262_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    3.0045 ^ _19273_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    3.0382 v _19284_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    3.1190 ^ _19295_/ZN (NOR4_X1)
+     1    3.4968    0.0228    0.0418    3.1608 v _19306_/ZN (NAND4_X1)
+     1    1.6599    0.0342    0.0738    3.2345 ^ _19317_/ZN (NOR4_X2)
+     1    1.5872    0.0163    0.0331    3.2676 v _19328_/ZN (NAND4_X1)
+     1    6.4234    0.0184    0.1167    3.3843 v _19339_/ZN (OR4_X2)
+     8   19.4899    0.0363    0.0552    3.4395 ^ _19350_/ZN (OAI211_X4)
+     5   18.2832    0.0225    0.0371    3.4766 v _19495_/ZN (NAND3_X4)
+     2    4.3042    0.0087    0.0159    3.4925 ^ _20584_/ZN (INV_X4)
+    10   13.4320    0.0107    0.0249    3.5174 ^ _20595_/Z (BUF_X4)
+    10   10.1192    0.0146    0.0304    3.5478 ^ _20606_/Z (BUF_X2)
+    12   19.5888    0.0475    0.0676    3.6154 ^ _21173_/Z (BUF_X1)
+     4    5.0993    0.0205    0.0318    3.6472 v frontend/_6016_/ZN (OAI21_X1)
+     1    1.6470    0.0094    0.0173    3.6645 ^ frontend/_3569_/ZN (INV_X1)
+     1    1.5638    0.0127    0.0133    3.6779 v frontend/_3570_/ZN (AOI21_X1)
+     2    2.5823    0.0207    0.0342    3.7120 ^ frontend/_3571_/ZN (NOR2_X1)
+     2    3.3145    0.0127    0.0392    3.7512 ^ _12603_/ZN (AND2_X1)
+     1    1.5583    0.0048    0.0079    3.7590 v memory_system/split.fmmu/_1540_/ZN (INV_X1)
+     3    4.2739    0.0303    0.0431    3.8021 ^ memory_system/split.fmmu/_1551_/ZN (OAI21_X1)
+     3    4.8535    0.0153    0.0455    3.8476 ^ memory_system/_118_/ZN (AND2_X1)
+     5    7.2140    0.0168    0.0267    3.8744 v memory_system/split.icache/_09775_/ZN (NAND2_X1)
+     3    3.4159    0.0382    0.0496    3.9240 ^ memory_system/split.icache/_16978_/ZN (OAI22_X1)
+     3    6.6869    0.0196    0.0575    3.9815 ^ memory_system/split.physical_arbiter/_1375_/Z (MUX2_X1)
+     3    6.7770    0.0129    0.0469    4.0284 ^ memory_system/split.physical_arbiter/_1552_/Z (MUX2_X2)
+     2    2.4030    0.0094    0.0136    4.0420 v memory_system/split.physical_arbiter/_1586_/ZN (AOI211_X2)
+     1    5.6131    0.0178    0.0867    4.1287 v memory_system/split.physical_arbiter/_1619_/ZN (OR3_X1)
+     7   17.8963    0.0349    0.0441    4.1728 ^ memory_system/split.physical_arbiter/_1652_/ZN (AOI21_X4)
+     2    4.5931    0.0110    0.0128    4.1855 v memory_system/split.physical_arbiter/_1852_/ZN (NOR2_X2)
+    10   17.2022    0.0079    0.0303    4.2159 v memory_system/split.physical_arbiter/_1863_/Z (BUF_X4)
+    10   15.3811    0.0075    0.0280    4.2439 v memory_system/split.physical_arbiter/_1874_/Z (BUF_X4)
+     1    0.9746    0.0417    0.0687    4.3126 ^ memory_system/split.physical_arbiter/_1477_/ZN (AOI222_X1)
+     2    3.2734    0.0122    0.0440    4.3567 ^ memory_system/split.physical_arbiter/_1478_/ZN (AND2_X1)
+     2    3.0745    0.0161    0.0154    4.3720 v memory_system/split.physical_arbiter/_1368_/ZN (AOI21_X1)
+     1    1.6504    0.0419    0.0804    4.4525 ^ memory_system/split.atomics/_2772_/ZN (NOR4_X1)
+     2    2.9421    0.0191    0.0297    4.4821 v memory_system/split.atomics/_2783_/ZN (NAND3_X1)
+     1    0.0100    0.0098    0.0189    4.5011 ^ memory_system/split.atomics/_2291_/ZN (NOR2_X1)
+                    0.0098    0.0000    4.5011 ^ req_store_check (out)
+                                        4.5011   data arrival time
+
+                    0.0000   10.0000   10.0000   clock core_clk (rise edge)
+                              0.0000   10.0000   clock network delay (ideal)
+                              0.0000   10.0000   clock reconvergence pessimism
+                             -1.0000    9.0000   output external delay
+                                        9.0000   data required time
+-------------------------------------------------------------------------------------
+                                        9.0000   data required time
+                                       -4.5011   data arrival time
+-------------------------------------------------------------------------------------
+                                        4.4989   slack (MET)
+
+
+Startpoint: _24746_ (rising edge-triggered flip-flop clocked by core_clk)
+Endpoint: dcache_write_event (output port clocked by core_clk)
+Path Group: core_clk
+Path Type: max
+
+Fanout       Cap      Slew     Delay      Time   Description
+-------------------------------------------------------------------------------------
+                    0.0000    0.0000    0.0000   clock core_clk (rise edge)
+                              0.0000    0.0000   clock network delay (ideal)
+                    0.0000    0.0000    0.0000 ^ _24746_/CK (DFF_X1)
+   132  203.7483    0.4676    0.5658    0.5658 ^ _24746_/Q (DFF_X1)
+    10   19.9737    0.0521    0.0834    0.6492 ^ decoder/_4228_/Z (BUF_X1)
+    10   20.5037    0.0496    0.0765    0.7257 ^ decoder/_4229_/Z (BUF_X1)
+    10   17.3908    0.0425    0.0688    0.7945 ^ decoder/_4230_/Z (BUF_X1)
+    10   16.1486    0.0397    0.0652    0.8596 ^ decoder/_4231_/Z (BUF_X1)
+    10   17.3903    0.0425    0.0677    0.9274 ^ decoder/_4232_/Z (BUF_X1)
+    10   18.5415    0.0451    0.0709    0.9983 ^ decoder/_4233_/Z (BUF_X1)
+    10   19.7536    0.0479    0.0741    1.0723 ^ decoder/_4235_/Z (BUF_X1)
+    10   16.3234    0.0401    0.0661    1.1384 ^ decoder/_4236_/Z (BUF_X1)
+    10   19.9491    0.0483    0.0740    1.2124 ^ decoder/_4237_/Z (BUF_X1)
+    10   19.9429    0.0483    0.0748    1.2872 ^ decoder/_4238_/Z (BUF_X1)
+    10   19.3870    0.0471    0.0735    1.3606 ^ decoder/_4239_/Z (BUF_X1)
+    10   18.8201    0.0458    0.0720    1.4326 ^ decoder/_4240_/Z (BUF_X1)
+    10   16.1417    0.0397    0.0654    1.4981 ^ decoder/_4241_/Z (BUF_X1)
+    10   18.1414    0.0442    0.0695    1.5676 ^ decoder/_4242_/Z (BUF_X1)
+    10   15.5167    0.0382    0.0638    1.6314 ^ decoder/_4243_/Z (BUF_X1)
+    10   16.8744    0.0413    0.0662    1.6976 ^ decoder/_4246_/Z (BUF_X1)
+     1    1.4863    0.0123    0.0106    1.7082 v decoder/_3997_/ZN (NOR2_X1)
+     1    1.6059    0.0117    0.0213    1.7294 ^ decoder/_3998_/ZN (NAND3_X1)
+     5    5.4726    0.0110    0.0176    1.7470 v decoder/_3999_/ZN (NOR4_X1)
+     1    0.8752    0.0091    0.0565    1.8035 v _12960_/Z (MUX2_X1)
+     5    6.0964    0.0099    0.0342    1.8377 v csrs/_09118_/Z (BUF_X1)
+    10   13.4038    0.0169    0.0445    1.8822 v csrs/_06280_/Z (BUF_X1)
+    10   18.0550    0.0216    0.0541    1.9363 v csrs/_08736_/Z (BUF_X1)
+     1    0.9070    0.0091    0.0499    1.9862 v csrs/_08778_/Z (MUX2_X1)
+     2    3.0566    0.0116    0.0614    2.0476 v _18951_/Z (MUX2_X1)
+     1    1.6264    0.0261    0.0493    2.0969 ^ _18962_/ZN (NOR3_X1)
+     2    3.9320    0.0158    0.0208    2.1178 v _18984_/ZN (AOI21_X1)
+     1    1.5527    0.0134    0.0413    2.1591 v _18995_/ZN (XNOR2_X1)
+     1    1.6381    0.0262    0.0501    2.2092 ^ _19006_/ZN (NOR3_X1)
+     1    1.4899    0.0158    0.0321    2.2414 v _19073_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0763    2.3176 ^ _19140_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.3514 v _19151_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.4321 ^ _19162_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.4658 v _19173_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.5466 ^ _19184_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.5803 v _19195_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.6610 ^ _19206_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.6948 v _19217_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.7755 ^ _19228_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.8093 v _19239_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    2.8900 ^ _19251_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    2.9238 v _19262_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    3.0045 ^ _19273_/ZN (NOR4_X1)
+     1    1.5542    0.0166    0.0338    3.0382 v _19284_/ZN (NAND4_X1)
+     1    1.6599    0.0420    0.0807    3.1190 ^ _19295_/ZN (NOR4_X1)
+     1    3.4968    0.0228    0.0418    3.1608 v _19306_/ZN (NAND4_X1)
+     1    1.6599    0.0342    0.0738    3.2345 ^ _19317_/ZN (NOR4_X2)
+     1    1.5872    0.0163    0.0331    3.2676 v _19328_/ZN (NAND4_X1)
+     1    6.4234    0.0184    0.1167    3.3843 v _19339_/ZN (OR4_X2)
+     8   19.4899    0.0363    0.0552    3.4395 ^ _19350_/ZN (OAI211_X4)
+     5   18.2832    0.0225    0.0371    3.4766 v _19495_/ZN (NAND3_X4)
+     2    4.3042    0.0087    0.0159    3.4925 ^ _20584_/ZN (INV_X4)
+    10   13.4320    0.0107    0.0249    3.5174 ^ _20595_/Z (BUF_X4)
+    10   10.1192    0.0146    0.0304    3.5478 ^ _20606_/Z (BUF_X2)
+    12   19.5888    0.0475    0.0676    3.6154 ^ _21173_/Z (BUF_X1)
+     4    5.0993    0.0205    0.0318    3.6472 v frontend/_6016_/ZN (OAI21_X1)
+     1    1.6470    0.0094    0.0173    3.6645 ^ frontend/_3569_/ZN (INV_X1)
+     1    1.5638    0.0127    0.0133    3.6779 v frontend/_3570_/ZN (AOI21_X1)
+     2    2.5823    0.0207    0.0342    3.7120 ^ frontend/_3571_/ZN (NOR2_X1)
+     2    3.3145    0.0127    0.0392    3.7512 ^ _12603_/ZN (AND2_X1)
+     1    1.5583    0.0048    0.0079    3.7590 v memory_system/split.fmmu/_1540_/ZN (INV_X1)
+     3    4.2739    0.0303    0.0431    3.8021 ^ memory_system/split.fmmu/_1551_/ZN (OAI21_X1)
+     3    4.8535    0.0153    0.0455    3.8476 ^ memory_system/_118_/ZN (AND2_X1)
+     5    7.2140    0.0168    0.0267    3.8744 v memory_system/split.icache/_09775_/ZN (NAND2_X1)
+     3    3.4159    0.0382    0.0496    3.9240 ^ memory_system/split.icache/_16978_/ZN (OAI22_X1)
+     3    6.6869    0.0196    0.0575    3.9815 ^ memory_system/split.physical_arbiter/_1375_/Z (MUX2_X1)
+     3    6.7770    0.0129    0.0469    4.0284 ^ memory_system/split.physical_arbiter/_1552_/Z (MUX2_X2)
+     2    2.4030    0.0094    0.0136    4.0420 v memory_system/split.physical_arbiter/_1586_/ZN (AOI211_X2)
+     1    5.6131    0.0178    0.0867    4.1287 v memory_system/split.physical_arbiter/_1619_/ZN (OR3_X1)
+     7   17.8963    0.0349    0.0441    4.1728 ^ memory_system/split.physical_arbiter/_1652_/ZN (AOI21_X4)
+     3    8.5345    0.0099    0.0383    4.2111 ^ memory_system/split.physical_arbiter/_1752_/ZN (AND2_X4)
+    10   26.0209    0.0107    0.0258    4.2368 ^ memory_system/split.physical_arbiter/_1763_/Z (BUF_X8)
+    10   26.7313    0.0109    0.0263    4.2631 ^ memory_system/split.physical_arbiter/_1774_/Z (BUF_X8)
+    10   16.1725    0.0214    0.0378    4.3010 ^ memory_system/split.physical_arbiter/_1330_/Z (BUF_X2)
+     3    4.8985    0.0172    0.0555    4.3564 ^ memory_system/split.physical_arbiter/_1565_/ZN (AND3_X1)
+     2    3.1277    0.0178    0.0176    4.3741 v memory_system/split.dcache/_14552_/ZN (AOI21_X1)
+     7   10.1088    0.0545    0.0747    4.4487 ^ memory_system/split.dcache/_14563_/ZN (NOR2_X1)
+     1    0.0100    0.0074    0.0445    4.4932 ^ memory_system/split.dcache/_19488_/ZN (AND3_X1)
+                    0.0074    0.0000    4.4932 ^ dcache_write_event (out)
+                                        4.4932   data arrival time
+
+                    0.0000   10.0000   10.0000   clock core_clk (rise edge)
+                              0.0000   10.0000   clock network delay (ideal)
+                              0.0000   10.0000   clock reconvergence pessimism
+                             -1.0000    9.0000   output external delay
+                                        9.0000   data required time
+-------------------------------------------------------------------------------------
+                                        9.0000   data required time
+                                       -4.4932   data arrival time
+-------------------------------------------------------------------------------------
+                                        4.5068   slack (MET)
+
+
+Startpoint: muldiv/_10487_ (rising edge-triggered flip-flop clocked by core_clk)
+Endpoint: muldiv/_10486_ (rising edge-triggered flip-flop clocked by core_clk)
+Path Group: core_clk
+Path Type: min
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00   clock core_clk (rise edge)
+   0.00    0.00   clock network delay (ideal)
+   0.00    0.00 ^ muldiv/_10487_/CK (DFF_X1)
+   0.07    0.07 ^ muldiv/_10487_/QN (DFF_X1)
+   0.01    0.08 v muldiv/_05638_/ZN (NOR3_X1)
+   0.00    0.08 v muldiv/_10486_/D (DFF_X1)
+           0.08   data arrival time
+
+   0.00    0.00   clock core_clk (rise edge)
+   0.00    0.00   clock network delay (ideal)
+   0.00    0.00   clock reconvergence pessimism
+           0.00 ^ muldiv/_10486_/CK (DFF_X1)
+   0.00    0.00   library hold time
+           0.00   data required time
+---------------------------------------------------------
+           0.00   data required time
+          -0.08   data arrival time
+---------------------------------------------------------
+           0.08   slack (MET)
+
+
+Startpoint: _24375_ (rising edge-triggered flip-flop clocked by core_clk)
+Endpoint: _24375_ (rising edge-triggered flip-flop clocked by core_clk)
+Path Group: core_clk
+Path Type: min
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00   clock core_clk (rise edge)
+   0.00    0.00   clock network delay (ideal)
+   0.00    0.00 ^ _24375_/CK (DFF_X1)
+   0.06    0.06 ^ _24375_/QN (DFF_X1)
+   0.03    0.09 ^ _18637_/ZN (AND2_X1)
+   0.00    0.09 ^ _24375_/D (DFF_X1)
+           0.09   data arrival time
+
+   0.00    0.00   clock core_clk (rise edge)
+   0.00    0.00   clock network delay (ideal)
+   0.00    0.00   clock reconvergence pessimism
+           0.00 ^ _24375_/CK (DFF_X1)
+   0.01    0.01   library hold time
+           0.01   data required time
+---------------------------------------------------------
+           0.01   data required time
+          -0.09   data arrival time
+---------------------------------------------------------
+           0.08   slack (MET)
+
+
+Startpoint: _23420_ (rising edge-triggered flip-flop clocked by core_clk)
+Endpoint: _23420_ (rising edge-triggered flip-flop clocked by core_clk)
+Path Group: core_clk
+Path Type: min
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00   clock core_clk (rise edge)
+   0.00    0.00   clock network delay (ideal)
+   0.00    0.00 ^ _23420_/CK (DFF_X1)
+   0.06    0.06 v _23420_/QN (DFF_X1)
+   0.01    0.08 ^ _15622_/ZN (INV_X1)
+   0.01    0.09 v _15623_/ZN (AOI21_X1)
+   0.00    0.09 v _23420_/D (DFF_X1)
+           0.09   data arrival time
+
+   0.00    0.00   clock core_clk (rise edge)
+   0.00    0.00   clock network delay (ideal)
+   0.00    0.00   clock reconvergence pessimism
+           0.00 ^ _23420_/CK (DFF_X1)
+   0.00    0.00   library hold time
+           0.00   data required time
+---------------------------------------------------------
+           0.00   data required time
+          -0.09   data arrival time
+---------------------------------------------------------
+           0.09   slack (MET)
+
+
+Startpoint: csrs/_09671_ (rising edge-triggered flip-flop clocked by core_clk)
+Endpoint: csrs/_09671_ (rising edge-triggered flip-flop clocked by core_clk)
+Path Group: core_clk
+Path Type: min
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00   clock core_clk (rise edge)
+   0.00    0.00   clock network delay (ideal)
+   0.00    0.00 ^ csrs/_09671_/CK (DFF_X1)
+   0.06    0.06 ^ csrs/_09671_/QN (DFF_X1)
+   0.01    0.07 v csrs/_07890_/ZN (NAND2_X1)
+   0.02    0.10 ^ csrs/_07896_/ZN (AOI21_X1)
+   0.00    0.10 ^ csrs/_09671_/D (DFF_X1)
+           0.10   data arrival time
+
+   0.00    0.00   clock core_clk (rise edge)
+   0.00    0.00   clock network delay (ideal)
+   0.00    0.00   clock reconvergence pessimism
+           0.00 ^ csrs/_09671_/CK (DFF_X1)
+   0.01    0.01   library hold time
+           0.01   data required time
+---------------------------------------------------------
+           0.01   data required time
+          -0.10   data arrival time
+---------------------------------------------------------
+           0.09   slack (MET)
+
+
+Startpoint: _24183_ (rising edge-triggered flip-flop clocked by core_clk)
+Endpoint: _24183_ (rising edge-triggered flip-flop clocked by core_clk)
+Path Group: core_clk
+Path Type: min
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00   clock core_clk (rise edge)
+   0.00    0.00   clock network delay (ideal)
+   0.00    0.00 ^ _24183_/CK (DFF_X1)
+   0.06    0.06 v _24183_/QN (DFF_X1)
+   0.01    0.08 ^ _17946_/ZN (INV_X1)
+   0.01    0.09 v _17947_/ZN (AOI211_X1)
+   0.00    0.09 v _24183_/D (DFF_X1)
+           0.09   data arrival time
+
+   0.00    0.00   clock core_clk (rise edge)
+   0.00    0.00   clock network delay (ideal)
+   0.00    0.00   clock reconvergence pessimism
+           0.00 ^ _24183_/CK (DFF_X1)
+   0.00    0.00   library hold time
+           0.00   data required time
+---------------------------------------------------------
+           0.00   data required time
+          -0.09   data arrival time
+---------------------------------------------------------
+           0.09   slack (MET)
+
+
+core_clk period_min = 4.86 fmax = 205.80

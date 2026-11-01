@@ -11,10 +11,11 @@
 | [v7_dcache_early](v7_dcache_early/README.md) | D-cache关键数据优先与提前重启 | 冻结的数据提前重启基线 |
 | [v8_split_memory](v8_split_memory/README.md) | 独立I/D MMU与缓存路径，共享物理仲裁 | 冻结的分离访存路径基线 |
 | [v9_static_predict](v9_static_predict/README.md) | BTFNT静态分支预测，JAL目标预测 | 冻结的静态预测基线 |
-| [v10_return_stack](v10_return_stack/README.md) | 8项返回地址栈，提交时更新 | 当前开发与实验 |
+| [v10_return_stack](v10_return_stack/README.md) | 8项返回地址栈，提交时更新 | 冻结的提交RAS基线 |
+| [v11_tlb](v11_tlb/README.md) | I/D各8项全相联4KiB TLB | 当前开发与实验 |
 
 每版有独立的 rtl、sim、sw、scripts、Makefile、build 和 results。
-仓库根目录的 Makefile 默认转发至 v10；用 VERSION=<目录名> 选择其他版本。后续新架构使用新目录，旧架构不随之修改。
+仓库根目录的 Makefile 默认转发至 v11；用 VERSION=<目录名> 选择其他版本。后续新架构使用新目录，旧架构不随之修改。
 公共比较脚本只负责运行实验，不在不同版本之间共用会变化的 RTL。
 
 ```sh
@@ -24,7 +25,7 @@ python3 tools/benchmark.py
 python3 tools/benchmark.py --run-id my-experiment
 ```
 
-默认比较十个版本的 11 个程序，在 (latency,gap)=(1,0)、(5,0)、(5,3) 下各跑一次，每版 33 次。
+默认比较十一个版本的12个程序，在(latency,gap)=(1,0)、(5,0)、(5,3)下各跑一次，每版36次。
 包括求和、依赖链、指针追踪、访存、位操作、C、M/A/C C、直线 ALU 、压缩指令依赖链和重复数据读取。
 脚本检查各版二进制 SHA-256 一致、退休指令数一致，且逐条提交和最终内存通过独立参考模型。
 v3/v4 另有关闭缓存的对照；v4 另有 27 组关闭取指缓冲的对照，分别隔离不同改动的收益。
@@ -72,3 +73,5 @@ v8增加SPLIT_MEMORY=0对照，同轮包含v7时检查恢复串行连接后的�
 v9增加PREDICT_ENABLE=0对照，恢复v8的顺序取指与跳转冲刷；同轮30组周期数/请求数逐项核对。
 
 v10增加RAS_ENABLE=0对照，33组周期数/请求数与同轮v9逐项核对；新增公共calls.S基准。
+
+v11增加TLB_ENABLE=0对照，36组周期数/请求数与同轮v10核对；新增公共分页基准，旧实验表保持不变。

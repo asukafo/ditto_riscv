@@ -1,0 +1,10 @@
+{
+  "name": "v11_tlb",
+  "base_commit": "61b8c82",
+  "architecture": "single_issue_split_memory_8_entry_itlb_dtlb_sv39_4k",
+  "icache_bytes": 256,
+  "dcache_bytes": 256,
+  "line_bytes": 16,
+  "tlb_entries_per_side": 8,
+  "tlb_page_bytes": 4096
+}
