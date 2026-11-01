@@ -1,0 +1,8 @@
+{
+  "name": "v9_static_predict",
+  "base_commit": "321bb47",
+  "architecture": "single_issue_split_memory_backward_taken_forward_not_taken_static_prediction",
+  "icache_bytes": 256,
+  "dcache_bytes": 256,
+  "line_bytes": 16
+}

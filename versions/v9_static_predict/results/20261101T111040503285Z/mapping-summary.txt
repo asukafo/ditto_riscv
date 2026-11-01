@@ -1,0 +1,149 @@
+=== design hierarchy ===
+
+        +----------Count including submodules.
+        |        +-Area including submodules.
+        |        |
+    77893 1.32E+05 rv64_core
+      174  321.594 $paramod$7887bd8815880764c17cfb6846d9e30b6c62bf2b\rv64_memory_system
+    11221 2.28E+04   $paramod$6abdd9dac59acb69d9fcb736ac318c0d181db642\rv64_dcache
+     9929 2.12E+04   $paramod$6abdd9dac59acb69d9fcb736ac318c0d181db642\rv64_icache
+     2016   3391.5   rv64_atomic_adapter
+     1234 1.33E+03     rv64_amo_alu
+     1424  2.3E+03   rv64_mmu
+     1322  1977.71   rv64_physical_arbiter
+     3648 5.79E+03 $paramod$b6cc75ca31df0f25b58513b89cae0048ea5458f4\rv64_fetch
+      662  846.678   $paramod$4408742ff15e67bc0fde016bac2c0338b3d59774\rv64_static_predictor
+      231  257.222   rv64_decompress
+     5234  8.9E+03 $paramod\rv64_csr\EXTENSIONS=s32'00000000000000000000000000000001
+     2524 2.87E+03 $paramod\rv64_decoder\EXTENSIONS=s32'00000000000000000000000000000001
+     4019 4.73E+03 rv64_alu
+     1234 1.33E+03 rv64_amo_alu
+      205  215.194 rv64_lsu
+     5602  8.4E+03 rv64_muldiv
+    12920  2.1E+04 rv64_regfile
+
+        +----------Count including submodules.
+        |        +-Area including submodules.
+        |        |
+    76148        - wires
+   101854        - wire bits
+     1014        - public wires
+    25883        - public wire bits
+      473        - ports
+     9086        - port bits
+        -        - memories
+        -        - memory bits
+        -        - processes
+    77893 1.32E+05 cells
+     2063  2.2E+03   AND2_X1
+       13    17.29   AND2_X2
+       15    35.91   AND2_X4
+      332   441.56   AND3_X1
+       10    15.96   AND3_X2
+       16   46.816   AND3_X4
+      183  292.068   AND4_X1
+       26   48.412   AND4_X2
+       16   55.328   AND4_X4
+     2917  3879.61   AOI211_X1
+      113  270.522   AOI211_X2
+        1    2.926   AOI211_X4
+     6644 7.07E+03   AOI21_X1
+       61  113.582   AOI21_X2
+       36  124.488   AOI21_X4
+      855  1364.58   AOI221_X1
+        7   20.482   AOI221_X2
+        2    6.916   AOI221_X4
+      430   915.04   AOI222_X1
+        5    18.62   AOI222_X2
+     1541  2049.53   AOI22_X1
+        2    4.788   AOI22_X2
+     4378 3.49E+03   BUF_X1
+        2     13.3   BUF_X16
+      732  778.848   BUF_X2
+      231  430.122   BUF_X4
+       36  124.488   BUF_X8
+     1489 1.19E+03   CLKBUF_X1
+       88   93.632   CLKBUF_X2
+        1     1.33   CLKBUF_X3
+    12322 5.57E+04   DFF_X1
+     6131 3.26E+03   INV_X1
+       11    8.778   INV_X2
+        1     1.33   INV_X4
+     8953 1.67E+04   MUX2_X1
+       13   31.122   MUX2_X2
+     4097 3.27E+03   NAND2_X1
+       22    29.26   NAND2_X2
+        5    11.97   NAND2_X4
+     1200   1276.8   NAND3_X1
+       13   24.206   NAND3_X2
+       12   41.496   NAND3_X4
+      328   436.24   NAND4_X1
+       13   31.122   NAND4_X2
+       25    119.7   NAND4_X4
+     5765  4600.47   NOR2_X1
+       27    35.91   NOR2_X2
+       17   40.698   NOR2_X4
+     1118 1.19E+03   NOR3_X1
+       37   68.894   NOR3_X2
+       12   44.688   NOR3_X4
+      362   481.46   NOR4_X1
+       16   38.304   NOR4_X2
+       42  201.096   NOR4_X4
+     1646  2189.18   OAI211_X1
+        8   19.152   OAI211_X2
+        3   13.566   OAI211_X4
+     6647 7.07E+03   OAI21_X1
+       50     93.1   OAI21_X2
+       16   55.328   OAI21_X4
+      495   790.02   OAI221_X1
+        1    2.926   OAI221_X2
+      151  321.328   OAI222_X1
+     2998  3987.34   OAI22_X1
+        8   19.152   OAI22_X2
+        4   18.088   OAI22_X4
+      115   214.13   OAI33_X1
+      564  600.096   OR2_X1
+       10     13.3   OR2_X2
+        6   14.364   OR2_X4
+      215   285.95   OR3_X1
+       14   22.344   OR3_X2
+        5    14.63   OR3_X4
+       65   103.74   OR4_X1
+       11   20.482   OR4_X2
+        6   20.748   OR4_X4
+     1386 2.21E+03   XNOR2_X1
+       10     26.6   XNOR2_X2
+      663 1.06E+03   XOR2_X1
+        9   21.546   XOR2_X2
+        9  1.1E+05 submodules
+        1 5.56E+04   $paramod$7887bd8815880764c17cfb6846d9e30b6c62bf2b\rv64_memory_system
+        1  6.9E+03   $paramod$b6cc75ca31df0f25b58513b89cae0048ea5458f4\rv64_fetch
+        1  8.9E+03   $paramod\rv64_csr\EXTENSIONS=s32'00000000000000000000000000000001
+        1 2.87E+03   $paramod\rv64_decoder\EXTENSIONS=s32'00000000000000000000000000000001
+        1 4.73E+03   rv64_alu
+        1 2.66E+03   rv64_amo_alu
+        1  215.194   rv64_lsu
+        1  8.4E+03   rv64_muldiv
+        1  2.1E+04   rv64_regfile
+
+   Chip area for top module '\rv64_core': 131956.748000
+     of which used for sequential elements: 55720.084000 (42.23%)
+
+25. Executing Verilog backend.
+Dumping module `$paramod$4408742ff15e67bc0fde016bac2c0338b3d59774\rv64_static_predictor'.
+Dumping module `$paramod$6abdd9dac59acb69d9fcb736ac318c0d181db642\rv64_dcache'.
+Dumping module `$paramod$6abdd9dac59acb69d9fcb736ac318c0d181db642\rv64_icache'.
+Dumping module `$paramod$7887bd8815880764c17cfb6846d9e30b6c62bf2b\rv64_memory_system'.
+Dumping module `$paramod$b6cc75ca31df0f25b58513b89cae0048ea5458f4\rv64_fetch'.
+Dumping module `$paramod\rv64_csr\EXTENSIONS=s32'00000000000000000000000000000001'.
+Dumping module `$paramod\rv64_decoder\EXTENSIONS=s32'00000000000000000000000000000001'.
+Dumping module `\rv64_alu'.
+Dumping module `\rv64_amo_alu'.
+Dumping module `\rv64_atomic_adapter'.
+Dumping module `\rv64_core'.
+Dumping module `\rv64_decompress'.
+Dumping module `\rv64_lsu'.
+Dumping module `\rv64_mmu'.
+Dumping module `\rv64_muldiv'.
+Dumping module `\rv64_physical_arbiter'.
+Dumping module `\rv64_regfile'.

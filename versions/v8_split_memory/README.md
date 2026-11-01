@@ -2,7 +2,7 @@
 
 v7已经提前返回load数据，但D-cache背景补数仍阻塞共享串行路径上的取指，甚至I-cache命中也要等。
 v8把取指与数据的地址翻译/缓存访问分开，让两侧命中能够独立推进。
-F/X/W仍是单发射、顺序执行。v1–v7独立冻结；所有版本的优化动机见[根README](../../README.md)。
+F/X/W仍是单发射、顺序执行。本版现已冻结，默认开发入口为v9；所有版本的优化动机见[根README](../../README.md)。
 
 ## 结构：把仲裁放到真正访问外部内存的位置
 
@@ -106,11 +106,11 @@ C53/C55/C57继续发射，C55/C57/C59继续提交。地址0x3008的剩余数据�
 622份提交/最终内存文件逐字节一致。门级使用标准单元逻辑模型，不含SDF延迟。
 
 ```sh
-# 根目录默认v8
-make lint test
-make test-split
-make test-mapped
-make diagrams
+# 仓库根目录，明确选择冻结的v8
+make lint test VERSION=v8_split_memory
+make test-split VERSION=v8_split_memory
+make test-mapped VERSION=v8_split_memory
+make diagrams VERSION=v8_split_memory
 make compare BENCHMARK_ARGS="--versions v5_early_restart v7_dcache_early v8_split_memory"
 make test VERSION=v7_dcache_early
 ```

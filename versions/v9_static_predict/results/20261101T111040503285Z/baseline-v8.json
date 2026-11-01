@@ -1,0 +1,34 @@
+{
+  "program": "sum",
+  "latency": 5,
+  "gap": 3,
+  "cycles": 1111,
+  "flush_count": 63,
+  "discarded_fetch_responses": 63,
+  "committed_control_flow": {
+    "conditional": 64,
+    "jal": 0,
+    "jalr": 0
+  },
+  "source_rtl_sha256": {
+    "rv64_alu.sv": "eb86bf6dd403c708fafe1ae416a588c6111f42da82eab25de6583daf48092acb",
+    "rv64_amo_alu.sv": "52d9c2468125b2788303930fd6d35b5eec26c005e6cd507449e0d2723b31270e",
+    "rv64_atomic_adapter.sv": "82b935c40ed68af26c3f8de3685193770064e71a2bbe2b811ed3f68643c5bddc",
+    "rv64_bus_arbiter.sv": "ba9a7c223d89a5e9cc88b11f2f2c5e6266aa5e02e75346b01a4aaf77db901163",
+    "rv64_core.sv": "0a9cd14c2f6687099d35bcf339fc9ce02cff15ff319f254727341085b1578d73",
+    "rv64_csr.sv": "a7aa808e17753e035b6316f645c25e7cd3c7269cb12b14e8d7d75772c394a7f3",
+    "rv64_dcache.sv": "930cbc06bca25cce823f2ce9280c226b47a6be21b5ed85b3bb19783526998415",
+    "rv64_decoder.sv": "037b781bb92e71f0c829620248eec0b69bd8ce151c5e6e3a60c2fca0929da6bd",
+    "rv64_decompress.sv": "aeae3ad6f8d74432f36f4543e820a8db9f4befc38b19bbd19e535d9c4a180aae",
+    "rv64_fetch.sv": "49f69fd3726080511fddcbe68ca7622dacafad531f13eb46747277931ef1c0ba",
+    "rv64_icache.sv": "f1e455bcd5a62d37aab9ff58cba4db87bc6bebd28553f2334991ae9697a21459",
+    "rv64_lsu.sv": "7901ad7ed68a99bad79d52b32b13de2698f980b6b8de8fd2177b68801bccfff1",
+    "rv64_memory_system.sv": "338b7b93702cda2464e0ff42133d68f7ee460204363adb68528686b2c2268374",
+    "rv64_mmu.sv": "581b7eb66f3f65eb11009c6f48506d7049dd336942c30bd3055dcad7477ff2ee",
+    "rv64_muldiv.sv": "4f17ae98d31dd4297338ad8878c695f0d48f87a9cf4ea1a618920b1256e8474b",
+    "rv64_physical_arbiter.sv": "6eb62aa42385935a286be5622da96ace43db189aa2dfa00c5e6fa749c920de99",
+    "rv64_regfile.sv": "c5f0bbcbaae376c8565a53a6170aec0e5a36244454dacd0124d66458b4e38583"
+  },
+  "image_sha256": "0658cc1382d509ac883f92d96111cbe5d934ed6fd304c0ca8c13071e85681aed",
+  "trace_sha256": "de5341f1ad39548a7f7bf5dc3da8912038122babcf3475c89b66bf565d34350e"
+}

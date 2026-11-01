@@ -2,6 +2,7 @@
 
 ## 当前工程
 
+- [v9 静态分支预测、错误路径恢复与循环退出波形](../versions/v9_static_predict/README.md)
 - [v8 独立翻译/缓存路径、响应归属与并发波形](../versions/v8_split_memory/README.md)
 - [v7 数据提前重启与共享通路瓶颈](../versions/v7_dcache_early/README.md)
 
