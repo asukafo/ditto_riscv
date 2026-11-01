@@ -14,10 +14,10 @@ sys.path.insert(0,str(ROOT/'versions'/'v1_multicycle'/'scripts'))
 from reference import verify_files
 from profile_stalls import profile
 
-VERSIONS=('v1_multicycle','v2_single_issue','v3_icache','v4_fetch_buffer','v5_early_restart','v6_dcache','v7_dcache_early','v8_split_memory','v9_static_predict')
+VERSIONS=('v1_multicycle','v2_single_issue','v3_icache','v4_fetch_buffer','v5_early_restart','v6_dcache','v7_dcache_early','v8_split_memory','v9_static_predict','v10_return_stack')
 PROGRAMS={'sum':2080,'dependency':128,'pointer_chase':2016,'load_add_store':14,
           'bit_ops':0x7ffffffffffffffc,'c_demo':1488,'full_demo':949,
-          'independent':640,'compressed':128,'data_reuse':896}
+          'independent':640,'compressed':128,'data_reuse':896,'calls':64}
 TIMINGS=((1,0),(5,0),(5,3))
 
 
@@ -45,17 +45,18 @@ def main():
         folder=ROOT/'versions'/version
         results=folder/'results'/args.run_id
         results.mkdir(parents=True,exist_ok=False)
-        targets=['build/full_obj/Vrv64_core']+[f'build/{name}.bin' for name in PROGRAMS if name not in ('independent','compressed','data_reuse')]+['timing']
-        if version in ('v3_icache','v4_fetch_buffer','v5_early_restart','v6_dcache','v7_dcache_early','v8_split_memory','v9_static_predict'):targets.append('build/noicache_obj/Vrv64_core')
-        if version in ('v4_fetch_buffer','v5_early_restart','v6_dcache','v7_dcache_early','v8_split_memory','v9_static_predict'):targets.append('build/nobuffer_obj/Vrv64_core')
-        if version in ('v5_early_restart','v6_dcache','v7_dcache_early','v8_split_memory','v9_static_predict'):targets.append('build/noearly_obj/Vrv64_core')
-        if version in ('v6_dcache','v7_dcache_early','v8_split_memory','v9_static_predict'):targets.append('build/nodcache_obj/Vrv64_core')
-        if version in ('v7_dcache_early','v8_split_memory','v9_static_predict'):targets.append('build/nodataearly_obj/Vrv64_core')
-        if version in ('v8_split_memory','v9_static_predict'):targets.append('build/unsplit_obj/Vrv64_core')
-        if version=='v9_static_predict':targets.append('build/nopredict_obj/Vrv64_core')
+        targets=['build/full_obj/Vrv64_core']+[f'build/{name}.bin' for name in PROGRAMS if name not in ('independent','compressed','data_reuse','calls')]+['timing']
+        if version in ('v3_icache','v4_fetch_buffer','v5_early_restart','v6_dcache','v7_dcache_early','v8_split_memory','v9_static_predict','v10_return_stack'):targets.append('build/noicache_obj/Vrv64_core')
+        if version in ('v4_fetch_buffer','v5_early_restart','v6_dcache','v7_dcache_early','v8_split_memory','v9_static_predict','v10_return_stack'):targets.append('build/nobuffer_obj/Vrv64_core')
+        if version in ('v5_early_restart','v6_dcache','v7_dcache_early','v8_split_memory','v9_static_predict','v10_return_stack'):targets.append('build/noearly_obj/Vrv64_core')
+        if version in ('v6_dcache','v7_dcache_early','v8_split_memory','v9_static_predict','v10_return_stack'):targets.append('build/nodcache_obj/Vrv64_core')
+        if version in ('v7_dcache_early','v8_split_memory','v9_static_predict','v10_return_stack'):targets.append('build/nodataearly_obj/Vrv64_core')
+        if version in ('v8_split_memory','v9_static_predict','v10_return_stack'):targets.append('build/unsplit_obj/Vrv64_core')
+        if version in ('v9_static_predict','v10_return_stack'):targets.append('build/nopredict_obj/Vrv64_core')
+        if version=='v10_return_stack':targets.append('build/noras_obj/Vrv64_core')
         with (results/'build.log').open('w') as log:
             subprocess.run(['make',*targets,f'CROSS={args.cross}'],cwd=folder,stdout=log,stderr=subprocess.STDOUT,check=True)
-        for name in ('independent','compressed','data_reuse'):
+        for name in ('independent','compressed','data_reuse','calls'):
             subprocess.run([args.cross+'gcc','-march=rv64imac_zicsr_zifencei','-mabi=lp64','-nostdlib','-nostartfiles',
                             '-Wl,-Ttext=0,-e,_start,--no-relax','-o',f'build/{name}.elf',str(ROOT/'benchmarks'/f'{name}.S')],cwd=folder,check=True)
             subprocess.run([args.cross+'objcopy','-O','binary','-j','.text',f'build/{name}.elf',f'build/{name}.bin'],cwd=folder,check=True)
@@ -72,7 +73,7 @@ def main():
                   'images':{},'tools':{}}
         for tool in (['verilator','--version'],['yosys','-V'],[args.cross+'gcc','--version']):
             manifest['tools'][tool[0]]=subprocess.check_output(tool,text=True).splitlines()[0]
-        rows=[];ablations=[];buffer_ablations=[];early_ablations=[];data_ablations=[];data_early_ablations=[];split_ablations=[];prediction_ablations=[]
+        rows=[];ablations=[];buffer_ablations=[];early_ablations=[];data_ablations=[];data_early_ablations=[];split_ablations=[];prediction_ablations=[];ras_ablations=[]
         for name,expected in PROGRAMS.items():
             image=folder/'build'/f'{name}.bin'
             digest=hashlib.sha256(image.read_bytes()).hexdigest()
@@ -82,7 +83,7 @@ def main():
             for latency,gap in TIMINGS:
                 # Raw traces remain under each version's ignored build directory.
                 trace=folder/'build'/f'benchmark-{args.run_id}-{name}-l{latency}-g{gap}.trace.jsonl'
-                capture_profile=version in ('v2_single_issue','v3_icache','v4_fetch_buffer','v5_early_restart','v6_dcache','v7_dcache_early','v8_split_memory','v9_static_predict') and name=='sum' and (latency,gap)==(5,3)
+                capture_profile=version in ('v2_single_issue','v3_icache','v4_fetch_buffer','v5_early_restart','v6_dcache','v7_dcache_early','v8_split_memory','v9_static_predict','v10_return_stack') and name=='sum' and (latency,gap)==(5,3)
                 wave=folder/'build'/f'benchmark-{args.run_id}-stall-profile.vcd' if capture_profile else '-'
                 run=subprocess.run([str(folder/'build/full_obj/Vrv64_core'),str(image),str(latency),str(wave),str(gap),str(trace)],
                                    cwd=folder,capture_output=True,text=True,check=True)
@@ -111,6 +112,8 @@ def main():
                     row[key]=stats.get(key,0)
                 for key in ('control_resolved','conditional_branches','direct_jumps','indirect_jumps','control_misses','predicted_redirects','conditional_misses','direct_misses','indirect_misses'):
                     row[key]=stats.get(key,'')
+                for key in ('ras_predictions','ras_misses','ras_pushes','ras_pops','ras_overflows','ras_underflows'):
+                    row[key]=stats.get(key,'')
                 row['flush_count']=stats.get('flush_count',0)
                 for key in ('fetch_buffer_reuses','fetch_buffer_flushes'):
                     row[key]=stats.get(key,0)
@@ -118,7 +121,7 @@ def main():
                             'fetch_blocked_by_data_cycles','discarded_fetch_responses'):
                     row[key]=stats.get(key,'')
                 rows.append(row)
-                if version in ('v3_icache','v4_fetch_buffer','v5_early_restart','v6_dcache','v7_dcache_early','v8_split_memory','v9_static_predict'):
+                if version in ('v3_icache','v4_fetch_buffer','v5_early_restart','v6_dcache','v7_dcache_early','v8_split_memory','v9_static_predict','v10_return_stack'):
                     off_trace=folder/'build'/f'benchmark-{args.run_id}-{name}-off-l{latency}-g{gap}.trace.jsonl'
                     off_run=subprocess.run([str(folder/'build/noicache_obj/Vrv64_core'),str(image),str(latency),'-',str(gap),str(off_trace)],
                                            cwd=folder,capture_output=True,text=True,check=True)
@@ -129,7 +132,7 @@ def main():
                         cache_cycles=stats['cycles'],disabled_cycles=off['cycles'],cache_requests=stats['requests'],disabled_requests=off['requests'],
                         cache_frontend_starved=stats['frontend_starved_cycles'],disabled_frontend_starved=off['frontend_starved_cycles'],
                         cache_data_fetch_contention=stats['data_blocked_by_fetch_cycles'],disabled_data_fetch_contention=off['data_blocked_by_fetch_cycles']))
-                if version in ('v4_fetch_buffer','v5_early_restart','v6_dcache','v7_dcache_early','v8_split_memory','v9_static_predict'):
+                if version in ('v4_fetch_buffer','v5_early_restart','v6_dcache','v7_dcache_early','v8_split_memory','v9_static_predict','v10_return_stack'):
                     off_trace=folder/'build'/f'benchmark-{args.run_id}-{name}-buffer-off-l{latency}-g{gap}.trace.jsonl'
                     off_run=subprocess.run([str(folder/'build/nobuffer_obj/Vrv64_core'),str(image),str(latency),'-',str(gap),str(off_trace)],
                                            cwd=folder,capture_output=True,text=True,check=True)
@@ -144,7 +147,7 @@ def main():
                         buffer_cycles=stats['cycles'],disabled_cycles=off['cycles'],buffer_requests=stats['requests'],disabled_requests=off['requests'],
                         buffer_icache_lookups=stats['icache_hits']+stats['icache_misses'],disabled_icache_lookups=off['icache_hits']+off['icache_misses'],
                         buffer_reuses=stats['fetch_buffer_reuses'],buffer_flushes=stats['fetch_buffer_flushes']))
-                if version in ('v5_early_restart','v6_dcache','v7_dcache_early','v8_split_memory','v9_static_predict'):
+                if version in ('v5_early_restart','v6_dcache','v7_dcache_early','v8_split_memory','v9_static_predict','v10_return_stack'):
                     off_trace=folder/'build'/f'benchmark-{args.run_id}-{name}-early-off-l{latency}-g{gap}.trace.jsonl'
                     off=json.loads(subprocess.check_output([str(folder/'build/noearly_obj/Vrv64_core'),str(image),str(latency),'-',str(gap),str(off_trace)],cwd=folder,text=True))
                     assert off['result']==expected and verify_files(image,off_trace)==count and off['instret']==count
@@ -153,7 +156,7 @@ def main():
                     if baseline and version=='v5_early_restart':assert (off['cycles'],off['requests'])==(baseline['cycles'],baseline['requests']),(name,latency,gap,off,baseline)
                     early_ablations.append(dict(program=name,latency=latency,gap=gap,instret=count,
                         early_cycles=stats['cycles'],disabled_cycles=off['cycles'],early_requests=stats['requests'],disabled_requests=off['requests']))
-                if version in ('v6_dcache','v7_dcache_early','v8_split_memory','v9_static_predict'):
+                if version in ('v6_dcache','v7_dcache_early','v8_split_memory','v9_static_predict','v10_return_stack'):
                     off_trace=folder/'build'/f'benchmark-{args.run_id}-{name}-data-off-l{latency}-g{gap}.trace.jsonl'
                     off=json.loads(subprocess.check_output([str(folder/'build/nodcache_obj/Vrv64_core'),str(image),str(latency),'-',str(gap),str(off_trace)],cwd=folder,text=True))
                     assert off['result']==expected and verify_files(image,off_trace)==count and off['instret']==count
@@ -164,7 +167,7 @@ def main():
                     data_ablations.append(dict(program=name,latency=latency,gap=gap,instret=count,
                         cache_cycles=stats['cycles'],disabled_cycles=off['cycles'],cache_requests=stats['requests'],disabled_requests=off['requests'],
                         cache_data_wait=stats['data_wait'],disabled_data_wait=off['data_wait'],hits=stats['dcache_hits'],misses=stats['dcache_misses']))
-                if version in ('v7_dcache_early','v8_split_memory','v9_static_predict'):
+                if version in ('v7_dcache_early','v8_split_memory','v9_static_predict','v10_return_stack'):
                     off_trace=folder/'build'/f'benchmark-{args.run_id}-{name}-data-early-off-l{latency}-g{gap}.trace.jsonl'
                     off=json.loads(subprocess.check_output([str(folder/'build/nodataearly_obj/Vrv64_core'),str(image),str(latency),'-',str(gap),str(off_trace)],cwd=folder,text=True))
                     assert off['result']==expected and verify_files(image,off_trace)==count and off['instret']==count
@@ -175,7 +178,7 @@ def main():
                         early_cycles=stats['cycles'],disabled_cycles=off['cycles'],early_requests=stats['requests'],disabled_requests=off['requests'],
                         early_data_wait=stats['data_wait'],disabled_data_wait=off['data_wait'],
                         early_frontend_starved=stats['frontend_starved_cycles'],disabled_frontend_starved=off['frontend_starved_cycles']))
-                if version in ('v8_split_memory','v9_static_predict'):
+                if version in ('v8_split_memory','v9_static_predict','v10_return_stack'):
                     off_trace=folder/'build'/f'benchmark-{args.run_id}-{name}-unsplit-l{latency}-g{gap}.trace.jsonl'
                     off=json.loads(subprocess.check_output([str(folder/'build/unsplit_obj/Vrv64_core'),str(image),str(latency),'-',str(gap),str(off_trace)],cwd=folder,text=True))
                     assert off['result']==expected and verify_files(image,off_trace)==count and off['instret']==count
@@ -188,7 +191,7 @@ def main():
                         split_frontend_starved=stats['frontend_starved_cycles'],legacy_frontend_starved=off['frontend_starved_cycles'],
                         instruction_hits_during_data_fill=stats['instruction_hits_during_data_fill'],
                         data_hits_during_instruction_fill=stats['data_hits_during_instruction_fill']))
-                if version=='v9_static_predict':
+                if version in ('v9_static_predict','v10_return_stack'):
                     off_trace=folder/'build'/f'benchmark-{args.run_id}-{name}-nopredict-l{latency}-g{gap}.trace.jsonl'
                     off=json.loads(subprocess.check_output([str(folder/'build/nopredict_obj/Vrv64_core'),str(image),str(latency),'-',str(gap),str(off_trace)],cwd=folder,text=True))
                     assert off['result']==expected and verify_files(image,off_trace)==count and off['instret']==count
@@ -201,7 +204,20 @@ def main():
                         resolved=stats['control_resolved'],predict_misses=stats['control_misses'],disabled_misses=off['control_misses'],
                         predict_flushes=stats['flush_count'],disabled_flushes=off['flush_count'],
                         predict_frontend_starved=stats['frontend_starved_cycles'],disabled_frontend_starved=off['frontend_starved_cycles']))
+                if version=='v10_return_stack':
+                    off_trace=folder/'build'/f'benchmark-{args.run_id}-{name}-noras-l{latency}-g{gap}.trace.jsonl'
+                    off=json.loads(subprocess.check_output([str(folder/'build/noras_obj/Vrv64_core'),str(image),str(latency),'-',str(gap),str(off_trace)],cwd=folder,text=True))
+                    assert off['result']==expected and verify_files(image,off_trace)==count and off['instret']==count
+                    assert off['ras_enabled']==0 and off['ras_predictions']==off['ras_pushes']==off['ras_pops']==0
+                    baseline=next((r for r in all_rows if r['version']=='v9_static_predict' and
+                                   (r['program'],r['latency'],r['gap'])==(name,latency,gap)),None)
+                    if baseline:assert (off['cycles'],off['requests'])==(baseline['cycles'],baseline['requests']),(name,latency,gap,off,baseline)
+                    ras_ablations.append(dict(program=name,latency=latency,gap=gap,instret=count,
+                        ras_cycles=stats['cycles'],disabled_cycles=off['cycles'],ras_requests=stats['requests'],disabled_requests=off['requests'],
+                        predictions=stats['ras_predictions'],ras_misses=stats['ras_misses'],
+                        indirect_misses=stats['indirect_misses'],disabled_indirect_misses=off['indirect_misses']))
         write_csv(results/'performance.csv',rows)
+        if ras_ablations:write_csv(results/'ras-ablation.csv',ras_ablations)
         if prediction_ablations:write_csv(results/'prediction-ablation.csv',prediction_ablations)
         if split_ablations:write_csv(results/'split-memory-ablation.csv',split_ablations)
         if data_early_ablations:write_csv(results/'dcache-early-ablation.csv',data_early_ablations)

@@ -1,9 +1,9 @@
 # ditto_riscv
 
 通过可运行的 RTL、逐条参考对照、真实波形与性能实验学习 RISC-V core 设计。
-当前开发版本是 **v9 单发射流水线、独立I/D路径与静态分支预测**；v1–v8 独立冻结。
-九版均支持 RV64IMAC、Zicsr/Zifencei、M/S/U、软件异常、中断与 Sv39/Svade。
-后续目标是共享总线等待优化、TLB、动态分支预测、双发射、乱序与双核，目前尚未实现这些功能。
+当前开发版本是 **v10 单发射流水线、静态分支预测与提交时维护的返回地址栈**；v1–v9 独立冻结。
+十版均支持 RV64IMAC、Zicsr/Zifencei、M/S/U、软件异常、中断与 Sv39/Svade。
+后续目标是共享总线等待优化、TLB、动态条件分支预测、双发射、乱序与双核，目前尚未实现这些功能。
 
 ## 快速开始
 
@@ -23,12 +23,13 @@ make test-dcache
 make test-data-early
 make test-split
 make test-predict
+make test-ras
 make diff PROGRAM=full_demo
 make diagrams
 make timing
 ```
 
-根目录命令默认转发到 `versions/v9_static_predict/`，输出位于该版的 `build/`。
+根目录命令默认转发到 `versions/v10_return_stack/`，输出位于该版的 `build/`。
 `make diagrams` 导出真实流水线 VCD 的阶段采样图；`make wave PROGRAM=full_demo` 用 Surfer 打开波形。
 选择旧版使用 `make test VERSION=v1_multicycle`，或进入该版本目录运行其 Makefile。
 `PROGRAM`、`LATENCY`、`GAP`、`CROSS`、`LIB`、`CLOCK_NS` 等命令行参数会传给所选版本。
@@ -46,7 +47,8 @@ make timing
 | [versions/v6_dcache](versions/v6_dcache/README.md) | 冻结的256字节写穿透数据缓存 |
 | [versions/v7_dcache_early](versions/v7_dcache_early/README.md) | 冻结的D-cache关键数据优先与提前重启 |
 | [versions/v8_split_memory](versions/v8_split_memory/README.md) | 冻结的独立I/D翻译、缓存命中与共享物理仲裁 |
-| [versions/v9_static_predict](versions/v9_static_predict/README.md) | 当前开发：向后分支预测跳转与JAL目标预测 |
+| [versions/v9_static_predict](versions/v9_static_predict/README.md) | 冻结的向后分支预测跳转与JAL目标预测 |
+| [versions/v10_return_stack](versions/v10_return_stack/README.md) | 当前开发：8项提交时维护的返回地址栈 |
 | [benchmarks](benchmarks/README.md) | 两版执行相同二进制的公共基准程序 |
 | [tools](tools/README.md) | 仓库检查与跨版本性能比较工具 |
 | [results](results/README.md) | 跨版本对比记录，各版详细记录保留在各自 results/ |
@@ -72,6 +74,7 @@ make timing
 | v7 数据提前重启 | 数据缺失必须等整行补齐才能继续执行 | 优先读包含所需数据的8B并提前返回，背景补齐另一半；保持写穿透和阻塞式请求规则 | 无背压时顺序读取1054→1022周期；延迟5/间隔3仍1499，等待转移到共享通路上的取指 |
 | v8 分离I/D路径 | D-cache补数期间，I-cache命中也被串行路径阻塞 | 独立MMU/缓存路径，仅页表读取与外部缺失请求经四路轮转仲裁；外部仍单笔事务 | 延迟5/间隔3求和1499→1111，前端等待449→168；面积约+2.47%，布局前周期4.66→4.83ns |
 | v9 静态分支预测 | 循环向后跳转反复冲刷顺序取指，求和64条分支产生63次冲刷 | 完整指令在F预测下一PC，向后条件分支预测跳转、向前不跳、JAL直接预测；预测随指令送X核对 | 延迟5/间隔3求和1111→983、冲刷63→1；面积约+1.71%，本轮布局前周期4.83→4.64ns；短访存程序195→199周期 |
+| v10 返回地址栈 | v9仍不预测函数返回，裸机C有6次返回失误 | 8项RAS在调用/返回提交时更新，F用栈顶预测常见ret；异常和串行化时清空，错误预测仍由X恢复 | 延迟5/间隔3调用基准379→343、返回失误16→0；裸机C955→943，但布局前周期4.64→4.86ns，C程序估计时间反而退步，面积约+3.70% |
 
 v6 首先建立写穿透 D-cache 的可验证基线。重复数据访问受益，顺序读取与冲突访问可能因完整补行变慢。
 v6轮次的布局前最小周期估计为4.54ns（v5为4.32ns），面积约+21.2%；因此应同时检查周期数、时序和面积。

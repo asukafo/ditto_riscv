@@ -1,0 +1,9 @@
+{
+  "name": "v10_return_stack",
+  "base_commit": "807c29f",
+  "architecture": "single_issue_static_prediction_committed_return_address_stack",
+  "icache_bytes": 256,
+  "dcache_bytes": 256,
+  "line_bytes": 16,
+  "ras_entries": 8
+}

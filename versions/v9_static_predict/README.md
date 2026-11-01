@@ -4,7 +4,7 @@
 [初始基线](results/20261101T111040503285Z/baseline-v8.json)记录：延迟5/间隔3的求和执行64条条件分支，
 发生63次冲刷、63次取指响应丢弃，共1111周期；基线提交与最终RAM也通过独立模型验证。
 
-继承v8的F/X/W单发射流水线、独立I/D MMU与缓存命中路径。v1–v8分别冻结，
+继承v8的F/X/W单发射流水线、独立I/D MMU与缓存命中路径。本版现已冻结，默认开发入口为v10；v1–v8也分别冻结，
 整体演进思路见[根README](../../README.md)，访存结构见[v8设计](../v8_split_memory/README.md)。
 
 ## 预测规则与位置
@@ -114,11 +114,11 @@ C231提交分支的commit_next_pc为0x14，随后从正确顺序地址恢复。
 732份提交/最终内存文件逐字节一致。门级采用无SDF的标准单元逻辑模型。
 
 ```sh
-# 仓库根目录默认v9
-make lint test
-make test-predict
-make test-mapped
-make diagrams
+# 仓库根目录，明确选择冻结的v9
+make lint test VERSION=v9_static_predict
+make test-predict VERSION=v9_static_predict
+make test-mapped VERSION=v9_static_predict
+make diagrams VERSION=v9_static_predict
 make compare BENCHMARK_ARGS="--versions v8_split_memory v9_static_predict"
 make test VERSION=v8_split_memory
 ```
