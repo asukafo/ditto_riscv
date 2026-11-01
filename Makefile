@@ -1,8 +1,8 @@
 # Repository entry point; each hardware version owns its build directory.
-VERSION ?= v5_early_restart
+VERSION ?= v6_dcache
 PYTHON ?= python3
 BENCHMARK_ARGS ?=
-VERSIONS := v1_multicycle v2_single_issue v3_icache v4_fetch_buffer v5_early_restart
+VERSIONS := v1_multicycle v2_single_issue v3_icache v4_fetch_buffer v5_early_restart v6_dcache
 VERSION_DIR := versions/$(VERSION)
 
 ifeq ($(filter $(VERSION),$(VERSIONS)),)
@@ -10,7 +10,7 @@ $(error Unknown VERSION '$(VERSION)'; choose one of: $(VERSIONS))
 endif
 
 .DEFAULT_GOAL := help
-FORWARDED := tools lint test test-base test-full test-pipeline test-icache test-fetch test-early test-mapped test-alu test-rv64i sim diff wave sweep diagrams synth timing clean
+FORWARDED := tools lint test test-base test-full test-pipeline test-icache test-fetch test-early test-dcache test-mapped test-alu test-rv64i sim diff wave sweep diagrams synth timing clean
 .PHONY: help versions check compare benchmark $(FORWARDED)
 
 help:
@@ -27,7 +27,8 @@ versions:
 	@echo 'v2_single_issue   frozen single-issue F/X/W pipeline'
 	@echo 'v3_icache   frozen physical instruction cache baseline'
 	@echo 'v4_fetch_buffer   frozen instruction cache with halfword reuse'
-	@echo 'v5_early_restart   critical-word-first refill and early restart (default)'
+	@echo 'v5_early_restart   frozen critical-word-first refill and early restart'
+	@echo 'v6_dcache   write-through physical data cache (default)'
 
 $(FORWARDED):
 	$(MAKE) -C "$(VERSION_DIR)" $@

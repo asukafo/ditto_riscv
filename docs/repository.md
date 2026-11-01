@@ -2,7 +2,7 @@
 
 ```text
 ditto_riscv/
-├── Makefile                  统一入口，默认选择 v5
+├── Makefile                  统一入口，默认选择 v6
 ├── README.md                 快速开始
 ├── CONTRIBUTING.md           开发、冻结和记录约定
 ├── versions/
@@ -10,7 +10,8 @@ ditto_riscv/
 │   ├── v2_single_issue/      冻结的流水线基线
 │   ├── v3_icache/            冻结的流水线与指令缓存
 │   ├── v4_fetch_buffer/      冻结的半字取指缓冲
-│   └── v5_early_restart/     关键字优先补齐与提前重启
+│   ├── v5_early_restart/     冻结的关键字优先补齐
+│   └── v6_dcache/            写穿透数据缓存
 ├── benchmarks/              公共比较程序
 ├── tools/                   仓库检查、跨版本比较
 ├── results/comparisons/     不覆盖的历史对比表
@@ -34,7 +35,7 @@ ditto_riscv/
 ## 根目录命令
 
 ```sh
-make lint                         # 默认 v5
+make lint                         # 默认 v6
 make test
 make diff PROGRAM=full_demo LATENCY=5 GAP=3
 make timing
@@ -53,8 +54,10 @@ make compare BENCHMARK_ARGS="--run-id my-experiment"
 
 根目录不再复制一套硬件源码。各版内部的重复模块是版本快照的一部分，
 不会抽成可变的公共 RTL，以免修改新版时改变旧版。
-v1–v4 的 frozen-files.json 记录各版冻结源码/构建文件哈希；`make check` 会校验。
+v1–v5 的 frozen-files.json 记录各版冻结源码/构建文件哈希；`make check` 会校验。
 各版的历史 results 和公共对比表迁移时保持内容不变，历史 manifest 中的原始信息仍有效。
 
 旧根目录的本地 build 已移入忽略目录 `.local/legacy-root-build-<timestamp>/`，未删除。
 它只用于保留此前的本机产物，不参与当前构建，也不提交 Git。
+
+`test-dcache` 从 v6 开始提供，包含数据缓存单元测试与整核访存/权限/原子对照。

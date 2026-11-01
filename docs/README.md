@@ -2,6 +2,8 @@
 
 ## 当前工程
 
+- [v6 写穿透数据缓存、旁路规则与性能取舍](../versions/v6_dcache/README.md)
+
 - [v5 关键字优先补齐、提前重启与真实波形](../versions/v5_early_restart/README.md)
 
 - [仓库结构、入口与产物位置](repository.md)

@@ -1,0 +1,8 @@
+{
+  "name": "v6_dcache",
+  "base_commit": "8a54077",
+  "architecture": "single_issue_split_physical_icache_dcache_write_through",
+  "icache_bytes": 256,
+  "dcache_bytes": 256,
+  "line_bytes": 16
+}
