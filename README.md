@@ -1,8 +1,8 @@
 # ditto_riscv
 
 通过可运行的 RTL、逐条参考对照、真实波形与性能实验学习 RISC-V core 设计。
-当前开发版本是 **v4 单发射流水线、物理指令缓存与半字取指缓冲**；v1–v3 独立冻结。
-四版均支持 RV64IMAC、Zicsr/Zifencei、M/S/U、软件异常、中断与 Sv39/Svade。
+当前开发版本是 **v5 单发射流水线、半字缓冲与关键字优先的指令缓存**；v1–v4 独立冻结。
+五版均支持 RV64IMAC、Zicsr/Zifencei、M/S/U、软件异常、中断与 Sv39/Svade。
 后续目标是数据缓存、TLB、分支优化、双发射、乱序与双核，目前尚未实现这些功能。
 
 ## 快速开始
@@ -18,12 +18,13 @@ make lint
 make test
 make test-icache
 make test-fetch
+make test-early
 make diff PROGRAM=full_demo
 make diagrams
 make timing
 ```
 
-根目录命令默认转发到 `versions/v4_fetch_buffer/`，输出位于该版的 `build/`。
+根目录命令默认转发到 `versions/v5_early_restart/`，输出位于该版的 `build/`。
 `make diagrams` 导出真实流水线 VCD 的阶段采样图；`make wave PROGRAM=full_demo` 用 Surfer 打开波形。
 选择旧版使用 `make test VERSION=v1_multicycle`，或进入该版本目录运行其 Makefile。
 `PROGRAM`、`LATENCY`、`GAP`、`CROSS`、`LIB`、`CLOCK_NS` 等命令行参数会传给所选版本。
@@ -36,7 +37,8 @@ make timing
 | [versions/v1_multicycle](versions/v1_multicycle/README.md) | 冻结的多周期核，源码对应提交 8adc22c |
 | [versions/v2_single_issue](versions/v2_single_issue/README.md) | 冻结的 F / X / W 单发射流水线及其测试 |
 | [versions/v3_icache](versions/v3_icache/README.md) | 冻结的物理指令缓存、合并取指、等待统计 |
-| [versions/v4_fetch_buffer](versions/v4_fetch_buffer/README.md) | 当前开发：半字复用、混合指令拼接与取指缓冲 |
+| [versions/v4_fetch_buffer](versions/v4_fetch_buffer/README.md) | 冻结的半字复用、混合指令拼接与取指缓冲 |
+| [versions/v5_early_restart](versions/v5_early_restart/README.md) | 当前开发：关键字优先补齐与提前重启 |
 | [benchmarks](benchmarks/README.md) | 两版执行相同二进制的公共基准程序 |
 | [tools](tools/README.md) | 仓库检查与跨版本性能比较工具 |
 | [results](results/README.md) | 跨版本对比记录，各版详细记录保留在各自 results/ |

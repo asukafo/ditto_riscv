@@ -1,8 +1,8 @@
 # Repository entry point; each hardware version owns its build directory.
-VERSION ?= v4_fetch_buffer
+VERSION ?= v5_early_restart
 PYTHON ?= python3
 BENCHMARK_ARGS ?=
-VERSIONS := v1_multicycle v2_single_issue v3_icache v4_fetch_buffer
+VERSIONS := v1_multicycle v2_single_issue v3_icache v4_fetch_buffer v5_early_restart
 VERSION_DIR := versions/$(VERSION)
 
 ifeq ($(filter $(VERSION),$(VERSIONS)),)
@@ -10,7 +10,7 @@ $(error Unknown VERSION '$(VERSION)'; choose one of: $(VERSIONS))
 endif
 
 .DEFAULT_GOAL := help
-FORWARDED := tools lint test test-base test-full test-pipeline test-icache test-fetch test-mapped test-alu test-rv64i sim diff wave sweep diagrams synth timing clean
+FORWARDED := tools lint test test-base test-full test-pipeline test-icache test-fetch test-early test-mapped test-alu test-rv64i sim diff wave sweep diagrams synth timing clean
 .PHONY: help versions check compare benchmark $(FORWARDED)
 
 help:
@@ -26,7 +26,8 @@ versions:
 	@echo 'v1_multicycle   frozen multicycle baseline (8adc22c)'
 	@echo 'v2_single_issue   frozen single-issue F/X/W pipeline'
 	@echo 'v3_icache   frozen physical instruction cache baseline'
-	@echo 'v4_fetch_buffer   instruction cache with halfword reuse (default)'
+	@echo 'v4_fetch_buffer   frozen instruction cache with halfword reuse'
+	@echo 'v5_early_restart   critical-word-first refill and early restart (default)'
 
 $(FORWARDED):
 	$(MAKE) -C "$(VERSION_DIR)" $@

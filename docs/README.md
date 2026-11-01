@@ -2,6 +2,8 @@
 
 ## 当前工程
 
+- [v5 关键字优先补齐、提前重启与真实波形](../versions/v5_early_restart/README.md)
+
 - [仓库结构、入口与产物位置](repository.md)
 - [版本清单与实际性能分析](../versions/README.md)
 - [v2 单发射流水线：阶段、前递、异常和仲裁](../versions/v2_single_issue/README.md)

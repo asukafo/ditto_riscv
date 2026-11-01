@@ -1,0 +1,8 @@
+{
+  "name": "v5_early_restart",
+  "base_commit": "636b056",
+  "architecture": "single_issue_icache_critical_word_first_early_restart",
+  "icache_bytes": 256,
+  "line_bytes": 16,
+  "fetch_buffer_halfwords": 1
+}

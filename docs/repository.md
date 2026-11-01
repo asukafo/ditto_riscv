@@ -2,14 +2,15 @@
 
 ```text
 ditto_riscv/
-├── Makefile                  统一入口，默认选择 v4
+├── Makefile                  统一入口，默认选择 v5
 ├── README.md                 快速开始
 ├── CONTRIBUTING.md           开发、冻结和记录约定
 ├── versions/
 │   ├── v1_multicycle/        冻结基线
 │   ├── v2_single_issue/      冻结的流水线基线
 │   ├── v3_icache/            冻结的流水线与指令缓存
-│   └── v4_fetch_buffer/      当前流水线与半字取指缓冲
+│   ├── v4_fetch_buffer/      冻结的半字取指缓冲
+│   └── v5_early_restart/     关键字优先补齐与提前重启
 ├── benchmarks/              公共比较程序
 ├── tools/                   仓库检查、跨版本比较
 ├── results/comparisons/     不覆盖的历史对比表
@@ -33,7 +34,7 @@ ditto_riscv/
 ## 根目录命令
 
 ```sh
-make lint                         # 默认 v4
+make lint                         # 默认 v5
 make test
 make diff PROGRAM=full_demo LATENCY=5 GAP=3
 make timing
@@ -46,13 +47,13 @@ make compare BENCHMARK_ARGS="--run-id my-experiment"
 递归 make 在所选版本目录执行，因此仿真输出为 `versions/<version>/build/`。
 `make clean VERSION=v2_single_issue` 只清理 v2 的 build，不触碰其他版本或任何 results。
 直接进入版本目录运行命令仍受支持，v1 的原 Makefile 保持冻结。
-`test-pipeline` 从 v2 开始提供，`test-icache` 从 v3 开始提供，`test-fetch` 为 v4 的半字缓冲专项测试。
+`test-pipeline` 从 v2 开始提供，`test-icache` 从 v3 开始提供，`test-early` 从 v5 开始提供；`test-fetch` 为 v4 的半字缓冲专项测试。
 
 ## 源码与记录保护
 
 根目录不再复制一套硬件源码。各版内部的重复模块是版本快照的一部分，
 不会抽成可变的公共 RTL，以免修改新版时改变旧版。
-v1–v3 的 frozen-files.json 分别记录 38、42、46 个冻结源码/构建文件哈希；`make check` 会校验。
+v1–v4 的 frozen-files.json 记录各版冻结源码/构建文件哈希；`make check` 会校验。
 各版的历史 results 和公共对比表迁移时保持内容不变，历史 manifest 中的原始信息仍有效。
 
 旧根目录的本地 build 已移入忽略目录 `.local/legacy-root-build-<timestamp>/`，未删除。
