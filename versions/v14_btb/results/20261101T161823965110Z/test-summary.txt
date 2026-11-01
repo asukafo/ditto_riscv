@@ -1,0 +1,45 @@
+HISTORY MODEL PASS: 30362 steps, enabled=1, gshare=1
+HISTORY MODEL PASS: 30362 steps, enabled=0, gshare=1
+HISTORY MODEL PASS: 30362 steps, enabled=1, gshare=0
+GSHARE FETCH PASS: 39 checks with memory/output backpressure
+HISTORY MODEL PASS: 30362 steps, enabled=1, gshare=1
+HISTORY MODEL PASS: 30362 steps, enabled=0, gshare=1
+GSHARE INTEGRATION PASS: 30 runs, 6705 commits, 0 traps; 36 on/off runs; saved-index VCD audit {'alternating': {'queries': 360, 'trains': 128, 'saved_index_differs_from_retirement_recompute': 0, 'clears': 0}, 'adjacent': {'queries': 232, 'trains': 160, 'saved_index_differs_from_retirement_recompute': 125, 'clears': 0}, 'compressed_adjacent': {'queries': 168, 'trains': 96, 'saved_index_differs_from_retirement_recompute': 62, 'clears': 0}, 'serial': {'queries': 55, 'trains': 16, 'saved_index_differs_from_retirement_recompute': 0, 'clears': 8}}
+BHT INTEGRATION PASS: 45 runs, 9280 commits, 0 traps; 36 on/off runs
+PASS: 71 runs; every commit, halt status and full RAM checked against reference
+Ran 13 tests in 0.011s
+OK
+EXTENSION PASS: 40 native runs, 9452 commits, 26 software-handled traps; 247 M vectors and 154 atomic gold values
+ALU PASS: 876 vectors across 19 operations × 5 timing configurations; 26305 commits checked
+PRIVILEGED PASS: 86 native runs, 3421 commits, 92 software-handled traps; Sv39/Svade, M/S/U, vectored and delegated interrupts
+Ran 7 tests in 0.012s
+OK
+PIPELINE PASS: 25 runs, 290 commits; overlap=101, bypass=5; trace=build/pipeline.vcd
+ICACHE UNIT PASS: 69 checks across 3 latency/backpressure configurations
+RV64I PASS: 126 runs, all 52 base instructions executed, 555 W vectors, 58 load-width vectors; C -O0/-O2 result=1488
+ICACHE INTEGRATION PASS: 30 runs, 1455 commits, 15 traps; 6 cache-on/off runs checked
+FETCH UNIT PASS: 84 checks across 3 memory/output backpressure configurations
+EARLY RESTART UNIT PASS: 103 checks across 3 latency/backpressure configurations
+DCACHE UNIT PASS: 558 checks across 3 latency/backpressure configurations
+FETCH BUFFER PASS: 40 runs, 1870 commits, 20 traps; 12 buffer-on/off runs checked
+DCACHE EARLY UNIT PASS: 111 checks across 3 latency/backpressure configurations
+DCACHE INTEGRATION PASS: 40 runs, 3645 commits, 15 traps; 6 on/off runs
+PHYSICAL ARBITER PASS: 144 transactions, metadata/ownership/backpressure/round-robin checked
+SPLIT MEMORY UNIT PASS: 49 checks, concurrent hits/walkers/permissions/errors/backpressure
+DCACHE EARLY INTEGRATION PASS: 25 runs, 1865 commits, 0 traps; 12 on/off runs
+STATIC PREDICTOR UNIT PASS: 393330 vectors, C=1
+STATIC PREDICTOR UNIT PASS: 196665 vectors, C=0
+PREDICT FETCH UNIT PASS: 15 checks with memory/output backpressure
+SPLIT MEMORY INTEGRATION PASS: 25 runs, 3215 commits, 5 traps; 6 split/legacy runs
+RETURN STACK UNIT PASS: 12433 steps, enabled=1
+RETURN STACK UNIT PASS: 12433 steps, enabled=0
+RAS FETCH UNIT PASS: 27 checks with memory/output backpressure
+PREDICTION INTEGRATION PASS: 55 runs, 1500 commits, 10 traps; 12 on/off runs
+TLB UNIT PASS: 12000 model steps, contexts/replacement/duplicate fill/invalidation
+RAS INTEGRATION PASS: 50 runs, 2525 commits, 5 traps; 12 on/off runs
+MMU TLB UNIT PASS: 69 permission/context/flush/error/poison/superpage checks
+BTB MODEL PASS: 25578 steps, enabled=1
+BTB MODEL PASS: 25578 steps, enabled=0
+BTB FETCH PASS: 21 checks with memory/output backpressure
+TLB INTEGRATION PASS: 45 runs, 3400 commits, 50 traps; 6 on/off runs
+BTB INTEGRATION PASS: 30 runs, 5800 commits, 0 traps; 36 on/off runs

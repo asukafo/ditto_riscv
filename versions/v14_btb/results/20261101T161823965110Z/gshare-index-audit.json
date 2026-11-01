@@ -1,0 +1,26 @@
+{
+  "alternating": {
+    "queries": 360,
+    "trains": 128,
+    "saved_index_differs_from_retirement_recompute": 0,
+    "clears": 0
+  },
+  "adjacent": {
+    "queries": 232,
+    "trains": 160,
+    "saved_index_differs_from_retirement_recompute": 125,
+    "clears": 0
+  },
+  "compressed_adjacent": {
+    "queries": 168,
+    "trains": 96,
+    "saved_index_differs_from_retirement_recompute": 62,
+    "clears": 0
+  },
+  "serial": {
+    "queries": 55,
+    "trains": 16,
+    "saved_index_differs_from_retirement_recompute": 0,
+    "clears": 8
+  }
+}

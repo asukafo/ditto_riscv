@@ -42,3 +42,5 @@ python3 tools/benchmark.py --versions v11_tlb v12_dynamic_predict --cycles-only
 v12额外关闭BHT，并检查周期、外部请求和控制失误与v11完全一致。
 
 v13可用`--versions v12_dynamic_predict v13_gshare --cycles-only`比较。额外构建`GSHARE_ENABLE=0`，检查周期、请求和控制失误与v12一致。
+
+v14可用`--versions v13_gshare v14_btb --cycles-only`比较；BTB关闭后检查周期、请求和控制失误与v13一致。其余开关保留BTB，不能当作无BTB的历史版本。

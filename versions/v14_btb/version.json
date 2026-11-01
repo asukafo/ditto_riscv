@@ -1,0 +1,14 @@
+{
+  "name": "v14_btb",
+  "base_commit": "9b565de",
+  "architecture": "single_issue_request_time_32_entry_tagged_btb",
+  "icache_bytes": 256,
+  "dcache_bytes": 256,
+  "line_bytes": 16,
+  "tlb_entries_per_side": 8,
+  "tlb_page_bytes": 4096,
+  "bht_entries": 32,
+  "bht_counter_bits": 2,
+  "ghr_bits": 4,
+  "btb_entries": 32
+}

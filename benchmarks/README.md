@@ -18,3 +18,5 @@
 新增动态分支对照：`branch_forward.S`（向前恒跳）、`branch_phase.S`（方向分阶段变化）、`branch_alternating.S`（交替方向）、`branch_alias.S`（相同BHT索引的相反方向）。它们与旧版本执行同一二进制，分别保留改善与退步项。
 
 `branch_correlated.S`让相邻条件分支共享同一个条件，比较独立计数与全局历史的效果；期望累加结果64。
+
+`indirect_calls.S`通过寄存器反复调用相同函数，16次调用、每次加4，结果64，用于观察BTB的上次间接目标预测。
