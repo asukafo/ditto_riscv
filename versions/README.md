@@ -7,10 +7,11 @@
 | [v3_icache](v3_icache/README.md) | 流水线、256 字节物理指令缓存 | 冻结的指令缓存基线 |
 | [v4_fetch_buffer](v4_fetch_buffer/README.md) | 指令缓存与半字取指缓冲 | 冻结的半字缓冲基线 |
 | [v5_early_restart](v5_early_restart/README.md) | 关键字优先补齐与提前重启 | 冻结的提前重启基线 |
-| [v6_dcache](v6_dcache/README.md) | 256B物理数据缓存，写穿透 | 当前开发与实验 |
+| [v6_dcache](v6_dcache/README.md) | 256B物理数据缓存，写穿透 | 冻结的数据缓存基线 |
+| [v7_dcache_early](v7_dcache_early/README.md) | D-cache关键数据优先与提前重启 | 当前开发与实验 |
 
 每版有独立的 rtl、sim、sw、scripts、Makefile、build 和 results。
-仓库根目录的 Makefile 默认转发至 v6；用 VERSION=<目录名> 选择其他版本。后续新架构使用新目录，旧架构不随之修改。
+仓库根目录的 Makefile 默认转发至 v7；用 VERSION=<目录名> 选择其他版本。后续新架构使用新目录，旧架构不随之修改。
 公共比较脚本只负责运行实验，不在不同版本之间共用会变化的 RTL。
 
 ```sh
@@ -20,7 +21,7 @@ python3 tools/benchmark.py
 python3 tools/benchmark.py --run-id my-experiment
 ```
 
-默认比较六个版本的 10 个程序，在 (latency,gap)=(1,0)、(5,0)、(5,3) 下各跑一次，每版 30 次。
+默认比较七个版本的 10 个程序，在 (latency,gap)=(1,0)、(5,0)、(5,3) 下各跑一次，每版 30 次。
 包括求和、依赖链、指针追踪、访存、位操作、C、M/A/C C、直线 ALU 、压缩指令依赖链和重复数据读取。
 脚本检查各版二进制 SHA-256 一致、退休指令数一致，且逐条提交和最终内存通过独立参考模型。
 v3/v4 另有关闭缓存的对照；v4 另有 27 组关闭取指缓冲的对照，分别隔离不同改动的收益。
@@ -60,3 +61,5 @@ v3/v4 另有关闭缓存的对照；v4 另有 27 组关闭取指缓冲的对照�
 v5 增加 EARLY_RESTART=0 对照；同轮包含 v4 时检查关闭优化后的周期数与请求数完全一致。
 
 v6 增加 DCACHE_ENABLE=0 对照；同轮包含 v5 时检查关闭 D-cache 后周期数与请求数完全一致。各版优化动机和代价汇总见 [根 README](../README.md)。
+
+v7增加DCACHE_EARLY_RESTART=0对照，同轮包含v6时检查关闭优化后的周期数/外部请求数完全一致。

@@ -14,7 +14,7 @@ sys.path.insert(0,str(ROOT/'versions'/'v1_multicycle'/'scripts'))
 from reference import verify_files
 from profile_stalls import profile
 
-VERSIONS=('v1_multicycle','v2_single_issue','v3_icache','v4_fetch_buffer','v5_early_restart','v6_dcache')
+VERSIONS=('v1_multicycle','v2_single_issue','v3_icache','v4_fetch_buffer','v5_early_restart','v6_dcache','v7_dcache_early')
 PROGRAMS={'sum':2080,'dependency':128,'pointer_chase':2016,'load_add_store':14,
           'bit_ops':0x7ffffffffffffffc,'c_demo':1488,'full_demo':949,
           'independent':640,'compressed':128,'data_reuse':896}
@@ -46,10 +46,11 @@ def main():
         results=folder/'results'/args.run_id
         results.mkdir(parents=True,exist_ok=False)
         targets=['build/full_obj/Vrv64_core']+[f'build/{name}.bin' for name in PROGRAMS if name not in ('independent','compressed','data_reuse')]+['timing']
-        if version in ('v3_icache','v4_fetch_buffer','v5_early_restart','v6_dcache'):targets.append('build/noicache_obj/Vrv64_core')
-        if version in ('v4_fetch_buffer','v5_early_restart','v6_dcache'):targets.append('build/nobuffer_obj/Vrv64_core')
-        if version in ('v5_early_restart','v6_dcache'):targets.append('build/noearly_obj/Vrv64_core')
-        if version=='v6_dcache':targets.append('build/nodcache_obj/Vrv64_core')
+        if version in ('v3_icache','v4_fetch_buffer','v5_early_restart','v6_dcache','v7_dcache_early'):targets.append('build/noicache_obj/Vrv64_core')
+        if version in ('v4_fetch_buffer','v5_early_restart','v6_dcache','v7_dcache_early'):targets.append('build/nobuffer_obj/Vrv64_core')
+        if version in ('v5_early_restart','v6_dcache','v7_dcache_early'):targets.append('build/noearly_obj/Vrv64_core')
+        if version in ('v6_dcache','v7_dcache_early'):targets.append('build/nodcache_obj/Vrv64_core')
+        if version=='v7_dcache_early':targets.append('build/nodataearly_obj/Vrv64_core')
         with (results/'build.log').open('w') as log:
             subprocess.run(['make',*targets,f'CROSS={args.cross}'],cwd=folder,stdout=log,stderr=subprocess.STDOUT,check=True)
         for name in ('independent','compressed','data_reuse'):
@@ -69,7 +70,7 @@ def main():
                   'images':{},'tools':{}}
         for tool in (['verilator','--version'],['yosys','-V'],[args.cross+'gcc','--version']):
             manifest['tools'][tool[0]]=subprocess.check_output(tool,text=True).splitlines()[0]
-        rows=[];ablations=[];buffer_ablations=[];early_ablations=[];data_ablations=[]
+        rows=[];ablations=[];buffer_ablations=[];early_ablations=[];data_ablations=[];data_early_ablations=[]
         for name,expected in PROGRAMS.items():
             image=folder/'build'/f'{name}.bin'
             digest=hashlib.sha256(image.read_bytes()).hexdigest()
@@ -79,7 +80,7 @@ def main():
             for latency,gap in TIMINGS:
                 # Raw traces remain under each version's ignored build directory.
                 trace=folder/'build'/f'benchmark-{args.run_id}-{name}-l{latency}-g{gap}.trace.jsonl'
-                capture_profile=version in ('v2_single_issue','v3_icache','v4_fetch_buffer','v5_early_restart','v6_dcache') and name=='sum' and (latency,gap)==(5,3)
+                capture_profile=version in ('v2_single_issue','v3_icache','v4_fetch_buffer','v5_early_restart','v6_dcache','v7_dcache_early') and name=='sum' and (latency,gap)==(5,3)
                 wave=folder/'build'/f'benchmark-{args.run_id}-stall-profile.vcd' if capture_profile else '-'
                 run=subprocess.run([str(folder/'build/full_obj/Vrv64_core'),str(image),str(latency),str(wave),str(gap),str(trace)],
                                    cwd=folder,capture_output=True,text=True,check=True)
@@ -110,7 +111,7 @@ def main():
                             'fetch_blocked_by_data_cycles','discarded_fetch_responses'):
                     row[key]=stats.get(key,'')
                 rows.append(row)
-                if version in ('v3_icache','v4_fetch_buffer','v5_early_restart','v6_dcache'):
+                if version in ('v3_icache','v4_fetch_buffer','v5_early_restart','v6_dcache','v7_dcache_early'):
                     off_trace=folder/'build'/f'benchmark-{args.run_id}-{name}-off-l{latency}-g{gap}.trace.jsonl'
                     off_run=subprocess.run([str(folder/'build/noicache_obj/Vrv64_core'),str(image),str(latency),'-',str(gap),str(off_trace)],
                                            cwd=folder,capture_output=True,text=True,check=True)
@@ -121,7 +122,7 @@ def main():
                         cache_cycles=stats['cycles'],disabled_cycles=off['cycles'],cache_requests=stats['requests'],disabled_requests=off['requests'],
                         cache_frontend_starved=stats['frontend_starved_cycles'],disabled_frontend_starved=off['frontend_starved_cycles'],
                         cache_data_fetch_contention=stats['data_blocked_by_fetch_cycles'],disabled_data_fetch_contention=off['data_blocked_by_fetch_cycles']))
-                if version in ('v4_fetch_buffer','v5_early_restart','v6_dcache'):
+                if version in ('v4_fetch_buffer','v5_early_restart','v6_dcache','v7_dcache_early'):
                     off_trace=folder/'build'/f'benchmark-{args.run_id}-{name}-buffer-off-l{latency}-g{gap}.trace.jsonl'
                     off_run=subprocess.run([str(folder/'build/nobuffer_obj/Vrv64_core'),str(image),str(latency),'-',str(gap),str(off_trace)],
                                            cwd=folder,capture_output=True,text=True,check=True)
@@ -136,7 +137,7 @@ def main():
                         buffer_cycles=stats['cycles'],disabled_cycles=off['cycles'],buffer_requests=stats['requests'],disabled_requests=off['requests'],
                         buffer_icache_lookups=stats['icache_hits']+stats['icache_misses'],disabled_icache_lookups=off['icache_hits']+off['icache_misses'],
                         buffer_reuses=stats['fetch_buffer_reuses'],buffer_flushes=stats['fetch_buffer_flushes']))
-                if version in ('v5_early_restart','v6_dcache'):
+                if version in ('v5_early_restart','v6_dcache','v7_dcache_early'):
                     off_trace=folder/'build'/f'benchmark-{args.run_id}-{name}-early-off-l{latency}-g{gap}.trace.jsonl'
                     off=json.loads(subprocess.check_output([str(folder/'build/noearly_obj/Vrv64_core'),str(image),str(latency),'-',str(gap),str(off_trace)],cwd=folder,text=True))
                     assert off['result']==expected and verify_files(image,off_trace)==count and off['instret']==count
@@ -145,7 +146,7 @@ def main():
                     if baseline and version=='v5_early_restart':assert (off['cycles'],off['requests'])==(baseline['cycles'],baseline['requests']),(name,latency,gap,off,baseline)
                     early_ablations.append(dict(program=name,latency=latency,gap=gap,instret=count,
                         early_cycles=stats['cycles'],disabled_cycles=off['cycles'],early_requests=stats['requests'],disabled_requests=off['requests']))
-                if version=='v6_dcache':
+                if version in ('v6_dcache','v7_dcache_early'):
                     off_trace=folder/'build'/f'benchmark-{args.run_id}-{name}-data-off-l{latency}-g{gap}.trace.jsonl'
                     off=json.loads(subprocess.check_output([str(folder/'build/nodcache_obj/Vrv64_core'),str(image),str(latency),'-',str(gap),str(off_trace)],cwd=folder,text=True))
                     assert off['result']==expected and verify_files(image,off_trace)==count and off['instret']==count
@@ -156,7 +157,19 @@ def main():
                     data_ablations.append(dict(program=name,latency=latency,gap=gap,instret=count,
                         cache_cycles=stats['cycles'],disabled_cycles=off['cycles'],cache_requests=stats['requests'],disabled_requests=off['requests'],
                         cache_data_wait=stats['data_wait'],disabled_data_wait=off['data_wait'],hits=stats['dcache_hits'],misses=stats['dcache_misses']))
+                if version=='v7_dcache_early':
+                    off_trace=folder/'build'/f'benchmark-{args.run_id}-{name}-data-early-off-l{latency}-g{gap}.trace.jsonl'
+                    off=json.loads(subprocess.check_output([str(folder/'build/nodataearly_obj/Vrv64_core'),str(image),str(latency),'-',str(gap),str(off_trace)],cwd=folder,text=True))
+                    assert off['result']==expected and verify_files(image,off_trace)==count and off['instret']==count
+                    baseline=next((r for r in all_rows if r['version']=='v6_dcache' and
+                                   (r['program'],r['latency'],r['gap'])==(name,latency,gap)),None)
+                    if baseline:assert (off['cycles'],off['requests'])==(baseline['cycles'],baseline['requests']),(name,latency,gap,off,baseline)
+                    data_early_ablations.append(dict(program=name,latency=latency,gap=gap,instret=count,
+                        early_cycles=stats['cycles'],disabled_cycles=off['cycles'],early_requests=stats['requests'],disabled_requests=off['requests'],
+                        early_data_wait=stats['data_wait'],disabled_data_wait=off['data_wait'],
+                        early_frontend_starved=stats['frontend_starved_cycles'],disabled_frontend_starved=off['frontend_starved_cycles']))
         write_csv(results/'performance.csv',rows)
+        if data_early_ablations:write_csv(results/'dcache-early-ablation.csv',data_early_ablations)
         if data_ablations:write_csv(results/'dcache-ablation.csv',data_ablations)
         if early_ablations:write_csv(results/'early-restart-ablation.csv',early_ablations)
         if ablations:write_csv(results/'icache-ablation.csv',ablations)

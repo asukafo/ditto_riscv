@@ -2,6 +2,8 @@
 
 ## 当前工程
 
+- [v7 数据提前重启与共享通路瓶颈](../versions/v7_dcache_early/README.md)
+
 - [v6 写穿透数据缓存、旁路规则与性能取舍](../versions/v6_dcache/README.md)
 
 - [v5 关键字优先补齐、提前重启与真实波形](../versions/v5_early_restart/README.md)

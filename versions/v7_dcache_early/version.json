@@ -1,0 +1,8 @@
+{
+  "name": "v7_dcache_early",
+  "base_commit": "ed37e59",
+  "architecture": "single_issue_split_cache_dcache_critical_word_first_early_restart",
+  "icache_bytes": 256,
+  "dcache_bytes": 256,
+  "line_bytes": 16
+}

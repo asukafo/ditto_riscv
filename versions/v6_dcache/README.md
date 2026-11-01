@@ -2,7 +2,7 @@
 
 目标是降低重复数据读取对外部内存的访问，建立可验证的数据缓存基线。继承 v5 的 F/X/W 单发射流水线、
 RV64IMAC/特权/Sv39、半字缓冲、256B I-cache 与取指提前重启；v1–v5 独立冻结。
-所有版本优化动机与演进关系见 [根 README](../../README.md)。
+本版现已冻结，当前默认开发入口为v7。所有版本优化动机与演进关系见 [根 README](../../README.md)。
 
 ## 结构与选择依据
 
@@ -80,11 +80,11 @@ Nangate45 typical、相同约束、理想时钟下，布局前最小周期估计
 ## 验证、波形与复现
 
 ```sh
-# 仓库根目录默认v6
-make lint test
-make test-dcache
-make test-mapped
-make diagrams
+# 仓库根目录，明确选择冻结的v6
+make lint test VERSION=v6_dcache
+make test-dcache VERSION=v6_dcache
+make test-mapped VERSION=v6_dcache
+make diagrams VERSION=v6_dcache
 make compare BENCHMARK_ARGS="--versions v5_early_restart v6_dcache"
 # 历史版本
 make test VERSION=v5_early_restart

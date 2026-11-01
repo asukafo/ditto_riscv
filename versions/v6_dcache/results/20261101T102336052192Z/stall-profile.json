@@ -1,0 +1,7 @@
+{
+  "sampled_cycles": 1499,
+  "frontend_starved_cycles": 224,
+  "data_blocked_by_fetch_cycles": 16,
+  "fetch_blocked_by_data_cycles": 65,
+  "discarded_fetch_responses": 63
+}
