@@ -2,7 +2,7 @@
 
 本版针对v6“每次数据缺失必须等完整16B缓存行”的等待，让load先拿到所需数据并继续执行。
 继承v6的F/X/W单发射流水线、256B I-cache与256B写穿透D-cache、MMU/特权/原子功能。
-v1–v6分别冻结。整体演进动机见[根README](../../README.md)，缓存基本策略见[v6设计](../v6_dcache/README.md)。
+本版现已冻结，当前默认开发入口为v8。整体演进动机见[根README](../../README.md)，缓存基本策略见[v6设计](../v6_dcache/README.md)。
 
 ## 从完整补行到提前响应
 
@@ -101,11 +101,11 @@ req_addr在req_valid=0时没有事务含义。miss_wait包含提前响应后的�
 门级逻辑仿真无SDF延迟，不能替代时序签核。
 
 ```sh
-# 仓库根目录默认v7
-make lint test
-make test-data-early
-make test-mapped
-make diagrams
+# From repository root, explicitly select frozen v7
+make lint test VERSION=v7_dcache_early
+make test-data-early VERSION=v7_dcache_early
+make test-mapped VERSION=v7_dcache_early
+make diagrams VERSION=v7_dcache_early
 make compare BENCHMARK_ARGS="--versions v5_early_restart v6_dcache v7_dcache_early"
 # 旧版保持独立
 make test VERSION=v6_dcache

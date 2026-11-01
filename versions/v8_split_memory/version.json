@@ -1,0 +1,9 @@
+{
+  "name": "v8_split_memory",
+  "base_commit": "823b1ab",
+  "architecture": "single_issue_split_mmu_cache_paths_shared_physical_bus",
+  "icache_bytes": 256,
+  "dcache_bytes": 256,
+  "line_bytes": 16,
+  "physical_outstanding": 1
+}

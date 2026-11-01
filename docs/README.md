@@ -2,6 +2,7 @@
 
 ## 当前工程
 
+- [v8 独立翻译/缓存路径、响应归属与并发波形](../versions/v8_split_memory/README.md)
 - [v7 数据提前重启与共享通路瓶颈](../versions/v7_dcache_early/README.md)
 
 - [v6 写穿透数据缓存、旁路规则与性能取舍](../versions/v6_dcache/README.md)

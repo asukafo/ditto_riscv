@@ -9,6 +9,7 @@ SIGNALS = {
     'serial':'serialize_pending', 'irq':'irq_stop', 'arb_state':'arbiter.state',
     'owner':'arbiter.owner_data', 'd_valid':'arbiter.d_valid', 'f_valid':'arbiter.f_valid',
     'rsp_ready':'frontend.rsp_ready', 'rsp_valid':'frontend.rsp_valid',
+    'direct_data_block':'data_blocked_by_fetch', 'direct_fetch_block':'fetch_blocked_by_data',
     'killed':'frontend.killed', 'redirect':'frontend.redirect',
 }
 
@@ -33,7 +34,9 @@ def profile(path):
                 for key in codes[code]:
                     value_int=int(value,2)
                     if not traces[key] or traces[key][-1][1]!=value_int:traces[key].append((stamp,value_int))
-    missing=[key for key,trace in traces.items() if not trace]
+    direct=bool(traces['direct_data_block'] and traces['direct_fetch_block'])
+    optional={'arb_state','owner','d_valid','f_valid'} if direct else {'direct_data_block','direct_fetch_block'}
+    missing=[key for key,trace in traces.items() if not trace and key not in optional]
     if missing:raise ValueError(f'Missing VCD signals: {missing}')
     times={key:[t for t,v in trace] for key,trace in traces.items()}
     def before(key,t):
@@ -43,11 +46,15 @@ def profile(path):
                 fetch_blocked_by_data_cycles=0,discarded_fetch_responses=0)
     for t,value in traces['clk']:
         if value!=1 or before('reset',t):continue
-        s={key:before(key,t) for key in SIGNALS}
+        s={key:before(key,t) for key in SIGNALS if traces[key]}
         result['sampled_cycles']+=1
         result['frontend_starved_cycles']+=int(not s['halted'] and s['state']==0 and not s['fe_valid'] and not s['serial'] and not s['irq'])
-        result['data_blocked_by_fetch_cycles']+=int(s['d_valid'] and s['arb_state']!=0 and not s['owner'])
-        result['fetch_blocked_by_data_cycles']+=int(s['f_valid'] and ((s['arb_state']!=0 and s['owner']) or (s['arb_state']==0 and s['d_valid'])))
+        if direct:
+            result['data_blocked_by_fetch_cycles']+=s['direct_data_block']
+            result['fetch_blocked_by_data_cycles']+=s['direct_fetch_block']
+        else:
+            result['data_blocked_by_fetch_cycles']+=int(s['d_valid'] and s['arb_state']!=0 and not s['owner'])
+            result['fetch_blocked_by_data_cycles']+=int(s['f_valid'] and ((s['arb_state']!=0 and s['owner']) or (s['arb_state']==0 and s['d_valid'])))
         result['discarded_fetch_responses']+=int(s['rsp_ready'] and s['rsp_valid'] and (s['killed'] or s['redirect']))
     return result
 
