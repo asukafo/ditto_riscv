@@ -1,8 +1,8 @@
 # ditto_riscv
 
 通过可运行的 RTL、逐条参考对照、真实波形与性能实验学习 RISC-V core 设计。
-当前开发版本是 **v19 需求响应旁路、沿BTB/gshare/RAS预测路径预取、多笔I侧在途取指、4项指令FIFO、BTB/gshare、独立I/D TLB与缓存**；v1–v18 独立冻结。
-十九版均支持 RV64IMAC、Zicsr/Zifencei、M/S/U、软件异常、中断与 Sv39/Svade。
+当前开发版本是 **v20 新需求当拍发送、需求响应旁路、沿BTB/gshare/RAS预测路径预取、多笔I侧在途取指、4项指令FIFO、BTB/gshare、独立I/D TLB与缓存**；v1–v19 独立冻结。
+二十版均支持 RV64IMAC、Zicsr/Zifencei、M/S/U、软件异常、中断与 Sv39/Svade。
 后续目标是共享总线等待优化、大页TLB、双发射、乱序与双核，目前尚未实现这些功能。
 
 ## 快速开始
@@ -33,12 +33,13 @@ make test-ifetch
 make test-window
 make test-path
 make test-forward
+make test-issue
 make diff PROGRAM=full_demo
 make diagrams
 make timing
 ```
 
-根目录命令默认转发到 `versions/v19_window_forward/`，输出位于该版的 `build/`。
+根目录命令默认转发到 `versions/v20_demand_issue/`，输出位于该版的 `build/`。
 `make diagrams` 导出真实流水线 VCD 的阶段采样图；`make wave PROGRAM=full_demo` 用 Surfer 打开波形。
 选择旧版使用 `make test VERSION=v1_multicycle`，或进入该版本目录运行其 Makefile。
 `PROGRAM`、`LATENCY`、`GAP`、`CROSS`、`LIB`、`CLOCK_NS` 等命令行参数会传给所选版本。
@@ -66,7 +67,8 @@ make timing
 | [versions/v16_ifetch_pipeline](versions/v16_ifetch_pipeline/README.md) | 冻结的I-cache/TLB命中交接、响应背压与提前排空 |
 | [versions/v17_fetch_window](versions/v17_fetch_window/README.md) | 冻结的4请求槽位、失效响应归属，整核2笔I侧在途 |
 | [versions/v18_btb_window](versions/v18_btb_window/README.md) | 冻结的预测路径读取窗口、槽内预测保存及字节复核 |
-| [versions/v19_window_forward](versions/v19_window_forward/README.md) | 当前开发：需求响应旁路、反压存储与同拍后继需求 |
+| [versions/v19_window_forward](versions/v19_window_forward/README.md) | 冻结的需求响应旁路、反压存储与同拍后继需求 |
+| [versions/v20_demand_issue](versions/v20_demand_issue/README.md) | 当前开发：新需求分配与发送同拍，背压时寄存重试 |
 | [benchmarks](benchmarks/README.md) | 两版执行相同二进制的公共基准程序 |
 | [tools](tools/README.md) | 仓库检查与跨版本性能比较工具 |
 | [results](results/README.md) | 跨版本对比记录，各版详细记录保留在各自 results/ |
@@ -102,6 +104,7 @@ make timing
 | v17 请求窗口 | 需要多个尚未返回的取指地址和严格响应归属 | 4槽地址窗口、注册响应级、完成令牌与poison；旧响应返回前不复用槽位 | 整核实测2笔I侧在途、外部总线仍1笔；压缩431→411，但C847→927、间接调用223→383，尚未全面跑赢v16 |
 | v18 预测路径窗口 | v17顺序预取浪费调用/返回后的槽位 | 独立BTB/gshare查询副本与提交RAS引导读取，保存槽内预测并复核返回字节 | 延迟5/间隔3间接调用383→251、调用367→235；冲突495→499，仍未全面超过v16；只测周期 |
 | v19 需求返回旁路 | 返回必须先写窗口寄存器，下一拍F才可接收 | 当前未完成需求按令牌匹配返回直接送F，反压时继续保存，支持同拍后继 | 延迟5/间隔3重复读999→867、交替559→487、压缩411→379；相关559→563，仍未全面超过v16；只测周期 |
+| v20 需求发送旁路 | 新分配需求先存槽，下一拍才能请求I侧 | 新需求分配/发送/令牌入队可同拍，背压时保持未发送槽重试 | 延迟5/间隔3分页787→763、求和863→855；向前分支359→367；只测周期 |
 
 v6 首先建立写穿透 D-cache 的可验证基线。重复数据访问受益，顺序读取与冲突访问可能因完整补行变慢。
 v6轮次的布局前最小周期估计为4.54ns（v5为4.32ns），面积约+21.2%；因此应同时检查周期数、时序和面积。
@@ -112,7 +115,7 @@ v7降低load响应等待，v8再解除命中路径间的阻塞；两侧同时缺
 ## 性能实验
 
 ```sh
-make compare BENCHMARK_ARGS="--versions v16_ifetch_pipeline v18_btb_window v19_window_forward --cycles-only"
+make compare BENCHMARK_ARGS="--versions v16_ifetch_pipeline v19_window_forward v20_demand_issue --cycles-only"
 # 每次使用新的 run-id；已存在时明确拒绝覆盖
 make compare BENCHMARK_ARGS="--run-id my-experiment"
 ```

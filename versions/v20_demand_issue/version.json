@@ -1,0 +1,18 @@
+{
+  "name": "v20_demand_issue",
+  "base_commit": "56d3fbe",
+  "architecture": "single_issue_window_demand_issue_bypass",
+  "icache_bytes": 256,
+  "dcache_bytes": 256,
+  "line_bytes": 16,
+  "tlb_entries_per_side": 8,
+  "tlb_page_bytes": 4096,
+  "bht_entries": 32,
+  "bht_counter_bits": 2,
+  "ghr_bits": 4,
+  "btb_entries": 32,
+  "fetch_queue_entries": 4,
+  "fetch_packet_bits": 333,
+  "base_version": "v19_window_forward",
+  "fetch_request_slots": 4
+}

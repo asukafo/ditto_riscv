@@ -101,3 +101,5 @@ python3 tools/profile_ifetch.py versions/v19_window_forward/build/profile-c_demo
 ## 接下来
 
 继续以v16为吞吐参照，区分冷缺失和热命中，测量需求分配后才发送的气泡，以及改向后的旧事务排空。下一版优先评估需求请求直接交接到I侧服务、减少需求miss的前置等待；需保持F同拍响应/请求不形成组合环，并继续验证槽位、令牌和上下文排空。
+
+本版已冻结；后续新需求发送旁路独立保存在[v20](../v20_demand_issue/README.md)。
