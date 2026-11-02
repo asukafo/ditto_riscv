@@ -1,8 +1,8 @@
 # Repository entry point; each hardware version owns its build directory.
-VERSION ?= v14_btb
+VERSION ?= v15_fetch_queue
 PYTHON ?= python3
 BENCHMARK_ARGS ?=
-VERSIONS := v1_multicycle v2_single_issue v3_icache v4_fetch_buffer v5_early_restart v6_dcache v7_dcache_early v8_split_memory v9_static_predict v10_return_stack v11_tlb v12_dynamic_predict v13_gshare v14_btb
+VERSIONS := v1_multicycle v2_single_issue v3_icache v4_fetch_buffer v5_early_restart v6_dcache v7_dcache_early v8_split_memory v9_static_predict v10_return_stack v11_tlb v12_dynamic_predict v13_gshare v14_btb v15_fetch_queue
 VERSION_DIR := versions/$(VERSION)
 
 ifeq ($(filter $(VERSION),$(VERSIONS)),)
@@ -10,7 +10,7 @@ $(error Unknown VERSION '$(VERSION)'; choose one of: $(VERSIONS))
 endif
 
 .DEFAULT_GOAL := help
-FORWARDED := tools lint test test-base test-full test-pipeline test-icache test-fetch test-early test-dcache test-data-early test-split test-predict test-ras test-tlb test-bht test-gshare test-btb test-mapped test-alu test-rv64i sim diff wave sweep diagrams synth timing clean
+FORWARDED := tools lint test test-base test-full test-pipeline test-icache test-fetch test-early test-dcache test-data-early test-split test-predict test-ras test-tlb test-bht test-gshare test-btb test-queue test-mapped test-alu test-rv64i sim diff wave sweep diagrams synth timing clean
 .PHONY: help versions check compare benchmark $(FORWARDED)
 
 help:
@@ -39,7 +39,9 @@ versions:
 
 	@echo 'v13_gshare   frozen committed-history gshare'
 
-	@echo 'v14_btb   request-time tagged target prediction (default)'
+	@echo 'v14_btb   frozen request-time target prediction'
+
+	@echo 'v15_fetch_queue   four-entry complete-instruction queue (default)'
 
 $(FORWARDED):
 	$(MAKE) -C "$(VERSION_DIR)" $@

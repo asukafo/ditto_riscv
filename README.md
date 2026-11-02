@@ -1,8 +1,8 @@
 # ditto_riscv
 
 通过可运行的 RTL、逐条参考对照、真实波形与性能实验学习 RISC-V core 设计。
-当前开发版本是 **v14 单发射流水线、BTB与gshare预测、独立I/D TLB与缓存**；v1–v13 独立冻结。
-十四版均支持 RV64IMAC、Zicsr/Zifencei、M/S/U、软件异常、中断与 Sv39/Svade。
+当前开发版本是 **v15 单发射流水线、4项取指队列、BTB/gshare、独立I/D TLB与缓存**；v1–v14 独立冻结。
+十五版均支持 RV64IMAC、Zicsr/Zifencei、M/S/U、软件异常、中断与 Sv39/Svade。
 后续目标是共享总线等待优化、大页TLB、双发射、乱序与双核，目前尚未实现这些功能。
 
 ## 快速开始
@@ -28,12 +28,13 @@ make test-tlb
 make test-bht
 make test-gshare
 make test-btb
+make test-queue
 make diff PROGRAM=full_demo
 make diagrams
 make timing
 ```
 
-根目录命令默认转发到 `versions/v14_btb/`，输出位于该版的 `build/`。
+根目录命令默认转发到 `versions/v15_fetch_queue/`，输出位于该版的 `build/`。
 `make diagrams` 导出真实流水线 VCD 的阶段采样图；`make wave PROGRAM=full_demo` 用 Surfer 打开波形。
 选择旧版使用 `make test VERSION=v1_multicycle`，或进入该版本目录运行其 Makefile。
 `PROGRAM`、`LATENCY`、`GAP`、`CROSS`、`LIB`、`CLOCK_NS` 等命令行参数会传给所选版本。
@@ -56,7 +57,8 @@ make timing
 | [versions/v11_tlb](versions/v11_tlb/README.md) | 冻结的各8项I/D TLB、权限复查与失效 |
 | [versions/v12_dynamic_predict](versions/v12_dynamic_predict/README.md) | 冻结的32项两位BHT，提交训练与静态冷启动 |
 | [versions/v13_gshare](versions/v13_gshare/README.md) | 冻结的4位提交历史、32项计数器、保存索引训练 |
-| [versions/v14_btb](versions/v14_btb/README.md) | 当前开发：32项带标签BTB、请求时目标预测、提交训练 |
+| [versions/v14_btb](versions/v14_btb/README.md) | 冻结的32项带标签BTB、请求时目标预测、提交训练 |
+| [versions/v15_fetch_queue](versions/v15_fetch_queue/README.md) | 当前开发：4项完整指令队列、空队列旁路、重定向清空 |
 | [benchmarks](benchmarks/README.md) | 两版执行相同二进制的公共基准程序 |
 | [tools](tools/README.md) | 仓库检查与跨版本性能比较工具 |
 | [results](results/README.md) | 跨版本对比记录，各版详细记录保留在各自 results/ |
@@ -87,6 +89,7 @@ make timing
 | v12 动态分支预测 | 向前长期跳转仍被静态规则反复预测错误 | 增加32项两位BHT，冷索引回退BTFNT；只在提交时用真实方向训练，保留X核对恢复 | 延迟5/间隔3向前恒跳719→591、阶段变化851→791；交替851→915、冲突479→547；本轮只测周期，暂不分析时序/面积 |
 | v13 gshare | v12对交替方向反复猜错，索引冲突相互干扰 | 将4位提交历史与PC索引异或，仍用32项两位计数器；查询索引随F/X/W保存，提交时精确更新 | 延迟5/间隔3交替915→791、冲突547→423、相关分支1115→871；向前恒跳591→595、阶段变化791→795；只测周期 |
 | v14 BTB | 重复寄存器间接调用仍等待X算目标 | 32项带完整高位PC标签BTB，请求时查询并保存目标，完整指令复核类型/长度/直接目标；方向及时刷新 | 延迟5/间隔3间接调用379→351、间接目标失误16→1；旧17程序51组周期/请求/控制失误不变；单笔取指仍限制吞吐 |
+| v15 取指队列 | X等待load/div时，F只有一个完整指令寄存器，随之停取指 | 增加4项333位FIFO，空时旁路、满时可同时出入，重定向清空；仍单笔在途取指 | 延迟5/间隔3求和983→855、除法后独立指令515→463、C程序943→887；位操作199→207、压缩依赖427→431；只测周期 |
 
 v6 首先建立写穿透 D-cache 的可验证基线。重复数据访问受益，顺序读取与冲突访问可能因完整补行变慢。
 v6轮次的布局前最小周期估计为4.54ns（v5为4.32ns），面积约+21.2%；因此应同时检查周期数、时序和面积。
@@ -97,7 +100,7 @@ v7降低load响应等待，v8再解除命中路径间的阻塞；两侧同时缺
 ## 性能实验
 
 ```sh
-make compare BENCHMARK_ARGS="--versions v13_gshare v14_btb --cycles-only"
+make compare BENCHMARK_ARGS="--versions v14_btb v15_fetch_queue --cycles-only"
 # 每次使用新的 run-id；已存在时明确拒绝覆盖
 make compare BENCHMARK_ARGS="--run-id my-experiment"
 ```

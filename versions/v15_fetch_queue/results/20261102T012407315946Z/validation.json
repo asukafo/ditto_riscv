@@ -1,0 +1,69 @@
+{
+  "run_id": "20261102T012407315946Z",
+  "lint": "pass",
+  "rtl_regression": "pass",
+  "native_runs": 596,
+  "native_commits": 55941,
+  "queue_native_runs": 30,
+  "queue_native_commits": 1515,
+  "queue_native_traps": 5,
+  "queue_model_steps_per_configuration": 30381,
+  "queue_model_configurations": 2,
+  "queue_model_full_pop_push_cases": 1512,
+  "queue_model_full_flush_cases": 60,
+  "base_program_runs": 71,
+  "alu_vectors_per_timing": 876,
+  "alu_timing_configurations": 5,
+  "rv64i_runs": 126,
+  "benchmark_main_runs": 114,
+  "benchmark_ablation_runs": 1425,
+  "queue_directed_on_off_runs": 36,
+  "queue_off_matches_v14_cases": 57,
+  "packet_and_inflight_vcd_audit": {
+    "divide": {
+      "peak": 4,
+      "nonempty_flushes": 0,
+      "fill_while_x_busy": 22,
+      "full_pop_push": 4,
+      "max_outstanding_fetches": 1
+    },
+    "flush": {
+      "peak": 4,
+      "nonempty_flushes": 1,
+      "fill_while_x_busy": 10,
+      "full_pop_push": 1,
+      "max_outstanding_fetches": 1
+    },
+    "precise": {
+      "peak": 4,
+      "nonempty_flushes": 1,
+      "fill_while_x_busy": 9,
+      "full_pop_push": 1,
+      "max_outstanding_fetches": 1
+    },
+    "fence_i": {
+      "peak": 4,
+      "nonempty_flushes": 1,
+      "fill_while_x_busy": 9,
+      "full_pop_push": 2,
+      "max_outstanding_fetches": 1
+    },
+    "compressed": {
+      "peak": 4,
+      "nonempty_flushes": 0,
+      "fill_while_x_busy": 21,
+      "full_pop_push": 9,
+      "max_outstanding_fetches": 1
+    }
+  },
+  "original_fetch_module_byte_identical_to_v14": true,
+  "yosys_structural_synthesis": "pass",
+  "sta": "not_run",
+  "mapped_gate_simulation": "not_run",
+  "native_trace_and_ram_files": 1192,
+  "native_trace_hash_manifest_sha256": "c6cc0e924fd402a75d5028e649c9d4ebc361e67ff30cfe011508a36973c659ac",
+  "old_archived_files_verified_unchanged": 382,
+  "full_test_log_sha256": "b7a0e34643ec414cfe85fbe0c86324a31dda36b514417b2ce41e325dce0d648f",
+  "test_summary_sha256": "4a3cd531ae63e409dc9d66347c3fb00545e560dd6434a75ef43daffd33830b19",
+  "synthesis_log_sha256": "e475daa8c09687c23fa2b7957227dddacc4042592f305bc8c564538f18066bdd"
+}

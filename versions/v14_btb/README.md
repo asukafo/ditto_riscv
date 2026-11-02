@@ -1,5 +1,7 @@
 # v14：请求时查询的32项BTB
 
+本版本在提交`38c5b63`后冻结，当前开发见[v15取指队列](../v15_fetch_queue/README.md)。
+
 v13学习条件分支方向，但普通间接调用仍要等X算出寄存器目标。v14增加BTB（Branch Target Buffer）：缓存某个虚拟PC的控制流类型、目标、指令长度，在开始取指时就查出预测目标。新版放在独立目录，v1–v13冻结。
 
 仍为单发射F/X/W，继承RV64IMAC、M/S/U、Sv39、I/D TLB与缓存、gshare和RAS。
