@@ -1,0 +1,327 @@
+{
+  "calls": {
+    "predictor": {
+      "queries": 162,
+      "path_redirects": 49,
+      "rejected_returned_metadata": 0,
+      "examples": [
+        {
+          "cycle": 98,
+          "pc": 16,
+          "target": 44,
+          "kind": 4
+        },
+        {
+          "cycle": 103,
+          "pc": 60,
+          "target": 20,
+          "kind": 3
+        },
+        {
+          "cycle": 105,
+          "pc": 24,
+          "target": 16,
+          "kind": 1
+        },
+        {
+          "cycle": 106,
+          "pc": 16,
+          "target": 44,
+          "kind": 4
+        },
+        {
+          "cycle": 111,
+          "pc": 60,
+          "target": 20,
+          "kind": 3
+        },
+        {
+          "cycle": 113,
+          "pc": 24,
+          "target": 16,
+          "kind": 1
+        },
+        {
+          "cycle": 114,
+          "pc": 16,
+          "target": 44,
+          "kind": 4
+        },
+        {
+          "cycle": 119,
+          "pc": 60,
+          "target": 20,
+          "kind": 3
+        }
+      ]
+    },
+    "ownership": {
+      "accepted_requests": 155,
+      "max_accepted_not_returned": 2,
+      "poisoned_completions": 7,
+      "redirect_or_retarget_cycles": 7,
+      "first_double_outstanding_cycle": 20,
+      "max_external_physical_transactions": 1
+    }
+  },
+  "alternating": {
+    "predictor": {
+      "queries": 386,
+      "path_redirects": 66,
+      "rejected_returned_metadata": 0,
+      "examples": [
+        {
+          "cycle": 63,
+          "pc": 28,
+          "target": 8,
+          "kind": 1
+        },
+        {
+          "cycle": 68,
+          "pc": 28,
+          "target": 8,
+          "kind": 1
+        },
+        {
+          "cycle": 74,
+          "pc": 28,
+          "target": 8,
+          "kind": 1
+        },
+        {
+          "cycle": 80,
+          "pc": 28,
+          "target": 8,
+          "kind": 1
+        },
+        {
+          "cycle": 95,
+          "pc": 28,
+          "target": 8,
+          "kind": 1
+        },
+        {
+          "cycle": 101,
+          "pc": 28,
+          "target": 8,
+          "kind": 1
+        },
+        {
+          "cycle": 107,
+          "pc": 28,
+          "target": 8,
+          "kind": 1
+        },
+        {
+          "cycle": 112,
+          "pc": 28,
+          "target": 8,
+          "kind": 1
+        }
+      ]
+    },
+    "ownership": {
+      "accepted_requests": 376,
+      "max_accepted_not_returned": 2,
+      "poisoned_completions": 10,
+      "redirect_or_retarget_cycles": 13,
+      "first_double_outstanding_cycle": 20,
+      "max_external_physical_transactions": 1
+    }
+  },
+  "changing": {
+    "predictor": {
+      "queries": 513,
+      "path_redirects": 158,
+      "rejected_returned_metadata": 0,
+      "examples": [
+        {
+          "cycle": 107,
+          "pc": 32,
+          "target": 60,
+          "kind": 4
+        },
+        {
+          "cycle": 109,
+          "pc": 64,
+          "target": 36,
+          "kind": 3
+        },
+        {
+          "cycle": 111,
+          "pc": 40,
+          "target": 8,
+          "kind": 1
+        },
+        {
+          "cycle": 118,
+          "pc": 40,
+          "target": 8,
+          "kind": 1
+        },
+        {
+          "cycle": 125,
+          "pc": 32,
+          "target": 68,
+          "kind": 4
+        },
+        {
+          "cycle": 128,
+          "pc": 32,
+          "target": 68,
+          "kind": 4
+        },
+        {
+          "cycle": 130,
+          "pc": 72,
+          "target": 36,
+          "kind": 3
+        },
+        {
+          "cycle": 132,
+          "pc": 40,
+          "target": 8,
+          "kind": 1
+        }
+      ]
+    },
+    "ownership": {
+      "accepted_requests": 459,
+      "max_accepted_not_returned": 2,
+      "poisoned_completions": 103,
+      "redirect_or_retarget_cycles": 88,
+      "first_double_outstanding_cycle": 20,
+      "max_external_physical_transactions": 1
+    }
+  },
+  "fence": {
+    "predictor": {
+      "queries": 143,
+      "path_redirects": 22,
+      "rejected_returned_metadata": 0,
+      "examples": [
+        {
+          "cycle": 93,
+          "pc": 20,
+          "target": 12,
+          "kind": 1
+        },
+        {
+          "cycle": 94,
+          "pc": 12,
+          "target": 68,
+          "kind": 4
+        },
+        {
+          "cycle": 98,
+          "pc": 20,
+          "target": 12,
+          "kind": 1
+        },
+        {
+          "cycle": 107,
+          "pc": 20,
+          "target": 12,
+          "kind": 1
+        },
+        {
+          "cycle": 108,
+          "pc": 12,
+          "target": 68,
+          "kind": 4
+        },
+        {
+          "cycle": 112,
+          "pc": 20,
+          "target": 12,
+          "kind": 1
+        },
+        {
+          "cycle": 121,
+          "pc": 20,
+          "target": 12,
+          "kind": 1
+        },
+        {
+          "cycle": 122,
+          "pc": 12,
+          "target": 68,
+          "kind": 4
+        }
+      ]
+    },
+    "ownership": {
+      "accepted_requests": 109,
+      "max_accepted_not_returned": 2,
+      "poisoned_completions": 43,
+      "redirect_or_retarget_cycles": 41,
+      "first_double_outstanding_cycle": 20,
+      "max_external_physical_transactions": 1
+    }
+  },
+  "skip": {
+    "predictor": {
+      "queries": 88,
+      "path_redirects": 31,
+      "rejected_returned_metadata": 0,
+      "examples": [
+        {
+          "cycle": 53,
+          "pc": 12,
+          "target": 28,
+          "kind": 2
+        },
+        {
+          "cycle": 67,
+          "pc": 12,
+          "target": 28,
+          "kind": 2
+        },
+        {
+          "cycle": 69,
+          "pc": 32,
+          "target": 8,
+          "kind": 1
+        },
+        {
+          "cycle": 71,
+          "pc": 12,
+          "target": 28,
+          "kind": 2
+        },
+        {
+          "cycle": 73,
+          "pc": 32,
+          "target": 8,
+          "kind": 1
+        },
+        {
+          "cycle": 75,
+          "pc": 12,
+          "target": 28,
+          "kind": 2
+        },
+        {
+          "cycle": 77,
+          "pc": 32,
+          "target": 8,
+          "kind": 1
+        },
+        {
+          "cycle": 79,
+          "pc": 12,
+          "target": 28,
+          "kind": 2
+        }
+      ]
+    },
+    "ownership": {
+      "accepted_requests": 81,
+      "max_accepted_not_returned": 2,
+      "poisoned_completions": 7,
+      "redirect_or_retarget_cycles": 7,
+      "first_double_outstanding_cycle": 20,
+      "max_external_physical_transactions": 1
+    }
+  }
+}

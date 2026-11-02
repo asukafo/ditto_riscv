@@ -89,3 +89,5 @@ make compare BENCHMARK_ARGS="--versions v16_ifetch_pipeline v17_fetch_window v18
 ## 下一步
 
 优先解释v18相对v16剩余的周期损失：统计窗口命中但F无法及时消费、需求miss重定向排空、响应级额外等待和错误路径访问。以这些证据决定是否增加完成数据到F的交接/旁路、优化槽位回收；之后再考虑更复杂的投机历史或非阻塞cache。每个结构变化继续新建版本并保留关闭功能对照。
+
+本版已冻结；后续需求响应旁路独立保存在[v19](../v19_window_forward/README.md)。

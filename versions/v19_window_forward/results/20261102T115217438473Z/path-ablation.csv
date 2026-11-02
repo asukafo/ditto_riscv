@@ -1,0 +1,16 @@
+program,latency,gap,path_cycles,linear_cycles,path_requests,linear_requests,path_drops,linear_drops
+calls,1,0,179,268,12,12,7,98
+calls,5,0,227,316,12,12,7,97
+calls,5,3,247,339,12,12,7,97
+alternating,1,0,438,554,11,11,11,133
+alternating,5,0,472,588,10,10,10,132
+alternating,5,3,487,603,9,9,10,132
+changing,1,0,563,715,12,12,103,259
+changing,5,0,611,763,12,12,103,259
+changing,5,3,631,783,12,12,103,259
+fence,1,0,197,203,23,23,44,53
+fence,5,0,288,294,23,23,43,52
+fence,5,3,327,335,23,23,43,52
+skip,1,0,104,161,11,11,7,64
+skip,5,0,145,200,11,11,7,64
+skip,5,3,163,219,10,10,7,64

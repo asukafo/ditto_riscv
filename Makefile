@@ -1,8 +1,8 @@
 # Repository entry point; each hardware version owns its build directory.
-VERSION ?= v18_btb_window
+VERSION ?= v19_window_forward
 PYTHON ?= python3
 BENCHMARK_ARGS ?=
-VERSIONS := v1_multicycle v2_single_issue v3_icache v4_fetch_buffer v5_early_restart v6_dcache v7_dcache_early v8_split_memory v9_static_predict v10_return_stack v11_tlb v12_dynamic_predict v13_gshare v14_btb v15_fetch_queue v16_ifetch_pipeline v17_fetch_window v18_btb_window
+VERSIONS := v1_multicycle v2_single_issue v3_icache v4_fetch_buffer v5_early_restart v6_dcache v7_dcache_early v8_split_memory v9_static_predict v10_return_stack v11_tlb v12_dynamic_predict v13_gshare v14_btb v15_fetch_queue v16_ifetch_pipeline v17_fetch_window v18_btb_window v19_window_forward
 VERSION_DIR := versions/$(VERSION)
 
 ifeq ($(filter $(VERSION),$(VERSIONS)),)
@@ -10,7 +10,7 @@ $(error Unknown VERSION '$(VERSION)'; choose one of: $(VERSIONS))
 endif
 
 .DEFAULT_GOAL := help
-FORWARDED := tools lint test test-base test-full test-pipeline test-icache test-fetch test-early test-dcache test-data-early test-split test-predict test-ras test-tlb test-bht test-gshare test-btb test-queue test-ifetch test-window test-path test-mapped test-alu test-rv64i sim diff wave sweep diagrams synth timing clean
+FORWARDED := tools lint test test-base test-full test-pipeline test-icache test-fetch test-early test-dcache test-data-early test-split test-predict test-ras test-tlb test-bht test-gshare test-btb test-queue test-ifetch test-window test-path test-forward test-mapped test-alu test-rv64i sim diff wave sweep diagrams synth timing clean
 .PHONY: help versions check compare benchmark $(FORWARDED)
 
 help:
@@ -46,7 +46,9 @@ versions:
 	@echo 'v16_ifetch_pipeline   frozen single-outstanding hit turnover'
 	@echo 'v17_fetch_window   frozen sequential request window'
 
-	@echo 'v18_btb_window   BTB/gshare/RAS-guided request window (default)'
+	@echo 'v18_btb_window   frozen BTB/gshare/RAS-guided request window'
+
+	@echo 'v19_window_forward   demand-response forwarding in request window (default)'
 
 $(FORWARDED):
 	$(MAKE) -C "$(VERSION_DIR)" $@

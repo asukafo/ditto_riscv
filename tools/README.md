@@ -50,7 +50,9 @@ v15使用`--versions v14_btb v15_fetch_queue --cycles-only`比较；关闭FETCH_
 v16及之后使用专门的`ifetch_experiments.py`，避免误套早期功能关闭开关的父版本假设：
 
 ```sh
-python3 tools/ifetch_experiments.py --versions v16_ifetch_pipeline v17_fetch_window v18_btb_window --cycles-only
+python3 tools/ifetch_experiments.py --versions v16_ifetch_pipeline v18_btb_window v19_window_forward --cycles-only
 ```
 
-逐条核对19个相同二进制和RAM；v16关闭命中交接恢复v15，v17关闭窗口恢复v16，v18关闭预测路径恢复v17。默认比较v16/v17/v18。当前根目录`make compare`转发到该脚本，历史全功能/映射实验仍使用`benchmark.py`。
+逐条核对19个相同二进制和RAM；v16关闭命中交接恢复v15，v17关闭窗口恢复v16，v18关闭预测路径恢复v17。v19关闭需求返回旁路恢复v18。默认比较v16/v18/v19。当前根目录`make compare`转发到该脚本，历史全功能/映射实验仍使用`benchmark.py`。
+
+`python3 tools/profile_ifetch.py <core.vcd>`检查F/X等待与窗口需求返回交接；字段为重叠事件计数，不相加当作总周期。v16没有窗口时窗口指标为0，非缺失数据的假定值。

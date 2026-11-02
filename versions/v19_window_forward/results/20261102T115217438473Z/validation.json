@@ -1,0 +1,121 @@
+{
+  "version": "v19_window_forward",
+  "run_id": "20261102T115217438473Z",
+  "native_runs": 636,
+  "native_commits": 61563,
+  "lint": "pass",
+  "functional_regression": "pass",
+  "base_program_runs": 71,
+  "rv64i_runs": 126,
+  "alu_vectors_per_timing": 876,
+  "alu_timing_configurations": 5,
+  "parent_off_equivalence_cases": 57,
+  "comparison_main_runs": 171,
+  "comparison_on_off_runs": 171,
+  "forward_directed_cases_per_mode": 17,
+  "forward_modes": 2,
+  "window_random_cycles_per_mode": 40000,
+  "window_model_peak": 4,
+  "core_i_service_peak": 2,
+  "external_physical_peak": 1,
+  "forward_vcd_cases": 5,
+  "forward_audit": {
+    "window_stream": {
+      "forwarding": {
+        "return_candidates": 165,
+        "forwarded_and_consumed": 165,
+        "forwarded_but_stalled": 0,
+        "simultaneous_successor": 163,
+        "flush_with_forward": 1,
+        "held_response_cycles": 0
+      },
+      "ownership": {
+        "accepted_requests": 173,
+        "max_accepted_not_returned": 2,
+        "poisoned_completions": 4,
+        "redirect_or_retarget_cycles": 5,
+        "first_double_outstanding_cycle": 20,
+        "max_external_physical_transactions": 1
+      }
+    },
+    "window_redirect": {
+      "forwarding": {
+        "return_candidates": 73,
+        "forwarded_and_consumed": 73,
+        "forwarded_but_stalled": 0,
+        "simultaneous_successor": 71,
+        "flush_with_forward": 1,
+        "held_response_cycles": 0
+      },
+      "ownership": {
+        "accepted_requests": 81,
+        "max_accepted_not_returned": 2,
+        "poisoned_completions": 7,
+        "redirect_or_retarget_cycles": 7,
+        "first_double_outstanding_cycle": 20,
+        "max_external_physical_transactions": 1
+      }
+    },
+    "path_calls": {
+      "forwarding": {
+        "return_candidates": 138,
+        "forwarded_and_consumed": 137,
+        "forwarded_but_stalled": 1,
+        "simultaneous_successor": 136,
+        "flush_with_forward": 1,
+        "held_response_cycles": 11
+      },
+      "ownership": {
+        "accepted_requests": 155,
+        "max_accepted_not_returned": 2,
+        "poisoned_completions": 7,
+        "redirect_or_retarget_cycles": 7,
+        "first_double_outstanding_cycle": 20,
+        "max_external_physical_transactions": 1
+      }
+    },
+    "path_changing": {
+      "forwarding": {
+        "return_candidates": 394,
+        "forwarded_and_consumed": 393,
+        "forwarded_but_stalled": 1,
+        "simultaneous_successor": 359,
+        "flush_with_forward": 34,
+        "held_response_cycles": 11
+      },
+      "ownership": {
+        "accepted_requests": 459,
+        "max_accepted_not_returned": 2,
+        "poisoned_completions": 103,
+        "redirect_or_retarget_cycles": 88,
+        "first_double_outstanding_cycle": 20,
+        "max_external_physical_transactions": 1
+      }
+    },
+    "path_fence": {
+      "forwarding": {
+        "return_candidates": 67,
+        "forwarded_and_consumed": 67,
+        "forwarded_but_stalled": 0,
+        "simultaneous_successor": 66,
+        "flush_with_forward": 1,
+        "held_response_cycles": 10
+      },
+      "ownership": {
+        "accepted_requests": 109,
+        "max_accepted_not_returned": 2,
+        "poisoned_completions": 43,
+        "redirect_or_retarget_cycles": 41,
+        "first_double_outstanding_cycle": 20,
+        "max_external_physical_transactions": 1
+      }
+    }
+  },
+  "synthesis": "pass",
+  "sta": "not_run",
+  "gate_simulation": "not_run",
+  "old_archived_files_verified_unchanged": 461,
+  "native_trace_and_ram_files": 1272,
+  "full_test_log_sha256": "8194a508c66859b98e0fc045537b55855c324a7a9efb77109367406c9adde168",
+  "synthesis_log_sha256": "54c43c7e679df6f0f2da2177e894d026b884763cfee826783866f96ad224e345"
+}
