@@ -1,0 +1,26 @@
+{
+  "stream": {
+    "accepted_requests": 203,
+    "max_accepted_not_returned": 2,
+    "poisoned_completions": 32,
+    "redirect_or_retarget_cycles": 20,
+    "first_double_outstanding_cycle": 20,
+    "max_external_physical_transactions": 1
+  },
+  "redirect": {
+    "accepted_requests": 138,
+    "max_accepted_not_returned": 2,
+    "poisoned_completions": 62,
+    "redirect_or_retarget_cycles": 36,
+    "first_double_outstanding_cycle": 20,
+    "max_external_physical_transactions": 1
+  },
+  "fence": {
+    "accepted_requests": 44,
+    "max_accepted_not_returned": 2,
+    "poisoned_completions": 5,
+    "redirect_or_retarget_cycles": 11,
+    "first_double_outstanding_cycle": 20,
+    "max_external_physical_transactions": 1
+  }
+}

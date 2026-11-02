@@ -1,0 +1,4 @@
+{
+  "simultaneous_response_and_next_accept": 200,
+  "max_outstanding": 1
+}

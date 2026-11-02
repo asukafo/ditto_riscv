@@ -2,6 +2,9 @@
 
 ## 当前工程
 
+- [v17 多笔I侧在途、完成令牌、失效槽位与真实波形](../versions/v17_fetch_window/README.md)
+- [v16 命中通路交接、背压与提前排空](../versions/v16_ifetch_pipeline/README.md)
+
 - [v15 取指队列、完整指令包与冲刷波形](../versions/v15_fetch_queue/README.md)
 
 - [v14 BTB、提前目标查询与间接调用](../versions/v14_btb/README.md)

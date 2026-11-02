@@ -1,0 +1,24 @@
+{
+  "version": "v16_ifetch_pipeline",
+  "run_id": "20261102T020843568164Z",
+  "native_runs": 596,
+  "native_commits": 55947,
+  "lint": "pass",
+  "functional_regression": "pass",
+  "base_program_runs": 71,
+  "rv64i_runs": 126,
+  "alu_vectors_per_timing": 876,
+  "alu_timing_configurations": 5,
+  "parent_off_equivalence_cases": 57,
+  "audit": {
+    "simultaneous_response_and_next_accept": 200,
+    "max_outstanding": 1
+  },
+  "synthesis": "pass",
+  "sta": "not_run",
+  "gate_simulation": "not_run",
+  "old_archived_files_verified_unchanged": 423,
+  "native_trace_and_ram_files": 1192,
+  "full_test_log_sha256": "98cbfb58e89afe41122f72c203e97d79cdfe45659bad14c4082dd3ffb1829ca1",
+  "synthesis_log_sha256": "6921084ae376361dd91a75c45c3847701710b9b86a0d4e6015ddd12f828af300"
+}

@@ -46,3 +46,11 @@ v13可用`--versions v12_dynamic_predict v13_gshare --cycles-only`比较。额�
 v14可用`--versions v13_gshare v14_btb --cycles-only`比较；BTB关闭后检查周期、请求和控制失误与v13一致。其余开关保留BTB，不能当作无BTB的历史版本。
 
 v15使用`--versions v14_btb v15_fetch_queue --cycles-only`比较；关闭FETCH_QUEUE_ENABLE的57组周期、请求和控制失误必须与v14一致。其他功能开关仍保留队列，不能强行匹配无队列架构。
+
+v16/v17使用专门的`ifetch_experiments.py`，避免误套早期功能关闭开关的父版本假设：
+
+```sh
+python3 tools/ifetch_experiments.py --versions v15_fetch_queue v16_ifetch_pipeline v17_fetch_window --cycles-only
+```
+
+逐条核对19个相同二进制和RAM；v16关闭命中交接恢复v15，v17关闭窗口恢复v16。当前根目录`make compare`转发到该脚本，历史全功能/映射实验仍使用`benchmark.py`。

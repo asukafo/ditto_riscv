@@ -1,0 +1,49 @@
+{
+  "version": "v17_fetch_window",
+  "run_id": "20261102T020843568164Z",
+  "native_runs": 611,
+  "native_commits": 56634,
+  "lint": "pass",
+  "functional_regression": "pass",
+  "base_program_runs": 71,
+  "rv64i_runs": 126,
+  "alu_vectors_per_timing": 876,
+  "alu_timing_configurations": 5,
+  "parent_off_equivalence_cases": 57,
+  "audit": {
+    "stream": {
+      "accepted_requests": 203,
+      "max_accepted_not_returned": 2,
+      "poisoned_completions": 32,
+      "redirect_or_retarget_cycles": 20,
+      "first_double_outstanding_cycle": 20,
+      "max_external_physical_transactions": 1
+    },
+    "redirect": {
+      "accepted_requests": 138,
+      "max_accepted_not_returned": 2,
+      "poisoned_completions": 62,
+      "redirect_or_retarget_cycles": 36,
+      "first_double_outstanding_cycle": 20,
+      "max_external_physical_transactions": 1
+    },
+    "fence": {
+      "accepted_requests": 44,
+      "max_accepted_not_returned": 2,
+      "poisoned_completions": 5,
+      "redirect_or_retarget_cycles": 11,
+      "first_double_outstanding_cycle": 20,
+      "max_external_physical_transactions": 1
+    }
+  },
+  "synthesis": "pass",
+  "sta": "not_run",
+  "gate_simulation": "not_run",
+  "old_archived_files_verified_unchanged": 423,
+  "native_trace_and_ram_files": 1222,
+  "full_test_log_sha256": "ca04153943555a27593c833688c9324c2a7b00ee812833130d021610ad1ec4e3",
+  "synthesis_log_sha256": "0167348f90dca541355ef0490a1b4aecbeb8302e177bb149a103abf0c333e954",
+  "window_model_cycles": 40000,
+  "window_model_peak": 4,
+  "pipeline_memory_unit_checks": 49
+}
