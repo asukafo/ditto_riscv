@@ -2,7 +2,7 @@
 
 ```text
 ditto_riscv/
-├── Makefile                  统一入口，默认选择 v17
+├── Makefile                  统一入口，默认选择 v18
 ├── README.md                 快速开始
 ├── CONTRIBUTING.md           开发、冻结和记录约定
 ├── versions/
@@ -22,7 +22,8 @@ ditto_riscv/
 │   ├── v14_btb/             冻结的请求时目标预测
 │   ├── v15_fetch_queue/     冻结的完整指令FIFO
 │   ├── v16_ifetch_pipeline/ 冻结的命中通路交接
-│   └── v17_fetch_window/    多笔I侧请求窗口与旧响应归属
+│   ├── v17_fetch_window/    冻结的多笔I侧请求窗口与旧响应归属
+│   └── v18_btb_window/      BTB/gshare/RAS引导读取窗口
 ├── benchmarks/              公共比较程序
 ├── tools/                   仓库检查、跨版本比较
 ├── results/comparisons/     不覆盖的历史对比表
@@ -46,7 +47,7 @@ ditto_riscv/
 ## 根目录命令
 
 ```sh
-make lint                         # 默认 v17
+make lint                         # 默认 v18
 make test
 make diff PROGRAM=full_demo LATENCY=5 GAP=3
 make timing
@@ -65,7 +66,7 @@ make compare BENCHMARK_ARGS="--run-id my-experiment"
 
 根目录不再复制一套硬件源码。各版内部的重复模块是版本快照的一部分，
 不会抽成可变的公共 RTL，以免修改新版时改变旧版。
-v1–v16的frozen-files.json记录各版冻结源码/构建文件哈希；`make check`会校验。
+v1–v17的frozen-files.json记录各版冻结源码/构建文件哈希；`make check`会校验。
 各版的历史 results 和公共对比表迁移时保持内容不变，历史 manifest 中的原始信息仍有效。
 
 旧根目录的本地 build 已移入忽略目录 `.local/legacy-root-build-<timestamp>/`，未删除。
@@ -86,7 +87,7 @@ v1–v16的frozen-files.json记录各版冻结源码/构建文件哈希；`make 
 `test-bht`从v12开始提供。仅比较周期、暂不分析时序：
 
 ```sh
-python3 tools/ifetch_experiments.py --versions v15_fetch_queue v16_ifetch_pipeline v17_fetch_window --cycles-only
+python3 tools/ifetch_experiments.py --versions v16_ifetch_pipeline v17_fetch_window v18_btb_window --cycles-only
 ```
 
 `test-gshare`从v13开始提供，包含保存索引的单元测试及整核VCD审计。
@@ -96,3 +97,5 @@ python3 tools/ifetch_experiments.py --versions v15_fetch_queue v16_ifetch_pipeli
 `test-queue`从v15开始提供，检查333位包的FIFO、整核冲刷、精确异常及单笔在途取指约束。
 
 `test-ifetch`从v16开始提供；v17另有`test-window`。前者测试流水前端，后者包括4槽窗口随机模型、流水内存系统检查、整核多笔/旧响应所有权审计。I侧多笔不等于外部物理总线多笔。
+
+v18增加`test-path`：预测器独立模型、24组窗口定向测试、整核预测/槽位VCD重放及开关对照。详见[v18](../versions/v18_btb_window/README.md)。

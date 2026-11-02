@@ -1,0 +1,357 @@
+{
+  "version": "v18_btb_window",
+  "run_id": "20261102T105547399149Z",
+  "native_runs": 636,
+  "native_commits": 61409,
+  "lint": "pass",
+  "functional_regression": "pass",
+  "base_program_runs": 71,
+  "rv64i_runs": 126,
+  "alu_vectors_per_timing": 876,
+  "alu_timing_configurations": 5,
+  "parent_off_equivalence_cases": 57,
+  "predictor_model_steps_per_mode": 30481,
+  "predictor_modes": 2,
+  "path_directed_cases": 24,
+  "path_native_runs": 25,
+  "path_native_commits": 4775,
+  "path_on_off_runs": 30,
+  "comparison_main_runs": 171,
+  "comparison_on_off_runs": 171,
+  "path_audit": {
+    "calls": {
+      "predictor": {
+        "queries": 163,
+        "path_redirects": 49,
+        "rejected_returned_metadata": 0,
+        "examples": [
+          {
+            "cycle": 99,
+            "pc": 16,
+            "target": 44,
+            "kind": 4
+          },
+          {
+            "cycle": 104,
+            "pc": 60,
+            "target": 20,
+            "kind": 3
+          },
+          {
+            "cycle": 106,
+            "pc": 24,
+            "target": 16,
+            "kind": 1
+          },
+          {
+            "cycle": 107,
+            "pc": 16,
+            "target": 44,
+            "kind": 4
+          },
+          {
+            "cycle": 112,
+            "pc": 60,
+            "target": 20,
+            "kind": 3
+          },
+          {
+            "cycle": 114,
+            "pc": 24,
+            "target": 16,
+            "kind": 1
+          },
+          {
+            "cycle": 115,
+            "pc": 16,
+            "target": 44,
+            "kind": 4
+          },
+          {
+            "cycle": 120,
+            "pc": 60,
+            "target": 20,
+            "kind": 3
+          }
+        ]
+      },
+      "ownership": {
+        "accepted_requests": 157,
+        "max_accepted_not_returned": 2,
+        "poisoned_completions": 7,
+        "redirect_or_retarget_cycles": 7,
+        "first_double_outstanding_cycle": 20,
+        "max_external_physical_transactions": 1
+      }
+    },
+    "alternating": {
+      "predictor": {
+        "queries": 475,
+        "path_redirects": 152,
+        "rejected_returned_metadata": 0,
+        "examples": [
+          {
+            "cycle": 64,
+            "pc": 28,
+            "target": 8,
+            "kind": 1
+          },
+          {
+            "cycle": 69,
+            "pc": 28,
+            "target": 8,
+            "kind": 1
+          },
+          {
+            "cycle": 75,
+            "pc": 28,
+            "target": 8,
+            "kind": 1
+          },
+          {
+            "cycle": 81,
+            "pc": 28,
+            "target": 8,
+            "kind": 1
+          },
+          {
+            "cycle": 98,
+            "pc": 28,
+            "target": 8,
+            "kind": 1
+          },
+          {
+            "cycle": 104,
+            "pc": 28,
+            "target": 8,
+            "kind": 1
+          },
+          {
+            "cycle": 111,
+            "pc": 28,
+            "target": 8,
+            "kind": 1
+          },
+          {
+            "cycle": 117,
+            "pc": 28,
+            "target": 8,
+            "kind": 1
+          }
+        ]
+      },
+      "ownership": {
+        "accepted_requests": 438,
+        "max_accepted_not_returned": 2,
+        "poisoned_completions": 66,
+        "redirect_or_retarget_cycles": 41,
+        "first_double_outstanding_cycle": 20,
+        "max_external_physical_transactions": 1
+      }
+    },
+    "changing": {
+      "predictor": {
+        "queries": 520,
+        "path_redirects": 145,
+        "rejected_returned_metadata": 0,
+        "examples": [
+          {
+            "cycle": 109,
+            "pc": 32,
+            "target": 60,
+            "kind": 4
+          },
+          {
+            "cycle": 111,
+            "pc": 64,
+            "target": 36,
+            "kind": 3
+          },
+          {
+            "cycle": 113,
+            "pc": 40,
+            "target": 8,
+            "kind": 1
+          },
+          {
+            "cycle": 122,
+            "pc": 40,
+            "target": 8,
+            "kind": 1
+          },
+          {
+            "cycle": 142,
+            "pc": 32,
+            "target": 68,
+            "kind": 4
+          },
+          {
+            "cycle": 144,
+            "pc": 72,
+            "target": 36,
+            "kind": 3
+          },
+          {
+            "cycle": 146,
+            "pc": 32,
+            "target": 68,
+            "kind": 4
+          },
+          {
+            "cycle": 148,
+            "pc": 72,
+            "target": 36,
+            "kind": 3
+          }
+        ]
+      },
+      "ownership": {
+        "accepted_requests": 482,
+        "max_accepted_not_returned": 2,
+        "poisoned_completions": 61,
+        "redirect_or_retarget_cycles": 74,
+        "first_double_outstanding_cycle": 20,
+        "max_external_physical_transactions": 1
+      }
+    },
+    "fence": {
+      "predictor": {
+        "queries": 161,
+        "path_redirects": 29,
+        "rejected_returned_metadata": 0,
+        "examples": [
+          {
+            "cycle": 97,
+            "pc": 20,
+            "target": 12,
+            "kind": 1
+          },
+          {
+            "cycle": 98,
+            "pc": 12,
+            "target": 68,
+            "kind": 4
+          },
+          {
+            "cycle": 101,
+            "pc": 76,
+            "target": 16,
+            "kind": 3
+          },
+          {
+            "cycle": 103,
+            "pc": 20,
+            "target": 12,
+            "kind": 1
+          },
+          {
+            "cycle": 113,
+            "pc": 20,
+            "target": 12,
+            "kind": 1
+          },
+          {
+            "cycle": 114,
+            "pc": 12,
+            "target": 68,
+            "kind": 4
+          },
+          {
+            "cycle": 117,
+            "pc": 76,
+            "target": 16,
+            "kind": 3
+          },
+          {
+            "cycle": 119,
+            "pc": 20,
+            "target": 12,
+            "kind": 1
+          }
+        ]
+      },
+      "ownership": {
+        "accepted_requests": 128,
+        "max_accepted_not_returned": 2,
+        "poisoned_completions": 43,
+        "redirect_or_retarget_cycles": 41,
+        "first_double_outstanding_cycle": 20,
+        "max_external_physical_transactions": 1
+      }
+    },
+    "skip": {
+      "predictor": {
+        "queries": 87,
+        "path_redirects": 30,
+        "rejected_returned_metadata": 0,
+        "examples": [
+          {
+            "cycle": 54,
+            "pc": 12,
+            "target": 28,
+            "kind": 2
+          },
+          {
+            "cycle": 66,
+            "pc": 12,
+            "target": 28,
+            "kind": 2
+          },
+          {
+            "cycle": 68,
+            "pc": 32,
+            "target": 8,
+            "kind": 1
+          },
+          {
+            "cycle": 73,
+            "pc": 12,
+            "target": 28,
+            "kind": 2
+          },
+          {
+            "cycle": 75,
+            "pc": 32,
+            "target": 8,
+            "kind": 1
+          },
+          {
+            "cycle": 80,
+            "pc": 12,
+            "target": 28,
+            "kind": 2
+          },
+          {
+            "cycle": 82,
+            "pc": 32,
+            "target": 8,
+            "kind": 1
+          },
+          {
+            "cycle": 87,
+            "pc": 12,
+            "target": 28,
+            "kind": 2
+          }
+        ]
+      },
+      "ownership": {
+        "accepted_requests": 80,
+        "max_accepted_not_returned": 2,
+        "poisoned_completions": 4,
+        "redirect_or_retarget_cycles": 21,
+        "first_double_outstanding_cycle": 20,
+        "max_external_physical_transactions": 1
+      }
+    }
+  },
+  "synthesis": "pass",
+  "sta": "not_run",
+  "gate_simulation": "not_run",
+  "old_archived_files_verified_unchanged": 443,
+  "native_trace_and_ram_files": 1272,
+  "full_test_log_sha256": "f44525a2bbfb869fb54d82c9afa103ca7319c055844c1c2d0fa113fa84525d5b",
+  "synthesis_log_sha256": "5ba466b2760dbbe95a974649837fa7d17fbfeb0c82b3803fdc9612679c61aeeb",
+  "window_model_cycles": 40000,
+  "window_model_peak": 4
+}

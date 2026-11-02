@@ -1,8 +1,8 @@
 # ditto_riscv
 
 通过可运行的 RTL、逐条参考对照、真实波形与性能实验学习 RISC-V core 设计。
-当前开发版本是 **v17 多笔I侧在途取指、4项指令FIFO、BTB/gshare、独立I/D TLB与缓存**；v1–v16 独立冻结。
-十七版均支持 RV64IMAC、Zicsr/Zifencei、M/S/U、软件异常、中断与 Sv39/Svade。
+当前开发版本是 **v18 沿BTB/gshare/RAS预测路径预取、多笔I侧在途取指、4项指令FIFO、BTB/gshare、独立I/D TLB与缓存**；v1–v17 独立冻结。
+十八版均支持 RV64IMAC、Zicsr/Zifencei、M/S/U、软件异常、中断与 Sv39/Svade。
 后续目标是共享总线等待优化、大页TLB、双发射、乱序与双核，目前尚未实现这些功能。
 
 ## 快速开始
@@ -31,12 +31,13 @@ make test-btb
 make test-queue
 make test-ifetch
 make test-window
+make test-path
 make diff PROGRAM=full_demo
 make diagrams
 make timing
 ```
 
-根目录命令默认转发到 `versions/v17_fetch_window/`，输出位于该版的 `build/`。
+根目录命令默认转发到 `versions/v18_btb_window/`，输出位于该版的 `build/`。
 `make diagrams` 导出真实流水线 VCD 的阶段采样图；`make wave PROGRAM=full_demo` 用 Surfer 打开波形。
 选择旧版使用 `make test VERSION=v1_multicycle`，或进入该版本目录运行其 Makefile。
 `PROGRAM`、`LATENCY`、`GAP`、`CROSS`、`LIB`、`CLOCK_NS` 等命令行参数会传给所选版本。
@@ -62,7 +63,8 @@ make timing
 | [versions/v14_btb](versions/v14_btb/README.md) | 冻结的32项带标签BTB、请求时目标预测、提交训练 |
 | [versions/v15_fetch_queue](versions/v15_fetch_queue/README.md) | 冻结的4项完整指令FIFO |
 | [versions/v16_ifetch_pipeline](versions/v16_ifetch_pipeline/README.md) | 冻结的I-cache/TLB命中交接、响应背压与提前排空 |
-| [versions/v17_fetch_window](versions/v17_fetch_window/README.md) | 当前开发：4请求槽位、失效响应归属，整核2笔I侧在途 |
+| [versions/v17_fetch_window](versions/v17_fetch_window/README.md) | 冻结的4请求槽位、失效响应归属，整核2笔I侧在途 |
+| [versions/v18_btb_window](versions/v18_btb_window/README.md) | 当前开发：预测路径读取窗口、槽内预测保存及字节复核 |
 | [benchmarks](benchmarks/README.md) | 两版执行相同二进制的公共基准程序 |
 | [tools](tools/README.md) | 仓库检查与跨版本性能比较工具 |
 | [results](results/README.md) | 跨版本对比记录，各版详细记录保留在各自 results/ |
@@ -96,6 +98,7 @@ make timing
 | v15 取指队列 | X等待load/div时，F只有一个完整指令寄存器，随之停取指 | 增加4项333位FIFO，空时旁路、满时可同时出入，重定向清空；仍单笔在途取指 | 延迟5/间隔3求和983→855、除法后独立指令515→463、C程序943→887；位操作199→207、压缩依赖427→431；只测周期 |
 | v16 命中交接 | 命中访问返回后仍有请求气泡 | 缓存/MMU响应与新请求同周期交接，合法ITLB命中直送物理访问，F可连发完整对齐指令 | 延迟5/间隔3直线ALU1623→1359、分页1059→735；仍单笔在途 |
 | v17 请求窗口 | 需要多个尚未返回的取指地址和严格响应归属 | 4槽地址窗口、注册响应级、完成令牌与poison；旧响应返回前不复用槽位 | 整核实测2笔I侧在途、外部总线仍1笔；压缩431→411，但C847→927、间接调用223→383，尚未全面跑赢v16 |
+| v18 预测路径窗口 | v17顺序预取浪费调用/返回后的槽位 | 独立BTB/gshare查询副本与提交RAS引导读取，保存槽内预测并复核返回字节 | 延迟5/间隔3间接调用383→251、调用367→235；冲突495→499，仍未全面超过v16；只测周期 |
 
 v6 首先建立写穿透 D-cache 的可验证基线。重复数据访问受益，顺序读取与冲突访问可能因完整补行变慢。
 v6轮次的布局前最小周期估计为4.54ns（v5为4.32ns），面积约+21.2%；因此应同时检查周期数、时序和面积。
@@ -106,7 +109,7 @@ v7降低load响应等待，v8再解除命中路径间的阻塞；两侧同时缺
 ## 性能实验
 
 ```sh
-make compare BENCHMARK_ARGS="--versions v15_fetch_queue v16_ifetch_pipeline v17_fetch_window --cycles-only"
+make compare BENCHMARK_ARGS="--versions v16_ifetch_pipeline v17_fetch_window v18_btb_window --cycles-only"
 # 每次使用新的 run-id；已存在时明确拒绝覆盖
 make compare BENCHMARK_ARGS="--run-id my-experiment"
 ```
