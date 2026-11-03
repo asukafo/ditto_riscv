@@ -1,8 +1,8 @@
 # Repository entry point; each hardware version owns its build directory.
-VERSION ?= v21_demand_priority
+VERSION ?= v22_hit_under_refill
 PYTHON ?= python3
 BENCHMARK_ARGS ?=
-VERSIONS := v1_multicycle v2_single_issue v3_icache v4_fetch_buffer v5_early_restart v6_dcache v7_dcache_early v8_split_memory v9_static_predict v10_return_stack v11_tlb v12_dynamic_predict v13_gshare v14_btb v15_fetch_queue v16_ifetch_pipeline v17_fetch_window v18_btb_window v19_window_forward v20_demand_issue v21_demand_priority
+VERSIONS := v1_multicycle v2_single_issue v3_icache v4_fetch_buffer v5_early_restart v6_dcache v7_dcache_early v8_split_memory v9_static_predict v10_return_stack v11_tlb v12_dynamic_predict v13_gshare v14_btb v15_fetch_queue v16_ifetch_pipeline v17_fetch_window v18_btb_window v19_window_forward v20_demand_issue v21_demand_priority v22_hit_under_refill
 VERSION_DIR := versions/$(VERSION)
 
 ifeq ($(filter $(VERSION),$(VERSIONS)),)
@@ -10,7 +10,7 @@ $(error Unknown VERSION '$(VERSION)'; choose one of: $(VERSIONS))
 endif
 
 .DEFAULT_GOAL := help
-FORWARDED := tools lint test test-base test-full test-pipeline test-icache test-fetch test-early test-dcache test-data-early test-split test-predict test-ras test-tlb test-bht test-gshare test-btb test-queue test-ifetch test-window test-path test-forward test-issue test-priority test-mapped test-alu test-rv64i sim diff wave sweep diagrams synth timing clean
+FORWARDED := tools lint test test-base test-full test-pipeline test-icache test-fetch test-early test-dcache test-data-early test-split test-predict test-ras test-tlb test-bht test-gshare test-btb test-queue test-ifetch test-window test-path test-forward test-issue test-priority test-under test-mapped test-alu test-rv64i sim diff wave sweep diagrams synth timing clean
 .PHONY: help versions check compare benchmark $(FORWARDED)
 
 help:
@@ -52,7 +52,9 @@ versions:
 
 	@echo 'v20_demand_issue   frozen same-cycle new-demand issue'
 
-	@echo 'v21_demand_priority   matched unsent demands outrank prefetches (default)'
+	@echo 'v21_demand_priority   frozen matched-demand issue priority'
+
+	@echo 'v22_hit_under_refill   cached instruction hits during background refill (default)'
 
 $(FORWARDED):
 	$(MAKE) -C "$(VERSION_DIR)" $@

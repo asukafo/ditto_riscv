@@ -117,3 +117,5 @@ python3 tools/profile_ifetch.py versions/v21_demand_priority/build/priority-prof
 [验证汇总与哈希](results/20261103T112719073706Z/validation.json)保存实际回归数量、源码、日志、trace/RAM及所示波形摘要。原始VCD和完整构建日志在本地build目录，精简JSON/CSV与SVG入库。
 
 本版可以作为一个有证据支持的调度优化保留；收益范围有限，尚未全面超过v16。本轮按当前学习安排不做STA、面积比较或门级仿真，额外选择逻辑的频率成本尚未测量。ISA和特权功能边界见[根README](../../README.md)。
+
+本版已冻结；后续I-cache补行下命中独立保存在[v22](../v22_hit_under_refill/README.md)。

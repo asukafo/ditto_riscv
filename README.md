@@ -1,8 +1,8 @@
 # ditto_riscv
 
 通过可运行的 RTL、逐条参考对照、真实波形与性能实验学习 RISC-V core 设计。
-当前开发版本是 **v21 需求优先发送的 F/X/W 单发射核**；v1–v20 独立冻结。
-二十一版均支持 RV64IMAC、Zicsr/Zifencei、M/S/U、软件异常、中断与 Sv39/Svade。
+当前开发版本是 **v22 支持补行下命中的 F/X/W 单发射核**；v1–v21 独立冻结。
+二十二版均支持 RV64IMAC、Zicsr/Zifencei、M/S/U、软件异常、中断与 Sv39/Svade。
 后续目标是共享总线等待优化、大页TLB、双发射、乱序与双核，目前尚未实现这些功能。
 
 ## 快速开始
@@ -35,12 +35,13 @@ make test-path
 make test-forward
 make test-issue
 make test-priority
+make test-under
 make diff PROGRAM=full_demo
 make diagrams
 make timing
 ```
 
-根目录命令默认转发到 `versions/v21_demand_priority/`，输出位于该版的 `build/`。
+根目录命令默认转发到 `versions/v22_hit_under_refill/`，输出位于该版的 `build/`。
 `make diagrams` 导出真实流水线 VCD 的阶段采样图；`make wave PROGRAM=full_demo` 用 Surfer 打开波形。
 选择旧版使用 `make test VERSION=v1_multicycle`，或进入该版本目录运行其 Makefile。
 `PROGRAM`、`LATENCY`、`GAP`、`CROSS`、`LIB`、`CLOCK_NS` 等命令行参数会传给所选版本。
@@ -70,7 +71,8 @@ make timing
 | [versions/v18_btb_window](versions/v18_btb_window/README.md) | 冻结的预测路径读取窗口、槽内预测保存及字节复核 |
 | [versions/v19_window_forward](versions/v19_window_forward/README.md) | 冻结的需求响应旁路、反压存储与同拍后继需求 |
 | [versions/v20_demand_issue](versions/v20_demand_issue/README.md) | 冻结的新需求分配与发送同拍，背压时寄存重试 |
-| [versions/v21_demand_priority](versions/v21_demand_priority/README.md) | 当前开发：匹配未发送槽的实际需求优先于其他预取 |
+| [versions/v21_demand_priority](versions/v21_demand_priority/README.md) | 冻结的匹配未发送槽实际需求优先于其他预取 |
+| [versions/v22_hit_under_refill](versions/v22_hit_under_refill/README.md) | 当前开发：I-cache背景补行期间服务其他完整行命中 |
 | [benchmarks](benchmarks/README.md) | 两版执行相同二进制的公共基准程序 |
 | [tools](tools/README.md) | 仓库检查与跨版本性能比较工具 |
 | [results](results/README.md) | 跨版本对比记录，各版详细记录保留在各自 results/ |
@@ -108,6 +110,7 @@ make timing
 | v19 需求返回旁路 | 返回必须先写窗口寄存器，下一拍F才可接收 | 当前未完成需求按令牌匹配返回直接送F，反压时继续保存，支持同拍后继 | 延迟5/间隔3重复读999→867、交替559→487、压缩411→379；相关559→563，仍未全面超过v16；只测周期 |
 | v20 需求发送旁路 | 新分配需求先存槽，下一拍才能请求I侧 | 新需求分配/发送/令牌入队可同拍，背压时保持未发送槽重试 | 延迟5/间隔3分页787→763、求和863→855；向前分支359→367；只测周期 |
 | v21 匹配需求优先 | F需要的未发送槽可能被无关预取抢先 | 本拍接受匹配需求时优先选择该槽，实际发送槽号进入完成令牌 | 57组8组改善、49组持平；延迟5/间隔3 C907→903、冲突479→475；大部分服务忙等待仍在；只测周期 |
+| v22 补行下命中 | 背景补行挡住其他完整行命中 | 关键字先返回后复用响应寄存器服务命中，补行所有权独立；处理反压、尾拍错误和失效 | 57组全部快于v21；延迟5/间隔3直线1375→1107、C903→855；相对v16仍38组较慢；只测周期 |
 
 v6 首先建立写穿透 D-cache 的可验证基线。重复数据访问受益，顺序读取与冲突访问可能因完整补行变慢。
 v6轮次的布局前最小周期估计为4.54ns（v5为4.32ns），面积约+21.2%；因此应同时检查周期数、时序和面积。
@@ -118,7 +121,7 @@ v7降低load响应等待，v8再解除命中路径间的阻塞；两侧同时缺
 ## 性能实验
 
 ```sh
-make compare BENCHMARK_ARGS="--versions v16_ifetch_pipeline v20_demand_issue v21_demand_priority --cycles-only"
+make compare BENCHMARK_ARGS="--versions v16_ifetch_pipeline v21_demand_priority v22_hit_under_refill --cycles-only"
 # 每次使用新的 run-id；已存在时明确拒绝覆盖
 make compare BENCHMARK_ARGS="--run-id my-experiment"
 ```

@@ -22,11 +22,12 @@
 | [v18_btb_window](v18_btb_window/README.md) | BTB/gshare/RAS引导预取、保存与复核槽内预测 | 冻结的预测路径窗口 |
 | [v19_window_forward](v19_window_forward/README.md) | 当前需求的返回旁路、反压存储与同拍交接 | 冻结的响应旁路窗口 |
 | [v20_demand_issue](v20_demand_issue/README.md) | 新需求当拍发送与令牌登记，背压缓冲重试 | 冻结的新需求发送窗口 |
-| [v21_demand_priority](v21_demand_priority/README.md) | 匹配未发送槽的需求当拍优先，保留实际发送所有权 | 当前开发与实验 |
+| [v21_demand_priority](v21_demand_priority/README.md) | 匹配未发送槽的需求当拍优先，保留实际发送所有权 | 冻结的需求优先窗口 |
+| [v22_hit_under_refill](v22_hit_under_refill/README.md) | 背景补行期间命中服务与有序响应，单个缺失保留 | 当前开发与实验 |
 
 每版有独立的 rtl、sim、sw、scripts、Makefile、build 和 results。
 
-仓库根目录的 Makefile 默认转发至 v21；用 VERSION=<目录名> 选择其他版本。后续新架构使用新目录，旧架构不随之修改。
+仓库根目录的 Makefile 默认转发至 v22；用 VERSION=<目录名> 选择其他版本。后续新架构使用新目录，旧架构不随之修改。
 公共比较脚本只负责运行实验，不在不同版本之间共用会变化的 RTL。
 
 ```sh
@@ -36,7 +37,7 @@ python3 tools/benchmark.py
 python3 tools/benchmark.py --run-id my-experiment
 ```
 
-当前`make compare`比较v16/v20/v21的19个程序，在(latency,gap)=(1,0)、(5,0)、(5,3)下各跑一次，每版57次。v1–v15历史全功能比较仍用`tools/benchmark.py`。
+当前`make compare`比较v16/v21/v22的19个程序，在(latency,gap)=(1,0)、(5,0)、(5,3)下各跑一次，每版57次。v1–v15历史全功能比较仍用`tools/benchmark.py`。
 包括求和、依赖链、指针追踪、访存、位操作、C、M/A/C C、直线 ALU 、压缩指令依赖链和重复数据读取。
 脚本检查各版二进制 SHA-256 一致、退休指令数一致，且逐条提交和最终内存通过独立参考模型。
 v3/v4 另有关闭缓存的对照；v4 另有 27 组关闭取指缓冲的对照，分别隔离不同改动的收益。
