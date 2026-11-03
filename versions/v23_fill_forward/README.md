@@ -53,3 +53,5 @@ python3 tools/ifetch_experiments.py --versions v16_ifetch_pipeline v22_hit_under
 [验证汇总](results/20261103T135434524710Z/validation.json)保留源码、实际运行数和trace/RAM哈希。综合结构检查通过，本轮不做STA、面积或门级仿真。外部物理事务仍单笔，I侧服务峰值仍2笔。
 
 单发射阶段到此保留一个可复现基线。下一目录开始保守双发射：首先只配对无异常、无依赖的ADDI/ADD/SUB，访存、分支和CSR继续沿原路径；需要额外寄存器读写端口、有序双提交、精确计数和完整回归。具体执行结果由双发射版本单独记录。
+
+本版已冻结，双发射开发独立保存在[v24](../v24_dual_alu/README.md)。

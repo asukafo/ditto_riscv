@@ -1,0 +1,31 @@
+{
+  "version": "v24_dual_alu",
+  "native_runs": 742,
+  "native_commits": 70492,
+  "lint": "pass",
+  "synthesis": "pass",
+  "parent_off_equivalence_cases": 60,
+  "comparison_main_runs": 180,
+  "comparison_off_runs": 180,
+  "dual_extra_runs": 56,
+  "dual_extra_commits": 1331,
+  "dual_extra_traps": 6,
+  "dual_vcd_cases": 12,
+  "forced_irq_after_pair": "pass",
+  "malformed_trace_rejections": 5,
+  "pair_queue_cycles_per_mode": 50000,
+  "three_way_runs": 99,
+  "peak_commits_per_cycle": 2,
+  "dual_retired_in_native_runs": 2525,
+  "warm_ipc": 1.0,
+  "old_archived_files_verified_unchanged": 562,
+  "sta": "not_run",
+  "gate_simulation": "not_run",
+  "full_test_log_sha256": "469224e01bae61a0701e17fb0c72031d320f319e2e06b2343072cea662204afa",
+  "synthesis_log_sha256": "e23e0911fd680b0b1037f0b2d6e28b890680f377641b32d9702390dcabf5cbb7",
+  "verifier_sha256": {
+    "reference.py": "a427df7496d009656f67a6bf2f8c5fbb51fec07a25d8071eaa8a03b9fd1da61f",
+    "full_reference.py": "5bc27ea157284bd2e34f4c67738f4bebf070703a2f4b4fec8b45225e869e4c93"
+  },
+  "nonfunctional_after_validation": "Updated leading core architecture comment; original validated source hashes preserved in manifest"
+}

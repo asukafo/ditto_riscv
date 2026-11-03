@@ -1,0 +1,13 @@
+{
+  "dual": {
+    "anchor_pc": 20,
+    "issue_cycle": 89,
+    "vcd_sha256": "8e86a90e68a3d458d936af38a12a4acb5a00374645558678d0288c01a1edf73f"
+  },
+  "lookahead_scalar": {
+    "anchor_pc": 20,
+    "issue_cycle": 90,
+    "vcd_sha256": "4fe5d0332b860da5fdfab2b9d07e50a3da72cb8f2c912b300687530f5416bf54"
+  },
+  "image_sha256": "d05ec221f06f39fe98e94e2a6042ce679564e3a9b4d631b3a0b7fa1a878e1c00"
+}

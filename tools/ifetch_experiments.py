@@ -1,5 +1,5 @@
 """Cycle-only hit-pipeline/window experiments with independent commit/RAM checks."""
-import argparse,csv,hashlib,json,subprocess,sys
+import argparse,csv,hashlib,json,subprocess,sys,re
 from datetime import datetime,timezone
 from pathlib import Path
 from benchmark import PROGRAMS,TIMINGS,write_csv
@@ -9,13 +9,13 @@ sys.path.insert(0,str(ROOT/'versions/v1_multicycle/scripts'))
 from reference import verify_files
 
 def main():
- p=argparse.ArgumentParser();p.add_argument('--cycles-only',action='store_true');p.add_argument('--versions',nargs='+',default=['v16_ifetch_pipeline','v22_hit_under_refill','v23_fill_forward']);p.add_argument('--run-id',default=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ'));a=p.parse_args()
+ p=argparse.ArgumentParser();p.add_argument('--cycles-only',action='store_true');p.add_argument('--versions',nargs='+',default=['v16_ifetch_pipeline','v23_fill_forward','v24_dual_alu']);p.add_argument('--run-id',default=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ'));a=p.parse_args()
  assert a.run_id.replace('_','').replace('-','').isalnum() and len(set(a.versions))==len(a.versions)
  out=ROOT/'results/comparisons'/a.run_id;out.mkdir(parents=True,exist_ok=False);rows=[];images={};baselines={}
  for version in a.versions:
-  assert version in ('v15_fetch_queue','v16_ifetch_pipeline','v17_fetch_window','v18_btb_window','v19_window_forward','v20_demand_issue','v21_demand_priority','v22_hit_under_refill','v23_fill_forward')
+  assert version in ('v15_fetch_queue','v16_ifetch_pipeline','v17_fetch_window','v18_btb_window','v19_window_forward','v20_demand_issue','v21_demand_priority','v22_hit_under_refill','v23_fill_forward','v24_dual_alu')
   folder=ROOT/'versions'/version;result=folder/'results'/a.run_id;result.mkdir(parents=True,exist_ok=False)
-  off='nopipe' if version=='v16_ifetch_pipeline' else 'nowindow' if version=='v17_fetch_window' else 'nopath' if version=='v18_btb_window' else 'noforward' if version=='v19_window_forward' else 'noissue' if version=='v20_demand_issue' else 'nopriority' if version=='v21_demand_priority' else 'nounder' if version=='v22_hit_under_refill' else 'nofill' if version=='v23_fill_forward' else None
+  off='nopipe' if version=='v16_ifetch_pipeline' else 'nowindow' if version=='v17_fetch_window' else 'nopath' if version=='v18_btb_window' else 'noforward' if version=='v19_window_forward' else 'noissue' if version=='v20_demand_issue' else 'nopriority' if version=='v21_demand_priority' else 'nounder' if version=='v22_hit_under_refill' else 'nofill' if version=='v23_fill_forward' else 'nodual' if version=='v24_dual_alu' else None
   targets=['build/full_obj/Vrv64_core']+([f'build/{off}_obj/Vrv64_core'] if off else [])+[f'build/{n}.bin' for n in PROGRAMS if not (ROOT/'benchmarks'/f'{n}.S').exists()]
   with (result/'build.log').open('w') as log:subprocess.run(['make',*targets],cwd=folder,stdout=log,stderr=subprocess.STDOUT,check=True)
   for n in PROGRAMS:
@@ -32,18 +32,23 @@ def main():
     for mode in (['full',off] if off else ['full']):
      trace=folder/'build'/f'{a.run_id}-{name}-{mode}-l{latency}-g{gap}.trace.jsonl'
      s=json.loads(subprocess.check_output([str(folder/'build'/f'{mode}_obj/Vrv64_core'),str(image),str(latency),'-',str(gap),str(trace)],cwd=folder,text=True))
-     assert s['result']==expected and verify_files(image,trace)==s['instret'];stats.append(s)
+     assert s['result']==expected
+     if version=='v24_dual_alu':
+      verified=subprocess.check_output([sys.executable,str(folder/'scripts/reference.py'),'--image',str(image),'--trace',str(trace)],text=True);assert int(re.search(r'DIFF PASS: (\d+)',verified).group(1))==s['instret']
+     else:assert verify_files(image,trace)==s['instret']
+     stats.append(s)
     s=stats[0];key=(name,latency,gap)
-    row=dict(version=version,program=name,latency=latency,gap=gap,instret=s['instret'],cycles=s['cycles'],requests=s['requests'],control_misses=s['control_misses'],window_peak=s.get('ifetch_window_peak',''),window_hits=s.get('ifetch_window_hits',''),window_drops=s.get('ifetch_window_drops',''),frontend_starved_cycles=s['frontend_starved_cycles'],icache_fill_hits=s.get('icache_fill_hits',''),icache_refill_hits=s.get('icache_refill_hits',''),demand_priority_enabled=s.get('demand_priority_enabled',''),demand_issue_enabled=s.get('demand_issue_enabled',''),window_forward_enabled=s.get('window_forward_enabled',''),path_queries=s.get('prefetch_path_queries',''),path_redirects=s.get('prefetch_path_redirects',''),path_rejects=s.get('prefetch_path_rejects',''),path_page_blocks=s.get('prefetch_path_page_blocks',''))
+    row=dict(version=version,program=name,latency=latency,gap=gap,instret=s['instret'],cycles=s['cycles'],requests=s['requests'],control_misses=s['control_misses'],window_peak=s.get('ifetch_window_peak',''),window_hits=s.get('ifetch_window_hits',''),window_drops=s.get('ifetch_window_drops',''),frontend_starved_cycles=s['frontend_starved_cycles'],dual_issue_pairs=s.get('dual_issue_pairs',''),icache_fill_hits=s.get('icache_fill_hits',''),icache_refill_hits=s.get('icache_refill_hits',''),demand_priority_enabled=s.get('demand_priority_enabled',''),demand_issue_enabled=s.get('demand_issue_enabled',''),window_forward_enabled=s.get('window_forward_enabled',''),path_queries=s.get('prefetch_path_queries',''),path_redirects=s.get('prefetch_path_redirects',''),path_rejects=s.get('prefetch_path_rejects',''),path_page_blocks=s.get('prefetch_path_page_blocks',''))
     own.append(row);rows.append(row);baselines[version,key]=s
     if off:
+     if off=='nodual':assert stats[1]['dual_issue_enabled']==stats[1]['dual_issue_pairs']==0
      if off=='nofill':assert stats[1]['icache_fill_forward_enabled']==stats[1]['icache_fill_hits']==0
      if off=='nounder':assert stats[1]['icache_refill_hits_enabled']==stats[1]['icache_refill_hits']==0
      if off=='nopriority':assert stats[1]['demand_priority_enabled']==0
      if off=='noissue':assert stats[1]['demand_issue_enabled']==0
      if off=='noforward':assert stats[1]['window_forward_enabled']==0
      if off=='nopath':assert stats[1]['prefetch_path_enabled']==stats[1]['prefetch_path_queries']==stats[1]['prefetch_path_redirects']==0
-     parent='v15_fetch_queue' if off=='nopipe' else 'v16_ifetch_pipeline' if off=='nowindow' else 'v17_fetch_window' if off=='nopath' else 'v18_btb_window' if off=='noforward' else 'v19_window_forward' if off=='noissue' else 'v20_demand_issue' if off=='nopriority' else 'v21_demand_priority' if off=='nounder' else 'v22_hit_under_refill';b=baselines.get((parent,key))
+     parent='v15_fetch_queue' if off=='nopipe' else 'v16_ifetch_pipeline' if off=='nowindow' else 'v17_fetch_window' if off=='nopath' else 'v18_btb_window' if off=='noforward' else 'v19_window_forward' if off=='noissue' else 'v20_demand_issue' if off=='nopriority' else 'v21_demand_priority' if off=='nounder' else 'v22_hit_under_refill' if off=='nofill' else 'v23_fill_forward';b=baselines.get((parent,key))
      if b:assert all(stats[1][k]==b[k] for k in ('cycles','requests','control_misses','instret')),(version,key,stats[1],b)
      ablation.append(dict(program=name,latency=latency,gap=gap,enabled_cycles=s['cycles'],disabled_cycles=stats[1]['cycles'],disabled_matches_parent=bool(b)))
   write_csv(result/'performance.csv',own)

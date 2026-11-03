@@ -47,3 +47,5 @@
 - [静态时序数字如何计算](baseline/timing-explained.md)
 - [缓冲、驱动尺寸与时序优化实验](baseline/timing-optimization.md)
 - [工具、约束和 v1 文件说明](baseline/tools.md)
+
+- [单发射收尾与双发射起步](multi_issue_start.md)

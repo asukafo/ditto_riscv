@@ -1,0 +1,29 @@
+{
+  "name": "v24_dual_alu",
+  "base_commit": "b87b918",
+  "architecture": "in_order_two_lane_simple_alu_issue",
+  "icache_bytes": 256,
+  "dcache_bytes": 256,
+  "line_bytes": 16,
+  "tlb_entries_per_side": 8,
+  "tlb_page_bytes": 4096,
+  "bht_entries": 32,
+  "bht_counter_bits": 2,
+  "ghr_bits": 4,
+  "btb_entries": 32,
+  "fetch_queue_entries": 4,
+  "fetch_packet_bits": 333,
+  "base_version": "v23_fill_forward",
+  "fetch_request_slots": 4,
+  "issue_width": 2,
+  "retire_width": 2,
+  "frontend_packet_width": 1,
+  "dual_ops": [
+    "addi",
+    "add",
+    "sub"
+  ],
+  "pair_raw": false,
+  "pair_waw": false,
+  "pair_war": true
+}
