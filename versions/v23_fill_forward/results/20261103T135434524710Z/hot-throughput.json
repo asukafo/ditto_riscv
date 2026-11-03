@@ -1,0 +1,8 @@
+{
+  "program": "hot_alu",
+  "warm_start_iteration": 16,
+  "warm_end_iteration": 112,
+  "instructions": 960,
+  "cycles": 960,
+  "ipc": 1.0
+}

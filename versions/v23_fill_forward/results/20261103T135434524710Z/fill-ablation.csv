@@ -1,0 +1,16 @@
+program,latency,gap,on_cycles,off_cycles,fill_hits
+stream,1,0,193,197,5
+stream,5,0,230,232,5
+stream,5,3,243,247,5
+c,1,0,351,356,23
+c,5,0,666,681,22
+c,5,3,843,855,23
+calls,1,0,172,174,2
+calls,5,0,212,215,3
+calls,5,3,231,231,3
+fence,1,0,179,183,4
+fence,5,0,254,263,4
+fence,5,3,287,291,4
+changing,1,0,538,544,3
+changing,5,0,579,589,3
+changing,5,3,595,607,3

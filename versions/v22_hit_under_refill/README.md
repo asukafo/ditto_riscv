@@ -132,3 +132,5 @@ python3 tools/profile_iservice.py versions/v22_hit_under_refill/build/under-prof
 - 57组关闭优化恢复父版；Verilator lint及Yosys综合结构检查通过。
 
 [验证汇总及哈希](results/20261103T131821117534Z/validation.json)记录实际整核运行数、源码、日志、trace/RAM、审计及波形摘要。原始VCD和完整日志在本地build目录，SVG/CSV及精简报告入库。本轮未做STA、面积比较或门级仿真；ISA与特权功能边界见[根README](../../README.md)。
+
+本版冻结，后续见[v23半行复用](../v23_fill_forward/README.md)。

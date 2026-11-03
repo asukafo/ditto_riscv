@@ -1,0 +1,212 @@
+{
+  "stream": {
+    "full": {
+      "cache": {
+        "cache_requests": 173,
+        "cache_responses": 173,
+        "background_hits": 8,
+        "fill_hits": 5,
+        "hit_while_refill_response_pending": 8,
+        "held_response_cycles": 0,
+        "hit_on_final_refill": 1,
+        "peak_cache_requests": 1
+      },
+      "ownership": {
+        "accepted_requests": 173,
+        "max_accepted_not_returned": 2,
+        "poisoned_completions": 4,
+        "redirect_or_retarget_cycles": 5,
+        "first_double_outstanding_cycle": 11,
+        "max_external_physical_transactions": 1
+      }
+    },
+    "nofill": {
+      "cache": {
+        "cache_requests": 171,
+        "cache_responses": 171,
+        "background_hits": 9,
+        "fill_hits": 0,
+        "hit_while_refill_response_pending": 6,
+        "held_response_cycles": 0,
+        "hit_on_final_refill": 1,
+        "peak_cache_requests": 1
+      },
+      "ownership": {
+        "accepted_requests": 171,
+        "max_accepted_not_returned": 2,
+        "poisoned_completions": 3,
+        "redirect_or_retarget_cycles": 5,
+        "first_double_outstanding_cycle": 20,
+        "max_external_physical_transactions": 1
+      }
+    }
+  },
+  "c": {
+    "full": {
+      "cache": {
+        "cache_requests": 199,
+        "cache_responses": 199,
+        "background_hits": 32,
+        "fill_hits": 23,
+        "hit_while_refill_response_pending": 24,
+        "held_response_cycles": 0,
+        "hit_on_final_refill": 2,
+        "peak_cache_requests": 1
+      },
+      "ownership": {
+        "accepted_requests": 199,
+        "max_accepted_not_returned": 2,
+        "poisoned_completions": 26,
+        "redirect_or_retarget_cycles": 31,
+        "first_double_outstanding_cycle": 11,
+        "max_external_physical_transactions": 1
+      }
+    },
+    "nofill": {
+      "cache": {
+        "cache_requests": 196,
+        "cache_responses": 196,
+        "background_hits": 34,
+        "fill_hits": 0,
+        "hit_while_refill_response_pending": 17,
+        "held_response_cycles": 0,
+        "hit_on_final_refill": 2,
+        "peak_cache_requests": 1
+      },
+      "ownership": {
+        "accepted_requests": 196,
+        "max_accepted_not_returned": 2,
+        "poisoned_completions": 27,
+        "redirect_or_retarget_cycles": 30,
+        "first_double_outstanding_cycle": 20,
+        "max_external_physical_transactions": 1
+      }
+    }
+  },
+  "calls": {
+    "full": {
+      "cache": {
+        "cache_requests": 152,
+        "cache_responses": 151,
+        "background_hits": 8,
+        "fill_hits": 3,
+        "hit_while_refill_response_pending": 8,
+        "held_response_cycles": 0,
+        "hit_on_final_refill": 1,
+        "peak_cache_requests": 1
+      },
+      "ownership": {
+        "accepted_requests": 152,
+        "max_accepted_not_returned": 2,
+        "poisoned_completions": 6,
+        "redirect_or_retarget_cycles": 7,
+        "first_double_outstanding_cycle": 11,
+        "max_external_physical_transactions": 1
+      }
+    },
+    "nofill": {
+      "cache": {
+        "cache_requests": 151,
+        "cache_responses": 150,
+        "background_hits": 9,
+        "fill_hits": 0,
+        "hit_while_refill_response_pending": 7,
+        "held_response_cycles": 0,
+        "hit_on_final_refill": 1,
+        "peak_cache_requests": 1
+      },
+      "ownership": {
+        "accepted_requests": 151,
+        "max_accepted_not_returned": 2,
+        "poisoned_completions": 5,
+        "redirect_or_retarget_cycles": 7,
+        "first_double_outstanding_cycle": 20,
+        "max_external_physical_transactions": 1
+      }
+    }
+  },
+  "fence": {
+    "full": {
+      "cache": {
+        "cache_requests": 105,
+        "cache_responses": 104,
+        "background_hits": 7,
+        "fill_hits": 4,
+        "hit_while_refill_response_pending": 6,
+        "held_response_cycles": 0,
+        "hit_on_final_refill": 0,
+        "peak_cache_requests": 1
+      },
+      "ownership": {
+        "accepted_requests": 105,
+        "max_accepted_not_returned": 2,
+        "poisoned_completions": 42,
+        "redirect_or_retarget_cycles": 41,
+        "first_double_outstanding_cycle": 11,
+        "max_external_physical_transactions": 1
+      }
+    },
+    "nofill": {
+      "cache": {
+        "cache_requests": 105,
+        "cache_responses": 104,
+        "background_hits": 10,
+        "fill_hits": 0,
+        "hit_while_refill_response_pending": 5,
+        "held_response_cycles": 0,
+        "hit_on_final_refill": 0,
+        "peak_cache_requests": 1
+      },
+      "ownership": {
+        "accepted_requests": 105,
+        "max_accepted_not_returned": 2,
+        "poisoned_completions": 41,
+        "redirect_or_retarget_cycles": 41,
+        "first_double_outstanding_cycle": 20,
+        "max_external_physical_transactions": 1
+      }
+    }
+  },
+  "changing": {
+    "full": {
+      "cache": {
+        "cache_requests": 437,
+        "cache_responses": 436,
+        "background_hits": 6,
+        "fill_hits": 3,
+        "hit_while_refill_response_pending": 6,
+        "held_response_cycles": 0,
+        "hit_on_final_refill": 1,
+        "peak_cache_requests": 1
+      },
+      "ownership": {
+        "accepted_requests": 437,
+        "max_accepted_not_returned": 2,
+        "poisoned_completions": 99,
+        "redirect_or_retarget_cycles": 88,
+        "first_double_outstanding_cycle": 11,
+        "max_external_physical_transactions": 1
+      }
+    },
+    "nofill": {
+      "cache": {
+        "cache_requests": 442,
+        "cache_responses": 441,
+        "background_hits": 2,
+        "fill_hits": 0,
+        "hit_while_refill_response_pending": 1,
+        "held_response_cycles": 0,
+        "hit_on_final_refill": 0,
+        "peak_cache_requests": 1
+      },
+      "ownership": {
+        "accepted_requests": 442,
+        "max_accepted_not_returned": 2,
+        "poisoned_completions": 103,
+        "redirect_or_retarget_cycles": 88,
+        "first_double_outstanding_cycle": 20,
+        "max_external_physical_transactions": 1
+      }
+    }
+  }
+}

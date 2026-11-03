@@ -1,0 +1,74 @@
+PIPELINE PASS: 25 runs, 290 commits; overlap=96, bypass=9; trace=build/pipeline.vcd
+FETCH QUEUE MODEL PASS: 30381 steps, enabled=1, full exchange=1512, full flush=60
+FETCH QUEUE MODEL PASS: 30381 steps, enabled=0, full exchange=0, full flush=0
+FETCH QUEUE INTEGRATION PASS: 30 runs, 1515 commits, 5 traps; 36 on/off runs; packet/inflight VCD audit {'divide': {'peak': 4, 'nonempty_flushes': 2, 'fill_while_x_busy': 15, 'full_pop_push': 53, 'max_outstanding_fetches': 1}, 'flush': {'peak': 4, 'nonempty_flushes': 2, 'fill_while_x_busy': 10, 'full_pop_push': 2, 'max_outstanding_fetches': 1}, 'precise': {'peak': 4, 'nonempty_flushes': 2, 'fill_while_x_busy': 11, 'full_pop_push': 2, 'max_outstanding_fetches': 1}, 'fence_i': {'peak': 4, 'nonempty_flushes': 2, 'fill_while_x_busy': 9, 'full_pop_push': 2, 'max_outstanding_fetches': 1}, 'compressed': {'peak': 4, 'nonempty_flushes': 1, 'fill_while_x_busy': 21, 'full_pop_push': 11, 'max_outstanding_fetches': 1}}
+BTB MODEL PASS: 25578 steps, enabled=1
+HISTORY MODEL PASS: 30362 steps, enabled=1, gshare=1
+BTB MODEL PASS: 25578 steps, enabled=0
+HISTORY MODEL PASS: 30362 steps, enabled=0, gshare=1
+BTB FETCH PASS: 21 checks with memory/output backpressure
+HISTORY MODEL PASS: 30362 steps, enabled=1, gshare=0
+GSHARE FETCH PASS: 39 checks with memory/output backpressure
+BTB INTEGRATION PASS: 30 runs, 5800 commits, 0 traps; 36 on/off runs
+HISTORY MODEL PASS: 30362 steps, enabled=1, gshare=1
+HISTORY MODEL PASS: 30362 steps, enabled=0, gshare=1
+GSHARE INTEGRATION PASS: 30 runs, 6705 commits, 0 traps; 36 on/off runs; saved-index VCD audit {'alternating': {'queries': 366, 'trains': 128, 'saved_index_differs_from_retirement_recompute': 62, 'clears': 0}, 'adjacent': {'queries': 239, 'trains': 160, 'saved_index_differs_from_retirement_recompute': 125, 'clears': 0}, 'compressed_adjacent': {'queries': 172, 'trains': 96, 'saved_index_differs_from_retirement_recompute': 63, 'clears': 0}, 'serial': {'queries': 58, 'trains': 16, 'saved_index_differs_from_retirement_recompute': 0, 'clears': 8}}
+BHT INTEGRATION PASS: 45 runs, 9280 commits, 0 traps; 36 on/off runs
+ICACHE UNIT PASS: 69 checks across 3 latency/backpressure configurations
+FETCH UNIT PASS: 84 checks across 3 memory/output backpressure configurations
+ICACHE INTEGRATION PASS: 30 runs, 1455 commits, 15 traps; 6 cache-on/off runs checked
+EARLY RESTART UNIT PASS: 103 checks across 3 latency/backpressure configurations
+FETCH BUFFER PASS: 40 runs, 1870 commits, 20 traps; 12 buffer-on/off runs checked
+DCACHE UNIT PASS: 558 checks across 3 latency/backpressure configurations
+DCACHE EARLY UNIT PASS: 111 checks across 3 latency/backpressure configurations
+DCACHE INTEGRATION PASS: 40 runs, 3645 commits, 15 traps; 6 on/off runs
+DCACHE EARLY INTEGRATION PASS: 25 runs, 1865 commits, 0 traps; 12 on/off runs
+PHYSICAL ARBITER PASS: 144 transactions, metadata/ownership/backpressure/round-robin checked
+STATIC PREDICTOR UNIT PASS: 393330 vectors, C=1
+SPLIT MEMORY UNIT PASS: 49 checks, concurrent hits/walkers/permissions/errors/backpressure
+STATIC PREDICTOR UNIT PASS: 196665 vectors, C=0
+SPLIT MEMORY INTEGRATION PASS: 25 runs, 3215 commits, 5 traps; 6 split/legacy runs
+PREDICT FETCH UNIT PASS: 15 checks with memory/output backpressure
+RETURN STACK UNIT PASS: 12433 steps, enabled=1
+RETURN STACK UNIT PASS: 12433 steps, enabled=0
+PREDICTION INTEGRATION PASS: 55 runs, 1500 commits, 10 traps; 12 on/off runs
+RAS FETCH UNIT PASS: 27 checks with memory/output backpressure
+TLB UNIT PASS: 12000 model steps, contexts/replacement/duplicate fill/invalidation
+MMU TLB UNIT PASS: 69 permission/context/flush/error/poison/superpage checks
+RAS INTEGRATION PASS: 50 runs, 2525 commits, 5 traps; 12 on/off runs
+FETCH UNIT PASS: 84 checks across 3 memory/output backpressure configurations
+TLB INTEGRATION PASS: 45 runs, 3400 commits, 50 traps; 6 on/off runs
+FETCH WINDOW MODEL PASS: 40000 cycles, responses=6818, peak=4, poisoned=8640
+PREFETCH PREDICTOR MODEL PASS: 30481 steps, enabled=1
+SPLIT MEMORY UNIT PASS: 49 checks, concurrent hits/walkers/permissions/errors/backpressure
+WINDOW INTEGRATION PASS: 15 runs, 1280 commits, 0 traps; interface/slot audit {'stream': {'accepted_requests': 173, 'max_accepted_not_returned': 2, 'poisoned_completions': 4, 'redirect_or_retarget_cycles': 5, 'first_double_outstanding_cycle': 11, 'max_external_physical_transactions': 1}, 'redirect': {'accepted_requests': 80, 'max_accepted_not_returned': 2, 'poisoned_completions': 7, 'redirect_or_retarget_cycles': 7, 'first_double_outstanding_cycle': 11, 'max_external_physical_transactions': 1}, 'fence': {'accepted_requests': 35, 'max_accepted_not_returned': 2, 'poisoned_completions': 4, 'redirect_or_retarget_cycles': 10, 'first_double_outstanding_cycle': 11, 'max_external_physical_transactions': 1}}
+PREFETCH PREDICTOR MODEL PASS: 30481 steps, enabled=0
+PATH WINDOW DIRECTED PASS: 24 cases, target/RAS/cold-direction/page/type/length/fault checks
+EXTENSION PASS: 40 native runs, 9256 commits, 26 software-handled traps; 247 M vectors and 154 atomic gold values
+PATH INTEGRATION PASS: 25 runs, 4775 commits, 0 traps; 30 on/off runs; independent predictor/metadata/slot replay
+PRIVILEGED PASS: 86 native runs, 3295 commits, 92 software-handled traps; Sv39/Svade, M/S/U, vectored and delegated interrupts
+WINDOW FORWARD UNIT PASS: 17 cases, enabled=1; return/backpressure/error/turnover/flush/poison
+WINDOW FORWARD UNIT PASS: 17 cases, enabled=0; return/backpressure/error/turnover/flush/poison
+PASS: 71 runs; every commit, halt status and full RAM checked against reference
+FETCH WINDOW MODEL PASS: 40000 cycles, responses=6252, peak=4, poisoned=7597
+ALU PASS: 876 vectors across 19 operations × 5 timing configurations; 26305 commits checked
+FORWARD INTERFACE AUDIT PASS: 5 actual core VCDs; owner/data/cause/error/held response/successor/physical transaction checks
+DEMAND ISSUE UNIT PASS: 21 cases, enabled=1; address/size/backpressure/turnover/error/flush/poison
+DEMAND ISSUE UNIT PASS: 21 cases, enabled=0; address/size/backpressure/turnover/error/flush/poison
+FETCH WINDOW MODEL PASS: 40000 cycles, responses=6268, peak=4, poisoned=7811
+RV64I PASS: 126 runs, all 52 base instructions executed, 555 W vectors, 58 load-width vectors; C -O0/-O2 result=1488
+DEMAND ISSUE INTERFACE AUDIT PASS: 5 core VCDs; address/size/issued/token/turnover/backpressure/ownership/physical transaction checks
+DEMAND PRIORITY UNIT PASS: 29 cases, enabled=1; priority/backpressure/error/issued/completed/same-address-poison/flush; diversions=0
+DEMAND PRIORITY UNIT PASS: 29 cases, enabled=0; priority/backpressure/error/issued/completed/same-address-poison/flush; diversions=6
+FETCH WINDOW MODEL PASS: 40000 cycles, responses=6818, peak=4, poisoned=8640
+DEMAND PRIORITY INTEGRATION PASS: 25 runs, 3340 commits, 0 traps; 30 on/off runs; 10 VCD priority/token/ownership audits
+HIT UNDER REFILL UNIT PASS: 20 cases, enabled=1; ordered hits/backpressure/final success-error/invalidation/conflicts/bypass/single physical request
+HIT UNDER REFILL UNIT PASS: 20 cases, enabled=0; ordered hits/backpressure/final success-error/invalidation/conflicts/bypass/single physical request
+REFILL RANDOM MODEL PASS: 120000 cycles, responses=12408, under_events=1042, enabled=1; independent byte/order/backpressure/invalidation/single downstream checks
+REFILL RANDOM MODEL PASS: 120000 cycles, responses=12132, under_events=0, enabled=0; independent byte/order/backpressure/invalidation/single downstream checks
+ICACHE UNIT PASS: 69 checks across 3 latency/backpressure configurations
+HIT UNDER REFILL INTEGRATION PASS: 25 runs, 4150 commits, 0 traps; 30 on/off runs; 10 cache response/refill/ownership VCD audits
+FILL FORWARD UNIT PASS: 30 cases, enabled=1; both halves/width/order/final error/held response/invalidation/boundary/first fault
+FILL FORWARD UNIT PASS: 30 cases, enabled=0; both halves/width/order/final error/held response/invalidation/boundary/first fault
+REFILL RANDOM MODEL PASS: 120000 cycles, responses=12435, under_events=1097, enabled=1; independent byte/order/backpressure/invalidation/single downstream checks
+FILL FORWARD INTEGRATION PASS: 30 on/off runs; 10 response/half-address/order/ownership VCD audits
