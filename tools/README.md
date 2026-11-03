@@ -50,11 +50,13 @@ v15使用`--versions v14_btb v15_fetch_queue --cycles-only`比较；关闭FETCH_
 v16及之后使用专门的`ifetch_experiments.py`，避免误套早期功能关闭开关的父版本假设：
 
 ```sh
-python3 tools/ifetch_experiments.py --versions v16_ifetch_pipeline v19_window_forward v20_demand_issue --cycles-only
+python3 tools/ifetch_experiments.py --versions v16_ifetch_pipeline v20_demand_issue v21_demand_priority --cycles-only
 ```
 
-逐条核对19个相同二进制和RAM；v16关闭命中交接恢复v15，v17关闭窗口恢复v16，v18关闭预测路径恢复v17。v19关闭需求返回旁路恢复v18。v20关闭新需求发送旁路恢复v19。默认比较v16/v19/v20。当前根目录`make compare`转发到该脚本，历史全功能/映射实验仍使用`benchmark.py`。
+逐条核对19个相同二进制和RAM；v16关闭命中交接恢复v15，v17关闭窗口恢复v16，v18关闭预测路径恢复v17。v19关闭需求返回旁路恢复v18。v20关闭新需求发送旁路恢复v19。v21关闭匹配需求优先恢复v20。默认比较v16/v20/v21。当前根目录`make compare`转发到该脚本，历史全功能/映射实验仍使用`benchmark.py`。
 
 `python3 tools/profile_ifetch.py <core.vcd>`检查F/X等待与窗口需求返回交接；字段为重叠事件计数，不相加当作总周期。v16没有窗口时窗口指标为0，非缺失数据的假定值。
 
 `profile_ifetch.py`新增新需求接收/同拍服务接收/缓冲计数，用于区分本版发送旁路机会和已经匹配预取槽的需求；保存历史统计文件不覆盖。
+
+`profile_ifetch.py`进一步区分匹配未发送槽时的I侧就绪、发出实际需求和被其他槽抢先的次数；已登记未发送需求的周期也分成服务未就绪、未提供请求、已发送和选了其他槽。该分类有总数校验，各版历史统计文件不覆盖。

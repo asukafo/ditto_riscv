@@ -121,3 +121,5 @@ python3 tools/profile_ifetch.py versions/v20_demand_issue/build/issue-profile-pa
 ## 下一步
 
 继续分析“匹配了预取槽，但槽尚未发送”的需求，以及已完成数据到F的交接。这些请求不会触发本版的新分配旁路。下一版优先测量这种命中等待是否占主要周期，再决定需求优先发送/完成槽交接；保留v16作为吞吐参照，不以新版本号代表一定更快。
+
+本版已冻结；后续匹配需求优先调度独立保存在[v21](../v21_demand_priority/README.md)。

@@ -1,0 +1,17 @@
+{
+  "full": {
+    "vcd": "build/priority-c-full.vcd",
+    "vcd_sha256": "4e1ee58c97a534b413b373fde350ebf3a47513deeaa4f548a761976525f86676",
+    "first_override_opportunity_cycle": 713,
+    "demand_addr": 4344,
+    "selected_addr": 4344
+  },
+  "nopriority": {
+    "vcd": "build/priority-c-nopriority.vcd",
+    "vcd_sha256": "724eb5a308d892b630d0b09a778cbcb4ad22f174070466b3314c20f997e437d3",
+    "first_override_opportunity_cycle": 713,
+    "demand_addr": 4344,
+    "selected_addr": 4352
+  },
+  "image_sha256": "f62ef697e65d5d18a482bae44d3076aa1e9d43d5c57150436a9b0a45ae1038c4"
+}

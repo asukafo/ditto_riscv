@@ -1,0 +1,245 @@
+{
+  "version": "v21_demand_priority",
+  "run_id": "20261103T112719073706Z",
+  "native_runs": 661,
+  "native_commits": 65007,
+  "lint": "pass",
+  "functional_regression": "pass",
+  "base_program_runs": 71,
+  "rv64i_runs": 126,
+  "alu_vectors_per_timing": 876,
+  "alu_timing_configurations": 5,
+  "parent_off_equivalence_cases": 57,
+  "comparison_main_runs": 171,
+  "comparison_on_off_runs": 171,
+  "priority_directed_cases_per_mode": 29,
+  "priority_modes": 2,
+  "priority_extra_native_runs": 25,
+  "priority_extra_native_commits": 3340,
+  "priority_extra_on_off_runs": 30,
+  "window_random_cycles_per_mode": 40000,
+  "window_model_peak": 4,
+  "core_i_service_peak": 2,
+  "external_physical_peak": 1,
+  "priority_vcd_cases": 10,
+  "priority_audit": {
+    "redirect": {
+      "full": {
+        "priority": {
+          "eligible": 9,
+          "service_ready": 5,
+          "sent_match": 5,
+          "sent_other": 0,
+          "old_selector_differs": 3,
+          "priority_override_sent": 1,
+          "blocked": 4,
+          "existing_issued_or_done": 61
+        },
+        "ownership": {
+          "accepted_requests": 81,
+          "max_accepted_not_returned": 2,
+          "poisoned_completions": 7,
+          "redirect_or_retarget_cycles": 7,
+          "first_double_outstanding_cycle": 20,
+          "max_external_physical_transactions": 1
+        }
+      },
+      "nopriority": {
+        "priority": {
+          "eligible": 9,
+          "service_ready": 5,
+          "sent_match": 4,
+          "sent_other": 1,
+          "old_selector_differs": 3,
+          "priority_override_sent": 0,
+          "blocked": 4,
+          "existing_issued_or_done": 61
+        },
+        "ownership": {
+          "accepted_requests": 82,
+          "max_accepted_not_returned": 2,
+          "poisoned_completions": 7,
+          "redirect_or_retarget_cycles": 7,
+          "first_double_outstanding_cycle": 20,
+          "max_external_physical_transactions": 1
+        }
+      }
+    },
+    "skip": {
+      "full": {
+        "priority": {
+          "eligible": 9,
+          "service_ready": 5,
+          "sent_match": 5,
+          "sent_other": 0,
+          "old_selector_differs": 3,
+          "priority_override_sent": 1,
+          "blocked": 4,
+          "existing_issued_or_done": 61
+        },
+        "ownership": {
+          "accepted_requests": 81,
+          "max_accepted_not_returned": 2,
+          "poisoned_completions": 7,
+          "redirect_or_retarget_cycles": 7,
+          "first_double_outstanding_cycle": 20,
+          "max_external_physical_transactions": 1
+        }
+      },
+      "nopriority": {
+        "priority": {
+          "eligible": 9,
+          "service_ready": 5,
+          "sent_match": 4,
+          "sent_other": 1,
+          "old_selector_differs": 3,
+          "priority_override_sent": 0,
+          "blocked": 4,
+          "existing_issued_or_done": 61
+        },
+        "ownership": {
+          "accepted_requests": 82,
+          "max_accepted_not_returned": 2,
+          "poisoned_completions": 7,
+          "redirect_or_retarget_cycles": 7,
+          "first_double_outstanding_cycle": 20,
+          "max_external_physical_transactions": 1
+        }
+      }
+    },
+    "fence": {
+      "full": {
+        "priority": {
+          "eligible": 31,
+          "service_ready": 21,
+          "sent_match": 21,
+          "sent_other": 0,
+          "old_selector_differs": 2,
+          "priority_override_sent": 0,
+          "blocked": 10,
+          "existing_issued_or_done": 26
+        },
+        "ownership": {
+          "accepted_requests": 112,
+          "max_accepted_not_returned": 2,
+          "poisoned_completions": 46,
+          "redirect_or_retarget_cycles": 41,
+          "first_double_outstanding_cycle": 20,
+          "max_external_physical_transactions": 1
+        }
+      },
+      "nopriority": {
+        "priority": {
+          "eligible": 31,
+          "service_ready": 21,
+          "sent_match": 21,
+          "sent_other": 0,
+          "old_selector_differs": 2,
+          "priority_override_sent": 0,
+          "blocked": 10,
+          "existing_issued_or_done": 26
+        },
+        "ownership": {
+          "accepted_requests": 112,
+          "max_accepted_not_returned": 2,
+          "poisoned_completions": 46,
+          "redirect_or_retarget_cycles": 41,
+          "first_double_outstanding_cycle": 20,
+          "max_external_physical_transactions": 1
+        }
+      }
+    },
+    "changing": {
+      "full": {
+        "priority": {
+          "eligible": 55,
+          "service_ready": 52,
+          "sent_match": 52,
+          "sent_other": 0,
+          "old_selector_differs": 0,
+          "priority_override_sent": 0,
+          "blocked": 3,
+          "existing_issued_or_done": 280
+        },
+        "ownership": {
+          "accepted_requests": 444,
+          "max_accepted_not_returned": 2,
+          "poisoned_completions": 103,
+          "redirect_or_retarget_cycles": 88,
+          "first_double_outstanding_cycle": 20,
+          "max_external_physical_transactions": 1
+        }
+      },
+      "nopriority": {
+        "priority": {
+          "eligible": 55,
+          "service_ready": 52,
+          "sent_match": 52,
+          "sent_other": 0,
+          "old_selector_differs": 0,
+          "priority_override_sent": 0,
+          "blocked": 3,
+          "existing_issued_or_done": 280
+        },
+        "ownership": {
+          "accepted_requests": 444,
+          "max_accepted_not_returned": 2,
+          "poisoned_completions": 103,
+          "redirect_or_retarget_cycles": 88,
+          "first_double_outstanding_cycle": 20,
+          "max_external_physical_transactions": 1
+        }
+      }
+    },
+    "c": {
+      "full": {
+        "priority": {
+          "eligible": 49,
+          "service_ready": 26,
+          "sent_match": 26,
+          "sent_other": 0,
+          "old_selector_differs": 16,
+          "priority_override_sent": 5,
+          "blocked": 23,
+          "existing_issued_or_done": 115
+        },
+        "ownership": {
+          "accepted_requests": 200,
+          "max_accepted_not_returned": 2,
+          "poisoned_completions": 28,
+          "redirect_or_retarget_cycles": 29,
+          "first_double_outstanding_cycle": 20,
+          "max_external_physical_transactions": 1
+        }
+      },
+      "nopriority": {
+        "priority": {
+          "eligible": 45,
+          "service_ready": 24,
+          "sent_match": 21,
+          "sent_other": 3,
+          "old_selector_differs": 12,
+          "priority_override_sent": 0,
+          "blocked": 21,
+          "existing_issued_or_done": 119
+        },
+        "ownership": {
+          "accepted_requests": 202,
+          "max_accepted_not_returned": 2,
+          "poisoned_completions": 28,
+          "redirect_or_retarget_cycles": 29,
+          "first_double_outstanding_cycle": 20,
+          "max_external_physical_transactions": 1
+        }
+      }
+    }
+  },
+  "synthesis": "pass",
+  "sta": "not_run",
+  "gate_simulation": "not_run",
+  "old_archived_files_verified_unchanged": 499,
+  "native_trace_and_ram_files": 1322,
+  "full_test_log_sha256": "8b32fde3d2ff4389c2297a62e9e67b92a8dc3010dfa3ff46c42205ac73a063db",
+  "synthesis_log_sha256": "11e847754d4806303f37406d02fe99de999267c2d9389e1998d42f05c709618d",
+  "profile_tool_sha256": "040efd52361089b757a5e06b464a7f36d4939466b94a36f63d1d28e7acb4f4ce"
+}

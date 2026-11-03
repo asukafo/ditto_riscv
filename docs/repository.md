@@ -2,7 +2,7 @@
 
 ```text
 ditto_riscv/
-├── Makefile                  统一入口，默认选择 v20
+├── Makefile                  统一入口，默认选择 v21
 ├── README.md                 快速开始
 ├── CONTRIBUTING.md           开发、冻结和记录约定
 ├── versions/
@@ -25,7 +25,8 @@ ditto_riscv/
 │   ├── v17_fetch_window/    冻结的多笔I侧请求窗口与旧响应归属
 │   ├── v18_btb_window/      冻结的BTB/gshare/RAS引导读取窗口
 │   ├── v19_window_forward/  冻结的需求返回旁路与同拍后继需求
-│   └── v20_demand_issue/    新需求分配与发送当拍交接
+│   ├── v20_demand_issue/    冻结的新需求分配与发送当拍交接
+│   └── v21_demand_priority/ 匹配未发送槽的真实需求优先
 ├── benchmarks/              公共比较程序
 ├── tools/                   仓库检查、跨版本比较
 ├── results/comparisons/     不覆盖的历史对比表
@@ -49,7 +50,7 @@ ditto_riscv/
 ## 根目录命令
 
 ```sh
-make lint                         # 默认 v20
+make lint                         # 默认 v21
 make test
 make diff PROGRAM=full_demo LATENCY=5 GAP=3
 make timing
@@ -68,7 +69,7 @@ make compare BENCHMARK_ARGS="--run-id my-experiment"
 
 根目录不再复制一套硬件源码。各版内部的重复模块是版本快照的一部分，
 不会抽成可变的公共 RTL，以免修改新版时改变旧版。
-v1–v19的frozen-files.json记录各版冻结源码/构建文件哈希；`make check`会校验。
+v1–v20的frozen-files.json记录各版冻结源码/构建文件哈希；`make check`会校验。
 各版的历史 results 和公共对比表迁移时保持内容不变，历史 manifest 中的原始信息仍有效。
 
 旧根目录的本地 build 已移入忽略目录 `.local/legacy-root-build-<timestamp>/`，未删除。
@@ -89,7 +90,7 @@ v1–v19的frozen-files.json记录各版冻结源码/构建文件哈希；`make 
 `test-bht`从v12开始提供。仅比较周期、暂不分析时序：
 
 ```sh
-python3 tools/ifetch_experiments.py --versions v16_ifetch_pipeline v19_window_forward v20_demand_issue --cycles-only
+python3 tools/ifetch_experiments.py --versions v16_ifetch_pipeline v20_demand_issue v21_demand_priority --cycles-only
 ```
 
 `test-gshare`从v13开始提供，包含保存索引的单元测试及整核VCD审计。
@@ -105,3 +106,5 @@ v18增加`test-path`：预测器独立模型、24组窗口定向测试、整核�
 v19增加`test-forward`：开关各17组需求返回定向检查、关闭旁路的随机窗口模型、五个整核VCD接口重放。`tools/profile_ifetch.py`统计需求返回仍额外等待的沿与前端缺指令情况。详见[v19](../versions/v19_window_forward/README.md)。
 
 v20增加`test-issue`：开关各21组需求发送定向检查、关闭发送旁路的随机模型和五个整核VCD令牌/槽位重放。详见[v20](../versions/v20_demand_issue/README.md)。
+
+v21增加`test-priority`：开关各29组调度定向检查、25次新增整核运行、30次开关运行、10个VCD优先级/所有权审计。详见[v21](../versions/v21_demand_priority/README.md)。
