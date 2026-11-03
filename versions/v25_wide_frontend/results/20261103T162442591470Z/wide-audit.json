@@ -1,0 +1,220 @@
+{
+  "mixed": {
+    "peak": 6,
+    "nonempty_flushes": 1,
+    "fill_while_x_busy": 6,
+    "full_pop_push": 0,
+    "max_outstanding_fetches": 1,
+    "push2": 15,
+    "pop2": 12,
+    "partial_accepts": 0,
+    "held_cycles": 1
+  },
+  "second_control": {
+    "peak": 6,
+    "nonempty_flushes": 1,
+    "fill_while_x_busy": 6,
+    "full_pop_push": 0,
+    "max_outstanding_fetches": 1,
+    "push2": 3,
+    "pop2": 1,
+    "partial_accepts": 0,
+    "held_cycles": 4
+  },
+  "second_fault": {
+    "peak": 5,
+    "nonempty_flushes": 2,
+    "fill_while_x_busy": 6,
+    "full_pop_push": 0,
+    "max_outstanding_fetches": 1,
+    "push2": 5,
+    "pop2": 0,
+    "partial_accepts": 0,
+    "held_cycles": 0
+  },
+  "self_modify": {
+    "peak": 6,
+    "nonempty_flushes": 3,
+    "fill_while_x_busy": 8,
+    "full_pop_push": 0,
+    "max_outstanding_fetches": 1,
+    "push2": 9,
+    "pop2": 0,
+    "partial_accepts": 2,
+    "held_cycles": 10
+  },
+  "load_use": {
+    "peak": 6,
+    "nonempty_flushes": 1,
+    "fill_while_x_busy": 5,
+    "full_pop_push": 0,
+    "max_outstanding_fetches": 1,
+    "push2": 5,
+    "pop2": 0,
+    "partial_accepts": 0,
+    "held_cycles": 19
+  },
+  "jump_half": {
+    "peak": 3,
+    "nonempty_flushes": 0,
+    "fill_while_x_busy": 1,
+    "full_pop_push": 0,
+    "max_outstanding_fetches": 1,
+    "push2": 3,
+    "pop2": 1,
+    "partial_accepts": 0,
+    "held_cycles": 0
+  },
+  "hot_full": {
+    "packets": {
+      "peak": 6,
+      "nonempty_flushes": 1,
+      "fill_while_x_busy": 4,
+      "full_pop_push": 0,
+      "max_outstanding_fetches": 1,
+      "push2": 522,
+      "pop2": 517,
+      "partial_accepts": 0,
+      "held_cycles": 1
+    },
+    "path": {
+      "queries": 790,
+      "path_redirects": 127,
+      "rejected_returned_metadata": 0,
+      "examples": [
+        {
+          "cycle": 95,
+          "pc": 72,
+          "target": 36,
+          "kind": 1
+        },
+        {
+          "cycle": 101,
+          "pc": 72,
+          "target": 36,
+          "kind": 1
+        },
+        {
+          "cycle": 107,
+          "pc": 72,
+          "target": 36,
+          "kind": 1
+        },
+        {
+          "cycle": 113,
+          "pc": 72,
+          "target": 36,
+          "kind": 1
+        },
+        {
+          "cycle": 119,
+          "pc": 72,
+          "target": 36,
+          "kind": 1
+        },
+        {
+          "cycle": 125,
+          "pc": 72,
+          "target": 36,
+          "kind": 1
+        },
+        {
+          "cycle": 131,
+          "pc": 72,
+          "target": 36,
+          "kind": 1
+        },
+        {
+          "cycle": 137,
+          "pc": 72,
+          "target": 36,
+          "kind": 1
+        }
+      ]
+    },
+    "owners": {
+      "accepted_requests": 784,
+      "max_accepted_not_returned": 2,
+      "poisoned_completions": 4,
+      "redirect_or_retarget_cycles": 5,
+      "first_double_outstanding_cycle": 20,
+      "max_external_physical_transactions": 1
+    }
+  },
+  "hot_onealu": {
+    "packets": {
+      "peak": 6,
+      "nonempty_flushes": 2,
+      "fill_while_x_busy": 4,
+      "full_pop_push": 0,
+      "max_outstanding_fetches": 1,
+      "push2": 20,
+      "pop2": 0,
+      "partial_accepts": 505,
+      "held_cycles": 1
+    },
+    "path": {
+      "queries": 794,
+      "path_redirects": 128,
+      "rejected_returned_metadata": 0,
+      "examples": [
+        {
+          "cycle": 95,
+          "pc": 72,
+          "target": 36,
+          "kind": 1
+        },
+        {
+          "cycle": 101,
+          "pc": 72,
+          "target": 36,
+          "kind": 1
+        },
+        {
+          "cycle": 108,
+          "pc": 72,
+          "target": 36,
+          "kind": 1
+        },
+        {
+          "cycle": 118,
+          "pc": 72,
+          "target": 36,
+          "kind": 1
+        },
+        {
+          "cycle": 128,
+          "pc": 72,
+          "target": 36,
+          "kind": 1
+        },
+        {
+          "cycle": 138,
+          "pc": 72,
+          "target": 36,
+          "kind": 1
+        },
+        {
+          "cycle": 148,
+          "pc": 72,
+          "target": 36,
+          "kind": 1
+        },
+        {
+          "cycle": 158,
+          "pc": 72,
+          "target": 36,
+          "kind": 1
+        }
+      ]
+    },
+    "owners": {
+      "accepted_requests": 789,
+      "max_accepted_not_returned": 2,
+      "poisoned_completions": 3,
+      "redirect_or_retarget_cycles": 5,
+      "first_double_outstanding_cycle": 20,
+      "max_external_physical_transactions": 1
+    }
+  }
+}

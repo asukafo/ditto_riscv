@@ -2,6 +2,8 @@
 
 ## 当前工程
 
+- [v25 双指令前端、混合长度、双进双出队列与1.67 IPC真实波形](../versions/v25_wide_frontend/README.md)
+
 - [v17 多笔I侧在途、完成令牌、失效槽位与真实波形](../versions/v17_fetch_window/README.md)
 - [v16 命中通路交接、背压与提前排空](../versions/v16_ifetch_pipeline/README.md)
 

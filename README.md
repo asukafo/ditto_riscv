@@ -1,9 +1,9 @@
 # ditto_riscv
 
 通过可运行的 RTL、逐条参考对照、真实波形与性能实验学习 RISC-V core 设计。
-当前开发版本是 **v24 保守双ALU发射核：后端最多两条，前端仍单包供给**；v1–v23 独立冻结。
-二十四版均支持 RV64IMAC、Zicsr/Zifencei、M/S/U、软件异常、中断与 Sv39/Svade。
-后续目标是共享总线等待优化、大页TLB、双发射、乱序与双核，目前尚未实现这些功能。
+当前开发版本是 **v25 双指令前端与保守双ALU核：热循环稳定区间达到1.67 IPC**；v1–v24 独立冻结。
+二十五版均支持 RV64IMAC、Zicsr/Zifencei、M/S/U、软件异常、中断与 Sv39/Svade。
+双发射已支持独立ADDI/ADD/SUB；后续目标是改善分支供给、扩大配对范围、共享总线等待优化、大页TLB、乱序与双核。
 
 ## 快速开始
 
@@ -38,12 +38,13 @@ make test-priority
 make test-under
 make test-fill
 make test-dual
+make test-wide
 make diff PROGRAM=full_demo
 make diagrams
 make timing
 ```
 
-根目录命令默认转发到 `versions/v24_dual_alu/`，输出位于该版的 `build/`。
+根目录命令默认转发到 `versions/v25_wide_frontend/`，输出位于该版的 `build/`。
 `make diagrams` 导出真实流水线 VCD 的阶段采样图；`make wave PROGRAM=full_demo` 用 Surfer 打开波形。
 选择旧版使用 `make test VERSION=v1_multicycle`，或进入该版本目录运行其 Makefile。
 `PROGRAM`、`LATENCY`、`GAP`、`CROSS`、`LIB`、`CLOCK_NS` 等命令行参数会传给所选版本。
@@ -77,6 +78,7 @@ make timing
 | [versions/v22_hit_under_refill](versions/v22_hit_under_refill/README.md) | 冻结的I-cache背景补行期间服务其他完整行命中 |
 | [versions/v23_fill_forward](versions/v23_fill_forward/README.md) | 冻结的补行半行转发，热区1.00 IPC单发射基线 |
 | [versions/v24_dual_alu](versions/v24_dual_alu/README.md) | 当前开发：独立ADDI/ADD/SUB同拍双发射、有序双提交 |
+| [versions/v25_wide_frontend](versions/v25_wide_frontend/README.md) | 当前双包供给、六项双进双出队列、热区1.67 IPC |
 | [benchmarks](benchmarks/README.md) | 各版执行相同二进制的公共基准程序 |
 | [tools](tools/README.md) | 仓库检查与跨版本性能比较工具 |
 | [results](results/README.md) | 跨版本对比记录，各版详细记录保留在各自 results/ |
@@ -117,6 +119,7 @@ make timing
 | v22 补行下命中 | 背景补行挡住其他完整行命中 | 关键字先返回后复用响应寄存器服务命中，补行所有权独立；处理反压、尾拍错误和失效 | 57组全部快于v21；延迟5/间隔3直线1375→1107、C903→855；相对v16仍38组较慢；只测周期 |
 | v23 半行转发 | 已返回8B中的下一条指令仍等整行有效 | 按完整物理半行地址与字节范围从fill buffer转发，保留错误/失效/顺序 | 60组49改善、10持平、1退步；热区960条/960周期=1.00 IPC |
 | v24 双发射起步 | 单发射热区已到1 IPC，需要后端宽度与新验证协议 | 两项前视、四读双写RF、第二简单ALU、有序双提交、精确计数；保留同缓冲单ALU对照 | 60组20改善、34持平、6退步；可观察同拍两条，但热循环仍受单包前端限制 |
+| v25 双指令前端 | 后端等不到第二条指令 | 对齐8B读取、混合长度双包、六项双进双出旁路队列、双位置预取提示 | 热区960条从960→576周期；60组18改善、3持平、39退步，分支供给仍需优化 |
 
 v6 首先建立写穿透 D-cache 的可验证基线。重复数据访问受益，顺序读取与冲突访问可能因完整补行变慢。
 v6轮次的布局前最小周期估计为4.54ns（v5为4.32ns），面积约+21.2%；因此应同时检查周期数、时序和面积。
@@ -127,7 +130,7 @@ v7降低load响应等待，v8再解除命中路径间的阻塞；两侧同时缺
 ## 性能实验
 
 ```sh
-make compare BENCHMARK_ARGS="--versions v16_ifetch_pipeline v23_fill_forward v24_dual_alu --cycles-only"
+make compare BENCHMARK_ARGS="--versions v23_fill_forward v24_dual_alu v25_wide_frontend --cycles-only"
 # 每次使用新的 run-id；已存在时明确拒绝覆盖
 make compare BENCHMARK_ARGS="--run-id my-experiment"
 ```

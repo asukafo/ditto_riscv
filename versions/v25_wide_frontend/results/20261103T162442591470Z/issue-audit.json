@@ -1,0 +1,92 @@
+{
+  "window_stream": {
+    "issue": {
+      "new_demands": 3,
+      "same_cycle_service_accepts": 2,
+      "buffered_on_backpressure": 1,
+      "simultaneous_demand_response": 0,
+      "retarget_with_issue": 2,
+      "queued_service_accepts": 92
+    },
+    "ownership": {
+      "accepted_requests": 94,
+      "max_accepted_not_returned": 2,
+      "poisoned_completions": 2,
+      "redirect_or_retarget_cycles": 5,
+      "first_double_outstanding_cycle": 20,
+      "max_external_physical_transactions": 1
+    }
+  },
+  "window_redirect": {
+    "issue": {
+      "new_demands": 12,
+      "same_cycle_service_accepts": 11,
+      "buffered_on_backpressure": 1,
+      "simultaneous_demand_response": 9,
+      "retarget_with_issue": 11,
+      "queued_service_accepts": 45
+    },
+    "ownership": {
+      "accepted_requests": 56,
+      "max_accepted_not_returned": 2,
+      "poisoned_completions": 3,
+      "redirect_or_retarget_cycles": 14,
+      "first_double_outstanding_cycle": 20,
+      "max_external_physical_transactions": 1
+    }
+  },
+  "path_calls": {
+    "issue": {
+      "new_demands": 5,
+      "same_cycle_service_accepts": 4,
+      "buffered_on_backpressure": 1,
+      "simultaneous_demand_response": 1,
+      "retarget_with_issue": 4,
+      "queued_service_accepts": 113
+    },
+    "ownership": {
+      "accepted_requests": 117,
+      "max_accepted_not_returned": 2,
+      "poisoned_completions": 5,
+      "redirect_or_retarget_cycles": 7,
+      "first_double_outstanding_cycle": 20,
+      "max_external_physical_transactions": 1
+    }
+  },
+  "path_changing": {
+    "issue": {
+      "new_demands": 40,
+      "same_cycle_service_accepts": 39,
+      "buffered_on_backpressure": 1,
+      "simultaneous_demand_response": 3,
+      "retarget_with_issue": 39,
+      "queued_service_accepts": 338
+    },
+    "ownership": {
+      "accepted_requests": 377,
+      "max_accepted_not_returned": 2,
+      "poisoned_completions": 59,
+      "redirect_or_retarget_cycles": 76,
+      "first_double_outstanding_cycle": 20,
+      "max_external_physical_transactions": 1
+    }
+  },
+  "path_fence": {
+    "issue": {
+      "new_demands": 28,
+      "same_cycle_service_accepts": 23,
+      "buffered_on_backpressure": 5,
+      "simultaneous_demand_response": 6,
+      "retarget_with_issue": 23,
+      "queued_service_accepts": 69
+    },
+    "ownership": {
+      "accepted_requests": 92,
+      "max_accepted_not_returned": 2,
+      "poisoned_completions": 31,
+      "redirect_or_retarget_cycles": 40,
+      "first_double_outstanding_cycle": 20,
+      "max_external_physical_transactions": 1
+    }
+  }
+}

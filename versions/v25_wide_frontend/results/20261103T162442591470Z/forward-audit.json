@@ -1,0 +1,92 @@
+{
+  "window_stream": {
+    "forwarding": {
+      "return_candidates": 15,
+      "forwarded_and_consumed": 15,
+      "forwarded_but_stalled": 0,
+      "simultaneous_successor": 11,
+      "flush_with_forward": 0,
+      "held_response_cycles": 27
+    },
+    "ownership": {
+      "accepted_requests": 94,
+      "max_accepted_not_returned": 2,
+      "poisoned_completions": 2,
+      "redirect_or_retarget_cycles": 5,
+      "first_double_outstanding_cycle": 20,
+      "max_external_physical_transactions": 1
+    }
+  },
+  "window_redirect": {
+    "forwarding": {
+      "return_candidates": 24,
+      "forwarded_and_consumed": 24,
+      "forwarded_but_stalled": 0,
+      "simultaneous_successor": 5,
+      "flush_with_forward": 1,
+      "held_response_cycles": 0
+    },
+    "ownership": {
+      "accepted_requests": 56,
+      "max_accepted_not_returned": 2,
+      "poisoned_completions": 3,
+      "redirect_or_retarget_cycles": 14,
+      "first_double_outstanding_cycle": 20,
+      "max_external_physical_transactions": 1
+    }
+  },
+  "path_calls": {
+    "forwarding": {
+      "return_candidates": 60,
+      "forwarded_and_consumed": 60,
+      "forwarded_but_stalled": 0,
+      "simultaneous_successor": 42,
+      "flush_with_forward": 1,
+      "held_response_cycles": 8
+    },
+    "ownership": {
+      "accepted_requests": 117,
+      "max_accepted_not_returned": 2,
+      "poisoned_completions": 5,
+      "redirect_or_retarget_cycles": 7,
+      "first_double_outstanding_cycle": 20,
+      "max_external_physical_transactions": 1
+    }
+  },
+  "path_changing": {
+    "forwarding": {
+      "return_candidates": 240,
+      "forwarded_and_consumed": 239,
+      "forwarded_but_stalled": 1,
+      "simultaneous_successor": 187,
+      "flush_with_forward": 20,
+      "held_response_cycles": 5
+    },
+    "ownership": {
+      "accepted_requests": 377,
+      "max_accepted_not_returned": 2,
+      "poisoned_completions": 59,
+      "redirect_or_retarget_cycles": 76,
+      "first_double_outstanding_cycle": 20,
+      "max_external_physical_transactions": 1
+    }
+  },
+  "path_fence": {
+    "forwarding": {
+      "return_candidates": 44,
+      "forwarded_and_consumed": 44,
+      "forwarded_but_stalled": 0,
+      "simultaneous_successor": 18,
+      "flush_with_forward": 7,
+      "held_response_cycles": 9
+    },
+    "ownership": {
+      "accepted_requests": 92,
+      "max_accepted_not_returned": 2,
+      "poisoned_completions": 31,
+      "redirect_or_retarget_cycles": 40,
+      "first_double_outstanding_cycle": 20,
+      "max_external_physical_transactions": 1
+    }
+  }
+}

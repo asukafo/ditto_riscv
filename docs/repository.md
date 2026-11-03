@@ -2,7 +2,7 @@
 
 ```text
 ditto_riscv/
-├── Makefile                  统一入口，默认选择 v24
+├── Makefile                  统一入口，默认选择 v25
 ├── README.md                 快速开始
 ├── CONTRIBUTING.md           开发、冻结和记录约定
 ├── versions/
@@ -29,7 +29,8 @@ ditto_riscv/
 │   ├── v21_demand_priority/ 冻结的匹配未发送槽真实需求优先
 │   ├── v22_hit_under_refill/ 冻结的背景补行下命中
 │   ├── v23_fill_forward/    冻结的补行半行转发与1 IPC热区
-│   └── v24_dual_alu/        保守双ALU发射、有序双提交
+│   ├── v24_dual_alu/        冻结的保守双ALU发射、有序双提交
+│   └── v25_wide_frontend/   双包前端、六项双端口队列、热区1.67 IPC
 ├── benchmarks/              公共比较程序
 ├── tools/                   仓库检查、跨版本比较
 ├── results/comparisons/     不覆盖的历史对比表
@@ -53,7 +54,7 @@ ditto_riscv/
 ## 根目录命令
 
 ```sh
-make lint                         # 默认 v24
+make lint                         # 默认 v25
 make test
 make diff PROGRAM=full_demo LATENCY=5 GAP=3
 make timing
@@ -72,7 +73,7 @@ make compare BENCHMARK_ARGS="--run-id my-experiment"
 
 根目录不再复制一套硬件源码。各版内部的重复模块是版本快照的一部分，
 不会抽成可变的公共 RTL，以免修改新版时改变旧版。
-v1–v23的frozen-files.json记录各版冻结源码/构建文件哈希；`make check`会校验。
+v1–v24的frozen-files.json记录各版冻结源码/构建文件哈希；`make check`会校验。
 各版的历史 results 和公共对比表迁移时保持内容不变，历史 manifest 中的原始信息仍有效。
 
 旧根目录的本地 build 已移入忽略目录 `.local/legacy-root-build-<timestamp>/`，未删除。
@@ -93,7 +94,7 @@ v1–v23的frozen-files.json记录各版冻结源码/构建文件哈希；`make 
 `test-bht`从v12开始提供。仅比较周期、暂不分析时序：
 
 ```sh
-python3 tools/ifetch_experiments.py --versions v16_ifetch_pipeline v23_fill_forward v24_dual_alu --cycles-only
+python3 tools/ifetch_experiments.py --versions v23_fill_forward v24_dual_alu v25_wide_frontend --cycles-only
 ```
 
 `test-gshare`从v13开始提供，包含保存索引的单元测试及整核VCD审计。
@@ -114,4 +115,6 @@ v21增加`test-priority`：开关各29组调度定向检查、25次新增整核�
 
 v22增加`test-under`：开关各20组cache定向检查、各120000周期随机模型、25次新增整核运行与10个cache响应/所有权VCD审计。新增`tools/profile_iservice.py`按MMU/cache/物理仲裁状态划分I侧阻塞。详见[v22](../versions/v22_hit_under_refill/README.md)。
 
-v23提供`test-fill`，v24提供`test-dual`。现代比较新增hot_alu共20个程序；v24第二提交用同cycle的retire_slot=1单独记录、逐条核对，原主槽为0。历史标量参考与归档保持原样，现代工具对子提交使用v24目录内的独立参考CLI。参见[多发射起步](multi_issue_start.md)。
+v23提供`test-fill`，v24提供`test-dual`。现代比较新增hot_alu共20个程序；v24第二提交用同cycle的retire_slot=1单独记录、逐条核对，原主槽为0。历史标量参考与归档保持原样，现代工具对子提交使用各自版本目录内的独立参考CLI。参见[多发射起步](multi_issue_start.md)。
+
+v25新增`test-wide`，对混合长度、跨页故障、部分接收和双包元数据建模，并比较宽前端双ALU/宽前端单ALU/窄前端三组热区IPC。WIDE_FETCH=0恢复v24。

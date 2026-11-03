@@ -25,11 +25,12 @@
 | [v21_demand_priority](v21_demand_priority/README.md) | 匹配未发送槽的需求当拍优先，保留实际发送所有权 | 冻结的需求优先窗口 |
 | [v22_hit_under_refill](v22_hit_under_refill/README.md) | 背景补行期间命中服务与有序响应，单个缺失保留 | 冻结的补行下命中 |
 | [v23_fill_forward](v23_fill_forward/README.md) | 已返回8B补行缓冲复用 | 冻结，热区1.00 IPC单发射基线 |
-| [v24_dual_alu](v24_dual_alu/README.md) | 简单ALU双发射、有序双提交，前端单包 | 当前开发与实验 |
+| [v24_dual_alu](v24_dual_alu/README.md) | 简单ALU双发射、有序双提交，前端单包 | 冻结的双发射后端 |
+| [v25_wide_frontend](v25_wide_frontend/README.md) | 双包供给、双进双出队列、热区1.67 IPC | 当前开发与实验 |
 
 每版有独立的 rtl、sim、sw、scripts、Makefile、build 和 results。
 
-仓库根目录的 Makefile 默认转发至 v24；用 VERSION=<目录名> 选择其他版本。后续新架构使用新目录，旧架构不随之修改。
+仓库根目录的 Makefile 默认转发至 v25；用 VERSION=<目录名> 选择其他版本。后续新架构使用新目录，旧架构不随之修改。
 公共比较脚本只负责运行实验，不在不同版本之间共用会变化的 RTL。
 
 ```sh
@@ -39,7 +40,7 @@ python3 tools/benchmark.py
 python3 tools/benchmark.py --run-id my-experiment
 ```
 
-当前`make compare`比较v16/v23/v24的20个程序，在(latency,gap)=(1,0)、(5,0)、(5,3)下各跑一次，每版60次。v1–v15历史全功能比较仍用`tools/benchmark.py`。
+当前`make compare`比较v23/v24/v25的20个程序，在(latency,gap)=(1,0)、(5,0)、(5,3)下各跑一次，每版60次。v1–v15历史全功能比较仍用`tools/benchmark.py`。
 包括求和、依赖链、指针追踪、访存、位操作、C、M/A/C C、直线 ALU 、压缩指令依赖链和重复数据读取。
 脚本检查各版二进制 SHA-256 一致、退休指令数一致，且逐条提交和最终内存通过独立参考模型。
 v3/v4 另有关闭缓存的对照；v4 另有 27 组关闭取指缓冲的对照，分别隔离不同改动的收益。
@@ -91,3 +92,7 @@ v10增加RAS_ENABLE=0对照，33组周期数/请求数与同轮v9逐项核对；
 v11增加TLB_ENABLE=0对照，36组周期数/请求数与同轮v10核对；新增公共分页基准，旧实验表保持不变。
 
 使用`--cycles-only`跳过映射和STA，时序/面积字段留空，不能据此宣称芯片频率或真实时间改善。
+
+## v25 双指令前端
+
+[v25设计、三配置归因与真实波形](v25_wide_frontend/README.md)：对齐64位取指返回形成最多两条完整指令包，六项队列支持双进双出和空时旁路。保持混合长度、跨页权限、精确异常和第二槽控制指令回退。热区960条/576周期=1.67 IPC；公共60组相对v24为18改善、3持平、39退步。WIDE_FETCH=0严格恢复v24。
