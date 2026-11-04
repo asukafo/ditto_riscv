@@ -1,0 +1,14 @@
+{
+  "v31_equal_branch": {
+    "reg_to_reg_period_ns": 7.77,
+    "full_setup_ns": 8.72,
+    "mapped_area": 281965.852,
+    "mapped_netlist_sha256": "7f72e45ab387d37fb7cb7299dc1887187f2d466b9b41f23a6433736d945d24ae"
+  },
+  "v32_data_under_refill": {
+    "reg_to_reg_period_ns": 8.16,
+    "full_setup_ns": 9.1191,
+    "mapped_area": 282726.08,
+    "mapped_netlist_sha256": "78529b324bb93194cf49648554187d9098b9d6494e9838231fd73bcd9b7b809d"
+  }
+}

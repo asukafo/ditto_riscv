@@ -1,8 +1,8 @@
 # Repository entry point; each hardware version owns its build directory.
-VERSION ?= v31_equal_branch
+VERSION ?= v33_onehot_arbiter
 PYTHON ?= python3
 BENCHMARK_ARGS ?=
-VERSIONS := v1_multicycle v2_single_issue v3_icache v4_fetch_buffer v5_early_restart v6_dcache v7_dcache_early v8_split_memory v9_static_predict v10_return_stack v11_tlb v12_dynamic_predict v13_gshare v14_btb v15_fetch_queue v16_ifetch_pipeline v17_fetch_window v18_btb_window v19_window_forward v20_demand_issue v21_demand_priority v22_hit_under_refill v23_fill_forward v24_dual_alu v25_wide_frontend v26_second_branch v27_integer_pair v28_data_turnover v29_ifill_turnover v30_window_cursor v31_equal_branch v32_data_under_refill
+VERSIONS := v1_multicycle v2_single_issue v3_icache v4_fetch_buffer v5_early_restart v6_dcache v7_dcache_early v8_split_memory v9_static_predict v10_return_stack v11_tlb v12_dynamic_predict v13_gshare v14_btb v15_fetch_queue v16_ifetch_pipeline v17_fetch_window v18_btb_window v19_window_forward v20_demand_issue v21_demand_priority v22_hit_under_refill v23_fill_forward v24_dual_alu v25_wide_frontend v26_second_branch v27_integer_pair v28_data_turnover v29_ifill_turnover v30_window_cursor v31_equal_branch v32_data_under_refill v33_onehot_arbiter
 VERSION_DIR := versions/$(VERSION)
 
 ifeq ($(filter $(VERSION),$(VERSIONS)),)
@@ -70,9 +70,11 @@ versions:
 
 	@echo 'v30_window_cursor    page-offset lookahead for allocated fetch slots'
 
-	@echo 'v31_equal_branch     decode-proven same-register branch direction (default)'
+	@echo 'v31_equal_branch     decode-proven same-register branch direction'
 
 	@echo 'v32_data_under_refill experimental D-cache load overlap'
+
+	@echo 'v33_onehot_arbiter   parallel one-hot physical arbitration (default)'
 
 $(FORWARDED):
 	$(MAKE) -C "$(VERSION_DIR)" $@
