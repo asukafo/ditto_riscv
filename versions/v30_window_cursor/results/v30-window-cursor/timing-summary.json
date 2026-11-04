@@ -1,0 +1,14 @@
+{
+  "yosys": "Yosys 0.70+post (git sha1 0c11ea098be065e585a90a06e7b7da49936cf231, Release, AppleClang clang++ 21.0.0.21000334)",
+  "opensta": "3.1.0",
+  "clock_constraint_ns": 10,
+  "liberty": "NangateOpenCellLibrary_typical.lib",
+  "liberty_sha256": "8d540a4d4cf6d09d27c87ad067857a9c0c2eeb023ab7a56e058cd3113db4e9b1",
+  "reg_to_reg_ns": 10.8169,
+  "full_setup_ns": 11.5652,
+  "mapped_area": 373111.018,
+  "cycles": 27005,
+  "mapped_netlist_sha256": "387456b8bf33f3681b21e3860c1003d6ec2420b433fd5bce9203653256477830",
+  "timing_tcl_sha256": "44530dce32ad4d3875c4b7a0667d90efad95ef4b716837d08f94108ae499479c",
+  "abc_constraints_sha256": "f62f5ca439a322ab157b4fbd502ec710a90850c0ce9ab67252b4745d44452878"
+}
