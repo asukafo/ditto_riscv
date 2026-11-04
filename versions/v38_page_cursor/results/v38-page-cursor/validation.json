@@ -1,0 +1,12 @@
+{
+  "test": "pass",
+  "lint": "pass",
+  "synthesis": "pass",
+  "public_cases": 60,
+  "warm_instructions": 960,
+  "warm_cycles": 576,
+  "test_log_sha256": "7d25732a43093b7ab564a40e2a112d6dcd923a85aa196d352258883e3a047a65",
+  "synthesis_log_sha256": "d4df9b80e3ed1d84590affe8db45fa079e9913b865ee60b94c867926b767b75e",
+  "public_trace_and_ram_byte_equivalent": 60,
+  "mapped_public_equivalence_cases": 60
+}
