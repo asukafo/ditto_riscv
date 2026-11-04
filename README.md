@@ -1,8 +1,8 @@
 # ditto_riscv
 
 通过可运行的 RTL、逐条参考对照、真实波形与性能实验学习 RISC-V core 设计。
-当前发布版本是 **v35 RV64IMAC 顺序双发射核**，热循环稳定区间达到 1.67 IPC。v1–v34 独立冻结。
-v35 支持 RV64IMAC、Zicsr/Zifencei、M/S/U、软件异常、中断与 Sv39/Svade。
+当前发布版本是 **v37 RV64IMAC 顺序双发射核**，热循环稳定区间达到 1.67 IPC。v1–v36 独立冻结。
+v37 支持 RV64IMAC、Zicsr/Zifencei、M/S/U、软件异常、中断与 Sv39/Svade。
 第二槽支持 30 种整数操作。v28 和 v29 缩短了数据请求以及指令、数据缓存补行的交接。
 
 ## 快速开始
@@ -44,7 +44,7 @@ make diagrams
 make timing
 ```
 
-根目录命令默认转发到 `versions/v35_prefetch_redirect/`，输出位于该版的 `build/`。
+根目录命令默认转发到 `versions/v37_onehot_tlb/`，输出位于该版的 `build/`。
 `make diagrams` 导出真实流水线 VCD 的阶段采样图；`make wave PROGRAM=full_demo` 用 Surfer 打开波形。
 选择旧版使用 `make test VERSION=v1_multicycle`，或进入该版本目录运行其 Makefile。
 `PROGRAM`、`LATENCY`、`GAP`、`CROSS`、`LIB`、`CLOCK_NS` 等命令行参数会传给所选版本。
@@ -90,6 +90,7 @@ make timing
 | [versions/v34_retire_amo](versions/v34_retire_amo/README.md) | 优化 AMO 退休数据路径，对比分层和展平映射 |
 | [versions/v35_prefetch_redirect](versions/v35_prefetch_redirect/README.md) | 缩短双槽预取重定向判断，验证页边界与预测优先级 |
 | [versions/v36_walker_response](versions/v36_walker_response/README.md) | 页表遍历器直收物理通道响应，拆开 TLB 填充与缓存回包 |
+| [versions/v37_onehot_tlb](versions/v37_onehot_tlb/README.md) | 并行匹配 TLB 表项，独热选择读出和填充位置 |
 | [benchmarks](benchmarks/README.md) | 各版执行相同二进制的公共基准程序 |
 | [tools](tools/README.md) | 仓库检查与跨版本性能比较工具 |
 | [results](results/README.md) | 跨版本对比记录，各版详细记录保留在各自 results/ |
