@@ -1,0 +1,38 @@
+{
+  "full": {
+    "cycles": 915,
+    "instret": 1300,
+    "paired_issues": 517,
+    "decode_pairs": 522,
+    "warm_instructions": 960,
+    "warm_cycles": 576,
+    "warm_ipc": 1.6666666666666667,
+    "anchor_cycle": 186,
+    "trace_sha256": "db464808a910de7b4ab959d547cd00ea5efb570db576c591249e9618cd3307f1",
+    "vcd_sha256": "3a4661c3ba047506110e1d0c61bab8704f752fb350138b2ce7b8eb94f5be7863"
+  },
+  "narrow": {
+    "cycles": 1419,
+    "instret": 1300,
+    "paired_issues": 0,
+    "decode_pairs": 0,
+    "warm_instructions": 960,
+    "warm_cycles": 960,
+    "warm_ipc": 1.0,
+    "anchor_cycle": 246,
+    "trace_sha256": "0cb763130670ee77d8f5565735e1d4d34c8086175eb46ab6c8e0c9c6d2a86050",
+    "vcd_sha256": "00421b92a8846f56e3718dffb0b3e2d3cf5c43ec3a07ef163deb7a98a271a102"
+  },
+  "onealu": {
+    "cycles": 1423,
+    "instret": 1300,
+    "paired_issues": 0,
+    "decode_pairs": 525,
+    "warm_instructions": 960,
+    "warm_cycles": 960,
+    "warm_ipc": 1.0,
+    "anchor_cycle": 246,
+    "trace_sha256": "7a19c5deb900b460a259952b4bbc444ac19069ad7d0423b9c9a80375fbd6a4be",
+    "vcd_sha256": "45f939a3798f16759b6fb9c53fbd5918cd5a67a0d4ea82fc2ba52edb8a11c994"
+  }
+}
