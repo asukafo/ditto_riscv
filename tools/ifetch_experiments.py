@@ -9,7 +9,7 @@ sys.path.insert(0,str(ROOT/'versions/v1_multicycle/scripts'))
 from reference import verify_files
 
 def main():
- p=argparse.ArgumentParser();p.add_argument('--cycles-only',action='store_true');p.add_argument('--versions',nargs='+',default=['v24_dual_alu','v25_wide_frontend','v26_second_branch','v27_integer_pair']);p.add_argument('--run-id',default=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ'));a=p.parse_args()
+ p=argparse.ArgumentParser();p.add_argument('--cycles-only',action='store_true');p.add_argument('--versions',nargs='+',default=['v24_dual_alu','v27_integer_pair','v28_data_turnover','v29_ifill_turnover']);p.add_argument('--run-id',default=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ'));a=p.parse_args()
  assert a.run_id.replace('_','').replace('-','').isalnum() and len(set(a.versions))==len(a.versions)
  out=ROOT/'results/comparisons'/a.run_id;out.mkdir(parents=True,exist_ok=False);rows=[];images={};baselines={}
  for version in a.versions:

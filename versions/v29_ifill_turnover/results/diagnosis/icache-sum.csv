@@ -1,0 +1,10 @@
+cycle,u_valid,u_ready,u_addr,direct_refill,d_valid,d_ready,d_addr,d_rsp_valid,forward_critical,u_rsp_valid,u_rsp_ready,response_available
+1,1,1,0x0,1,1,1,0x0,0,0,0,0,0
+2,0,0,0x0,0,0,0,0x0,0,0,0,1,0
+3,0,0,0x0,0,0,0,0x0,0,0,0,1,0
+4,0,0,0x0,0,0,0,0x0,0,0,0,1,0
+5,0,0,0x0,0,0,0,0x0,0,0,0,1,0
+6,1,0,0x8,0,0,0,0x0,1,1,1,1,0
+7,1,0,0x8,0,1,1,0x8,0,0,0,0,0
+8,1,0,0x8,0,0,0,0x8,0,0,0,0,0
+9,1,0,0x8,0,0,0,0x8,0,0,0,0,0
