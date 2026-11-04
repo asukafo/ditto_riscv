@@ -1,0 +1,8 @@
+cycle,u_addr,u_valid,u_ready,tail_pending,d_rsp_valid,d_rsp_error,returned_half,background_accept,u_rsp_valid,u_rsp_ready
+64,0x1300,1,0,1,0,0,0,0,0,0
+65,0x1300,1,0,1,0,0,0,0,0,0
+66,0x1300,1,0,1,0,0,0,0,0,0
+67,0x1300,1,1,1,1,0,1,1,0,0
+68,0x0,0,0,0,0,0,0,0,1,1
+69,0x1300,0,1,0,0,0,0,0,0,0
+70,0x1300,0,1,0,0,0,0,0,0,0

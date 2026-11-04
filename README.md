@@ -85,6 +85,7 @@ make timing
 | [versions/v29_ifill_turnover](versions/v29_ifill_turnover/README.md) | I-cache 缺失与关键字当拍交接，60 组合计比 v27 降低 5.68% |
 | [versions/v30_window_cursor](versions/v30_window_cursor/README.md) | 页内游标跳过已有槽位，前向分支减少取指空拍 |
 | [versions/v31_equal_branch](versions/v31_equal_branch/README.md) | 两个取指槽直接判定同寄存器分支，减少方向误判 |
+| [versions/v32_data_under_refill](versions/v32_data_under_refill/README.md) | 可选实验，补行期间接收数据已可用的 load |
 | [benchmarks](benchmarks/README.md) | 各版执行相同二进制的公共基准程序 |
 | [tools](tools/README.md) | 仓库检查与跨版本性能比较工具 |
 | [results](results/README.md) | 跨版本对比记录，各版详细记录保留在各自 results/ |
