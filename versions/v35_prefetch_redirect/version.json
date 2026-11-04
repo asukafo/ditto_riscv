@@ -1,0 +1,36 @@
+{
+  "name": "v35_prefetch_redirect",
+  "base_commit": "ddbf965",
+  "architecture": "page_local_prefetch_redirect_and_next_pc",
+  "icache_bytes": 256,
+  "dcache_bytes": 256,
+  "line_bytes": 16,
+  "tlb_entries_per_side": 8,
+  "tlb_page_bytes": 4096,
+  "bht_entries": 32,
+  "bht_counter_bits": 2,
+  "ghr_bits": 4,
+  "btb_entries": 32,
+  "fetch_queue_entries": 6,
+  "fetch_packet_bits": 333,
+  "base_version": "v34_retire_amo",
+  "fetch_request_slots": 4,
+  "issue_width": 2,
+  "retire_width": 2,
+  "frontend_packet_width": 2,
+  "dual_ops": [
+    "OP",
+    "OP-IMM",
+    "OP-32",
+    "OP-IMM-32",
+    "LUI",
+    "AUIPC"
+  ],
+  "pair_raw": false,
+  "pair_waw": false,
+  "pair_war": true,
+  "wide_path_read_offsets": [
+    0,
+    4
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "test": "pass",
+  "lint": "pass",
+  "synthesis": "pass",
+  "equivalence_cases": 60,
+  "warm_instructions": 960,
+  "warm_cycles": 576,
+  "test_log_sha256": "787fd843cc25faaecf7798510043b98a2ee6e34f4299a0ff2a0ff1faeecb0c09",
+  "synthesis_log_sha256": "0d2737feed4b29d0bb8d340ac22775015f2ce01f208b3306c923b6e056bf20be",
+  "public_trace_and_ram_byte_equivalent": 60,
+  "mapped_public_equivalence_cases": 60,
+  "directed_wide_redirect_cases": 4,
+  "flat_netlist_sha256": "e23bd8ac18c1b17536a2b81f343205e6d697775acfee00967db42d4330dd9c1d"
+}

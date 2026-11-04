@@ -1,8 +1,8 @@
 # Repository entry point; each hardware version owns its build directory.
-VERSION ?= v33_onehot_arbiter
+VERSION ?= v35_prefetch_redirect
 PYTHON ?= python3
 BENCHMARK_ARGS ?=
-VERSIONS := v1_multicycle v2_single_issue v3_icache v4_fetch_buffer v5_early_restart v6_dcache v7_dcache_early v8_split_memory v9_static_predict v10_return_stack v11_tlb v12_dynamic_predict v13_gshare v14_btb v15_fetch_queue v16_ifetch_pipeline v17_fetch_window v18_btb_window v19_window_forward v20_demand_issue v21_demand_priority v22_hit_under_refill v23_fill_forward v24_dual_alu v25_wide_frontend v26_second_branch v27_integer_pair v28_data_turnover v29_ifill_turnover v30_window_cursor v31_equal_branch v32_data_under_refill v33_onehot_arbiter v34_retire_amo
+VERSIONS := v1_multicycle v2_single_issue v3_icache v4_fetch_buffer v5_early_restart v6_dcache v7_dcache_early v8_split_memory v9_static_predict v10_return_stack v11_tlb v12_dynamic_predict v13_gshare v14_btb v15_fetch_queue v16_ifetch_pipeline v17_fetch_window v18_btb_window v19_window_forward v20_demand_issue v21_demand_priority v22_hit_under_refill v23_fill_forward v24_dual_alu v25_wide_frontend v26_second_branch v27_integer_pair v28_data_turnover v29_ifill_turnover v30_window_cursor v31_equal_branch v32_data_under_refill v33_onehot_arbiter v34_retire_amo v35_prefetch_redirect
 VERSION_DIR := versions/$(VERSION)
 
 ifeq ($(filter $(VERSION),$(VERSIONS)),)
@@ -74,8 +74,9 @@ versions:
 
 	@echo 'v32_data_under_refill experimental D-cache load overlap'
 
-	@echo 'v33_onehot_arbiter   parallel one-hot physical arbitration (default)'
+	@echo 'v33_onehot_arbiter   parallel one-hot physical arbitration'
 	@echo 'v34_retire_amo       optimized atomic retirement data'
+	@echo 'v35_prefetch_redirect page-local prefetch redirect (default)'
 
 $(FORWARDED):
 	$(MAKE) -C "$(VERSION_DIR)" $@
