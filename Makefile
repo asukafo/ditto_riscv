@@ -1,8 +1,8 @@
 # Repository entry point; each hardware version owns its build directory.
-VERSION ?= v25_wide_frontend
+VERSION ?= v26_second_branch
 PYTHON ?= python3
 BENCHMARK_ARGS ?=
-VERSIONS := v1_multicycle v2_single_issue v3_icache v4_fetch_buffer v5_early_restart v6_dcache v7_dcache_early v8_split_memory v9_static_predict v10_return_stack v11_tlb v12_dynamic_predict v13_gshare v14_btb v15_fetch_queue v16_ifetch_pipeline v17_fetch_window v18_btb_window v19_window_forward v20_demand_issue v21_demand_priority v22_hit_under_refill v23_fill_forward v24_dual_alu v25_wide_frontend
+VERSIONS := v1_multicycle v2_single_issue v3_icache v4_fetch_buffer v5_early_restart v6_dcache v7_dcache_early v8_split_memory v9_static_predict v10_return_stack v11_tlb v12_dynamic_predict v13_gshare v14_btb v15_fetch_queue v16_ifetch_pipeline v17_fetch_window v18_btb_window v19_window_forward v20_demand_issue v21_demand_priority v22_hit_under_refill v23_fill_forward v24_dual_alu v25_wide_frontend v26_second_branch
 VERSION_DIR := versions/$(VERSION)
 
 ifeq ($(filter $(VERSION),$(VERSIONS)),)
@@ -59,7 +59,9 @@ versions:
 	@echo 'v23_fill_forward   frozen refill-half forwarding, one-IPC warm baseline'
 	@echo 'v24_dual_alu   frozen conservative dual ALU issue and ordered dual retirement'
 
-	@echo 'v25_wide_frontend   two-packet fetch, six-entry dual-port queue, sustained warm IPC > 1 (default)'
+	@echo 'v25_wide_frontend   two-packet fetch, six-entry dual-port queue, sustained warm IPC > 1'
+
+	@echo 'v26_second_branch   second-slot direct branch prediction (default)'
 
 $(FORWARDED):
 	$(MAKE) -C "$(VERSION_DIR)" $@

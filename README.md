@@ -1,7 +1,7 @@
 # ditto_riscv
 
 通过可运行的 RTL、逐条参考对照、真实波形与性能实验学习 RISC-V core 设计。
-当前开发版本是 **v25 双指令前端与保守双ALU核：热循环稳定区间达到1.67 IPC**；v1–v24 独立冻结。
+当前发布版本是 **v26 第二槽直接分支预测**，热循环稳定区间仍达到 1.67 IPC。v1–v25 独立冻结。
 二十五版均支持 RV64IMAC、Zicsr/Zifencei、M/S/U、软件异常、中断与 Sv39/Svade。
 双发射已支持独立ADDI/ADD/SUB；后续目标是改善分支供给、扩大配对范围、共享总线等待优化、大页TLB、乱序与双核。
 
@@ -44,7 +44,7 @@ make diagrams
 make timing
 ```
 
-根目录命令默认转发到 `versions/v25_wide_frontend/`，输出位于该版的 `build/`。
+根目录命令默认转发到 `versions/v26_second_branch/`，输出位于该版的 `build/`。
 `make diagrams` 导出真实流水线 VCD 的阶段采样图；`make wave PROGRAM=full_demo` 用 Surfer 打开波形。
 选择旧版使用 `make test VERSION=v1_multicycle`，或进入该版本目录运行其 Makefile。
 `PROGRAM`、`LATENCY`、`GAP`、`CROSS`、`LIB`、`CLOCK_NS` 等命令行参数会传给所选版本。
@@ -78,7 +78,8 @@ make timing
 | [versions/v22_hit_under_refill](versions/v22_hit_under_refill/README.md) | 冻结的I-cache背景补行期间服务其他完整行命中 |
 | [versions/v23_fill_forward](versions/v23_fill_forward/README.md) | 冻结的补行半行转发，热区1.00 IPC单发射基线 |
 | [versions/v24_dual_alu](versions/v24_dual_alu/README.md) | 当前开发：独立ADDI/ADD/SUB同拍双发射、有序双提交 |
-| [versions/v25_wide_frontend](versions/v25_wide_frontend/README.md) | 当前双包供给、六项双进双出队列、热区1.67 IPC |
+| [versions/v25_wide_frontend](versions/v25_wide_frontend/README.md) | 双包供给、六项双进双出队列、热区1.67 IPC |
+| [versions/v26_second_branch](versions/v26_second_branch/README.md) | 第二槽条件分支和 JAL 同拍出包，保留顺序执行和退休 |
 | [benchmarks](benchmarks/README.md) | 各版执行相同二进制的公共基准程序 |
 | [tools](tools/README.md) | 仓库检查与跨版本性能比较工具 |
 | [results](results/README.md) | 跨版本对比记录，各版详细记录保留在各自 results/ |
