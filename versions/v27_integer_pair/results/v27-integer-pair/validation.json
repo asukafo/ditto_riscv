@@ -1,0 +1,17 @@
+{
+  "test": "pass",
+  "lint": "pass",
+  "synthesis": "pass",
+  "comparison_cases": 240,
+  "feature_off_cases": 240,
+  "parent_equivalence_cases": 60,
+  "native_runs": 781,
+  "native_commits": 78047,
+  "native_traps": 259,
+  "second_slot_integer_operations": 30,
+  "second_slot_timing_cases": 4,
+  "warm_instructions": 960,
+  "warm_cycles": 576,
+  "test_log_sha256": "b581795301abc830fd4d3ec0fcc850d7af2bf10e250aed758bef23925175e39a",
+  "synthesis_log_sha256": "24843ef78272fea8ec1f287b882d188611975764601ced5c78398e4f1867cbb1"
+}
