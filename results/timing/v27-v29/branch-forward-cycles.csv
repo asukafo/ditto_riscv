@@ -1,0 +1,3 @@
+run,control_misses,cycles,data_wait,dual_issue,frontend_empty,frontend_empty_x_finish,one_dependency,one_no_second,one_opcode,other_no_issue
+v24_dual_alu-branch_forward,4,347,24,0,47,6,2,261,0,7
+v29_ifill_turnover-branch_forward,4,371,17,65,53,96,2,126,5,7

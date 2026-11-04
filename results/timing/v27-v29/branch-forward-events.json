@@ -1,0 +1,22 @@
+{
+  "v24_dual_alu": {
+    "cycles": 347,
+    "instret": 262,
+    "requests": 9,
+    "icache_misses": 4,
+    "control_misses": 4,
+    "ifetch_window_drops": 9,
+    "ifetch_window_hits": 265,
+    "prefetch_path_redirects": 127
+  },
+  "v29_ifill_turnover": {
+    "cycles": 371,
+    "instret": 262,
+    "requests": 9,
+    "icache_misses": 4,
+    "control_misses": 4,
+    "ifetch_window_drops": 55,
+    "ifetch_window_hits": 150,
+    "prefetch_path_redirects": 65
+  }
+}

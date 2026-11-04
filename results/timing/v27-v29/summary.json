@@ -1,0 +1,31 @@
+{
+  "yosys": "Yosys 0.70+post (git sha1 0c11ea098be065e585a90a06e7b7da49936cf231, Release, AppleClang clang++ 21.0.0.21000334)",
+  "opensta": "3.1.0",
+  "clock_constraint_ns": 10,
+  "liberty": "NangateOpenCellLibrary_typical.lib",
+  "liberty_sha256": "8d540a4d4cf6d09d27c87ad067857a9c0c2eeb023ab7a56e058cd3113db4e9b1",
+  "versions": {
+    "v27_integer_pair": {
+      "cycles": 28937,
+      "reg_to_reg_ns": 10.4353,
+      "full_setup_ns": 11.4229,
+      "aggregate_reg_to_reg_us": 301.966276,
+      "aggregate_full_setup_us": 330.544457,
+      "area": 369441.016,
+      "mapped_netlist_sha256": "913f63d49e5dc443dfaaaef4dfbd0357b1ebc94f86a6177a2066077e5787a1ef",
+      "timing_tcl_sha256": "44530dce32ad4d3875c4b7a0667d90efad95ef4b716837d08f94108ae499479c",
+      "abc_constraints_sha256": "f62f5ca439a322ab157b4fbd502ec710a90850c0ce9ab67252b4745d44452878"
+    },
+    "v29_ifill_turnover": {
+      "cycles": 27294,
+      "reg_to_reg_ns": 10.869,
+      "full_setup_ns": 11.6173,
+      "aggregate_reg_to_reg_us": 296.658486,
+      "aggregate_full_setup_us": 317.082586,
+      "area": 370905.612,
+      "mapped_netlist_sha256": "89eca803999a9ef62b702d7a5ac885381a753d072998f03651be406826a79e4b",
+      "timing_tcl_sha256": "44530dce32ad4d3875c4b7a0667d90efad95ef4b716837d08f94108ae499479c",
+      "abc_constraints_sha256": "f62f5ca439a322ab157b4fbd502ec710a90850c0ce9ab67252b4745d44452878"
+    }
+  }
+}
