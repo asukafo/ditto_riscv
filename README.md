@@ -87,6 +87,7 @@ make timing
 | [versions/v31_equal_branch](versions/v31_equal_branch/README.md) | 两个取指槽直接判定同寄存器分支，减少方向误判 |
 | [versions/v32_data_under_refill](versions/v32_data_under_refill/README.md) | 可选实验，补行期间接收数据已可用的 load |
 | [versions/v33_onehot_arbiter](versions/v33_onehot_arbiter/README.md) | 并行独热物理仲裁，保留补行重叠周期收益并缩短布局前寄存器路径 |
+| [versions/v34_retire_amo](versions/v34_retire_amo/README.md) | 优化 AMO 退休数据路径，对比分层和展平映射 |
 | [benchmarks](benchmarks/README.md) | 各版执行相同二进制的公共基准程序 |
 | [tools](tools/README.md) | 仓库检查与跨版本性能比较工具 |
 | [results](results/README.md) | 跨版本对比记录，各版详细记录保留在各自 results/ |
