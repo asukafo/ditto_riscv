@@ -89,6 +89,7 @@ make timing
 | [versions/v33_onehot_arbiter](versions/v33_onehot_arbiter/README.md) | 并行独热物理仲裁，保留补行重叠周期收益并缩短布局前寄存器路径 |
 | [versions/v34_retire_amo](versions/v34_retire_amo/README.md) | 优化 AMO 退休数据路径，对比分层和展平映射 |
 | [versions/v35_prefetch_redirect](versions/v35_prefetch_redirect/README.md) | 缩短双槽预取重定向判断，验证页边界与预测优先级 |
+| [versions/v36_walker_response](versions/v36_walker_response/README.md) | 页表遍历器直收物理通道响应，拆开 TLB 填充与缓存回包 |
 | [benchmarks](benchmarks/README.md) | 各版执行相同二进制的公共基准程序 |
 | [tools](tools/README.md) | 仓库检查与跨版本性能比较工具 |
 | [results](results/README.md) | 跨版本对比记录，各版详细记录保留在各自 results/ |

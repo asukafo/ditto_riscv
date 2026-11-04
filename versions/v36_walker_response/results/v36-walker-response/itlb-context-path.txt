@@ -1,0 +1,52 @@
+Startpoint: _340170_ (rising edge-triggered flip-flop clocked by core_clk)
+Endpoint: _324990_ (rising edge-triggered flip-flop clocked by core_clk)
+Path Group: core_clk
+Path Type: max
+
+    Delay      Time   Description
+-------------------------------------------------------------
+   0.0000    0.0000   clock core_clk (rise edge)
+   0.0000    0.0000   clock network delay (ideal)
+   0.0000    0.0000 ^ _340170_/CK (DFF_X1)
+   0.0772    0.0772 v _340170_/Q (DFF_X1)
+   0.0441    0.1213 v _243758_/Z (BUF_X1)
+   0.0550    0.1762 v _245253_/Z (XOR2_X1)
+   0.1127    0.2890 v _245255_/ZN (OR4_X1)
+   0.0767    0.3656 ^ _245257_/ZN (NOR4_X1)
+   0.0331    0.3987 v _245258_/ZN (NAND4_X1)
+   0.0351    0.4338 ^ _245268_/ZN (NOR3_X1)
+   0.0277    0.4615 v _245279_/ZN (NAND4_X1)
+   0.0766    0.5381 ^ _245315_/ZN (NOR4_X1)
+   0.0140    0.5521 v _245317_/ZN (NOR2_X1)
+   0.0431    0.5953 ^ _245505_/ZN (OAI211_X1)
+   0.0098    0.6050 v _245604_/ZN (NOR2_X1)
+   0.0232    0.6283 ^ _245696_/ZN (NAND2_X1)
+   0.0253    0.6535 ^ _245898_/ZN (OR2_X1)
+   0.0205    0.6740 v _246124_/ZN (OAI21_X1)
+   0.0255    0.6995 ^ _246126_/ZN (OAI211_X1)
+   0.0231    0.7226 v _246129_/ZN (AOI22_X1)
+   0.0408    0.7634 ^ _246130_/ZN (AOI21_X1)
+   0.0158    0.7792 v _246132_/ZN (AOI21_X1)
+   0.0431    0.8222 ^ _246133_/ZN (NOR3_X1)
+   0.0376    0.8598 ^ _246135_/ZN (OR2_X1)
+   0.0103    0.8701 v _274397_/ZN (INV_X1)
+   0.0267    0.8967 ^ _274398_/ZN (NOR2_X1)
+   0.0319    0.9286 ^ _274403_/ZN (AND2_X1)
+   0.0315    0.9601 ^ _274404_/Z (BUF_X1)
+   0.0513    1.0114 ^ _274405_/Z (BUF_X1)
+   0.0705    1.0819 ^ _291572_/Z (BUF_X1)
+   0.0609    1.1428 v _291573_/Z (MUX2_X1)
+   0.0000    1.1428 v _324990_/D (DFF_X1)
+             1.1428   data arrival time
+
+  10.0000   10.0000   clock core_clk (rise edge)
+   0.0000   10.0000   clock network delay (ideal)
+   0.0000   10.0000   clock reconvergence pessimism
+            10.0000 ^ _324990_/CK (DFF_X1)
+  -0.0405    9.9595   library setup time
+             9.9595   data required time
+-------------------------------------------------------------
+             9.9595   data required time
+            -1.1428   data arrival time
+-------------------------------------------------------------
+             8.8166   slack (MET)
