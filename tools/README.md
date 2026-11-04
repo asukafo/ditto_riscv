@@ -5,6 +5,8 @@
 | check_repo.py | `make check` | 检查目录、文档链接、v1 冻结源码和历史对比表的一致性 |
 | benchmark.py | `make compare` | 创建新的跨版本实验记录，拒绝覆盖已有 run-id |
 | profile_stalls.py | `python3 tools/profile_stalls.py wave.vcd` | 从上升沿前 VCD 采样统计等待，无需修改冻结 RTL |
+| flat_timing.py | `python3 tools/flat_timing.py <version> --output <new-directory>` | 用该版既有 ABC 和 STA 约束做展平映射，保存网表、工具与约束哈希、寄存器和端口时序 |
+| verify_mapped_public.py | `python3 tools/verify_mapped_public.py <version> <run> <simulator> --output <new-directory>` | 比较门级模拟器与本地公共 RTL 运行的逐条退休记录、周期和最终 RAM |
 
 版本自己的仿真、参考模型、指令测试与时序脚本保留在 `versions/<version>/scripts/`。
 公共比较器使用 v1 冻结的独立参考模型核对各版提交；硬件版本并不共享可变 RTL。

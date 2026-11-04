@@ -33,3 +33,5 @@ make compare BENCHMARK_ARGS="--versions v31_equal_branch v32_data_under_refill v
 保留相同库、ABC 驱动/负载及 STA 约束，仅将 v31、v32 的 Yosys `synth` 改成 `synth -flatten`。两版寄存器间时钟估计分别约为 7.77 ns、8.16 ns，映射面积约为 281,966、282,726。展平降低了两版的绝对时钟估计，但 v32 的布局前整组时间仍比展平后的 v31 长。v33 的表格使用分层映射对照。[展平数据与网表哈希](results/v33-onehot-arbiter/flat-comparison.json) · [v31 展平报告](results/v33-onehot-arbiter/v31_equal_branch-flat-timing.txt) · [v32 展平报告](results/v33-onehot-arbiter/v32_data_under_refill-flat-timing.txt)
 
 复现展平实验时，复制对应版本 `make -n timing CLOCK_NS=10` 输出的 Yosys 和 OpenSTA 命令到独立工作目录，改用绝对 RTL、约束及 Tcl 路径，在综合子命令加入 `-flatten`，并在工作目录创建 `build/`。
+
+后续实验补齐了 v33 展平时序及 60 组零延迟门级核对。[v31 至 v33 展平对照](../../results/timing/v31-v33-flat/README.md)
