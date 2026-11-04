@@ -1,0 +1,222 @@
+// Four address-tagged read slots. Ordered completion tokens are never reused
+// until their response returns. Redirect poisons ownership; it does not cancel I/O.
+module rv64_fetch_window #(parameter CURSOR_SKIP=0, ENABLED=1,WORD_SIZE=2,DEMAND_PRIORITY=1,DEMAND_ISSUE=1,WINDOW_FORWARD=1,PREFETCH_PATH=1,EXTENSIONS=1,BTB_ENABLE=1,BHT_ENABLE=1,GSHARE_ENABLE=1,PREDICT_ENABLE=1,PREFETCH_REDIRECT=1)(
+ input wire clk,reset,flush,allow,
+ input wire predictor_clear,btb_train,bht_train,train_taken,
+ input wire [63:0] train_pc,train_next,ras_target,input wire [31:0] train_insn,
+ input wire [2:0] train_bytes,input wire [4:0] train_index,input wire ras_valid,
+ output wire path_query_event,path_redirect_event,path_reject_event,path_page_block_event,
+ input wire u_valid,output wire u_ready,input wire [63:0] u_addr,input wire [1:0] u_size,
+ output wire u_rsp_valid,input wire u_rsp_ready,output wire [63:0] u_rsp_data,u_rsp_cause,output wire u_rsp_error,
+ output wire d_valid,input wire d_ready,output wire [63:0] d_addr,output wire [1:0] d_size,
+ input wire d_rsp_valid,output wire d_rsp_ready,input wire [63:0] d_rsp_data,d_rsp_cause,input wire d_rsp_error,
+ output wire busy,output wire [2:0] pending,output wire hit_event,drop_event
+);
+ generate if(ENABLED==0)begin: bypass
+ assign u_ready=d_ready;assign d_valid=u_valid;assign d_addr=u_addr;assign d_size=u_size;
+ assign u_rsp_valid=d_rsp_valid;assign d_rsp_ready=u_rsp_ready;assign u_rsp_data=d_rsp_data;assign u_rsp_cause=d_rsp_cause;assign u_rsp_error=d_rsp_error;
+ assign busy=0;assign pending=0;assign hit_event=0;assign drop_event=0;
+ assign path_query_event=0;assign path_redirect_event=0;assign path_reject_event=0;assign path_page_block_event=0;
+ wire unused=^{clk,reset,flush,allow,predictor_clear,btb_train,bht_train,train_taken,train_pc,train_next,ras_target,train_insn,train_bytes,train_index,ras_valid};
+ end else begin: window
+ reg [3:0] valid,issued,done,poison,error;
+ reg [63:0] address[0:3],payload[0:3],causes[0:3];reg [1:0] sizes[0:3];
+ reg [1:0] tokens[0:3],rh,rt,demand;
+ reg [3:0] forecast_used,forecast_upper;
+ reg [11:0] forecast_offset[0:3];
+ reg [3:0] forecast_in_page;
+ reg [63:0] forecast_target[0:3];
+ reg [2:0] forecast_kind[0:3],forecast_bytes[0:3];
+ reg [2:0] count;
+ reg active,cancelled,speculate;
+ // While the cursor is eligible it belongs to spec_page. A cursor
+ // crossing the page stops allocation until a new demand supplies a page.
+ reg [11:0] spec_offset;
+ reg spec_in_page;
+ reg [51:0] spec_page;
+ wire [63:0] spec_pc={spec_page,spec_offset};
+ wire returned=d_rsp_valid && d_rsp_ready;
+ wire [1:0] owner=tokens[rh];
+ assign d_rsp_ready=count!=0;
+ // The registered I response can feed its demand owner immediately. Do not
+ // gate this on retarget: F may request a successor while consuming this word.
+ // If F stalls, returned data is still captured below for a later retry.
+ wire forward_return=WINDOW_FORWARD!=0 && active && valid[demand] && !done[demand] &&
+  !poison[demand] && returned && owner==demand;
+ assign u_rsp_valid=cancelled || (active && valid[demand] && !poison[demand] && (done[demand] || forward_return));
+ assign u_rsp_data=cancelled ? 64'd0 : forward_return ? d_rsp_data : payload[demand];
+ assign u_rsp_cause=cancelled ? 64'd1 : forward_return ? d_rsp_cause : causes[demand];
+ assign u_rsp_error=cancelled || (forward_return ? d_rsp_error : error[demand]);
+ // Skip already allocated forecasts before choosing the next allocation.
+ wire [3:0] cursor_slots, successor_in_page;
+ for(genvar k=0;k<4;k=k+1)begin: cursor_meta
+  assign cursor_slots[k]=valid[k] && !poison[k] && address[k][63:12]==spec_page;
+  // The slot address is checked against spec_page before using its forecast.
+  assign successor_in_page[k]=forecast_in_page[k];
+ end
+ function automatic [12:0] skip_existing(input [11:0] cursor);
+  begin
+   skip_existing={1'b1,cursor};
+   for(integer k=0;k<4;k=k+1)
+    if(cursor_slots[k] && address[k][11:0]==cursor &&
+       sizes[k]==(WORD_SIZE==3 && cursor[2] ? 2'd2 : 2'(WORD_SIZE)))
+     skip_existing={successor_in_page[k],forecast_offset[k]};
+  end
+ endfunction
+ wire [12:0] cursor_one=skip_existing(spec_pc[11:0]);
+ wire [12:0] cursor_two=skip_existing(cursor_one[11:0]);
+ wire [63:0] alloc_pc=CURSOR_SKIP!=0 && PREFETCH_PATH!=0 && BTB_ENABLE!=0 &&
+    PREDICT_ENABLE!=0 && spec_in_page && cursor_one[12] && cursor_two[12]
+    ? {spec_page,cursor_two[11:0]} : spec_pc;
+ wire consume=u_rsp_valid && u_rsp_ready;
+ reg found,free_found,choose_found,exists;
+ reg [1:0] match,free_slot,choose,existing_slot;
+ integer j;
+ wire retarget=u_valid && (!active || consume) && !found && !cancelled && allow && !flush;
+ always @* begin
+  found=0;match=0;free_found=0;free_slot=0;choose_found=0;choose=0;exists=0;existing_slot=0;
+  for(integer k=0;k<4;k=k+1)begin
+   if(valid[k] && !poison[k] && address[k]==u_addr && sizes[k]==u_size && !found)begin found=1;match=2'(k);end
+  end
+  for(integer k=0;k<4;k=k+1)begin
+   if((!valid[k] || (retarget && (!issued[k] || done[k])) || (consume && !cancelled && demand==2'(k))) && !(u_valid && found && match==2'(k)) && !free_found)begin free_found=1;free_slot=2'(k);end
+   if(valid[k] && !poison[k] && address[k]==alloc_pc && sizes[k]==(WORD_SIZE==3 && alloc_pc[2] ? 2'd2 : 2'(WORD_SIZE)))begin exists=1;existing_slot=2'(k);end
+  end
+  if(active && valid[demand] && !issued[demand] && !poison[demand])begin choose_found=1;choose=demand;end
+  for(integer k=0;k<4;k=k+1)if(valid[k] && !issued[k] && !poison[k] && !choose_found)begin choose_found=1;choose=2'(k);end
+ end
+ assign u_ready=!reset && allow && !flush && !cancelled && (!active || consume) && (found || free_found);
+ wire take=u_valid && u_ready;
+ wire new_demand=take && !found;
+ wire advance=!reset && !flush && !(take && !found) && allow && !retarget && active && speculate && spec_in_page && (exists || free_found);
+ wire allocate=advance && !exists;
+ wire [63:0] path_pc=new_demand ? u_addr : alloc_pc;
+ wire path_eligible=!new_demand || ((u_size==2'(WORD_SIZE) || (WORD_SIZE==3 && u_size==2)) && u_addr[1:0]==0);
+ wire hint,page_block;wire [63:0] hint_next,hint_target;wire [2:0] hint_kind,hint_bytes;
+ wire low_hint,low_block,high_hint,high_block;wire [63:0] low_next,low_target,high_next,high_target;wire [2:0] low_kind,low_bytes,high_kind,high_bytes;
+ wire low_redirect,high_redirect;
+ wire [63:0] low_destination,high_destination;
+ wire use_direct_redirect=PREFETCH_REDIRECT!=0 && WORD_SIZE==3;
+ // The upper lookup matters only for an aligned wide packet (PC bit 2 clear).
+ wire [63:0] upper_pc=use_direct_redirect ? {path_pc[63:3],1'b1,path_pc[1:0]} : path_pc+4;
+ wire low_changes=use_direct_redirect ? low_redirect : low_hint && low_next!=path_pc+4;
+ wire high_changes=use_direct_redirect ? high_redirect : high_hint && high_next!=path_pc+8;
+ wire upper_hint=WORD_SIZE==3 && !path_pc[2] && !low_changes && high_changes;
+ assign hint=WORD_SIZE==3 ? (upper_hint || low_changes) : low_hint;
+ assign hint_next=use_direct_redirect ? (upper_hint ? high_destination : low_destination) :
+     (upper_hint ? high_next : low_next);
+ assign hint_target=upper_hint ? high_target : low_target;
+ assign hint_kind=upper_hint ? high_kind : low_kind;
+ assign hint_bytes=upper_hint ? high_bytes : low_bytes;
+ assign page_block=low_block || (WORD_SIZE==3 && !path_pc[2] && high_block);
+ rv64_prefetch_predictor #(.ENABLED(PREFETCH_PATH!=0 && BTB_ENABLE!=0 && PREDICT_ENABLE!=0),.BHT_ENABLE(BHT_ENABLE),.GSHARE_ENABLE(GSHARE_ENABLE)) path_predictor(
+  .clk(clk),.reset(reset),.clear(predictor_clear),.pc(path_pc),.btb_train(btb_train),.bht_train(bht_train),.train_taken(train_taken),
+  .train_pc(train_pc),.train_next(train_next),.train_insn(train_insn),.train_bytes(train_bytes),.train_index(train_index),.ras_valid(ras_valid),.ras_target(ras_target),
+  .hint(low_hint),.page_block(low_block),.next_pc(low_next),.target(low_target),.kind(low_kind),.bytes(low_bytes),.redirect(low_redirect),.redirect_target(low_destination));
+ rv64_prefetch_predictor #(.ENABLED(WORD_SIZE==3 && PREFETCH_PATH!=0 && BTB_ENABLE!=0 && PREDICT_ENABLE!=0),.BHT_ENABLE(BHT_ENABLE),.GSHARE_ENABLE(GSHARE_ENABLE)) upper_path_predictor(
+  .clk(clk),.reset(reset),.clear(predictor_clear),.pc(upper_pc),.btb_train(btb_train),.bht_train(bht_train),.train_taken(train_taken),
+  .train_pc(train_pc),.train_next(train_next),.train_insn(train_insn),.train_bytes(train_bytes),.train_index(train_index),.ras_valid(ras_valid),.ras_target(ras_target),
+  .hint(high_hint),.page_block(high_block),.next_pc(high_next),.target(high_target),.kind(high_kind),.bytes(high_bytes),.redirect(high_redirect),.redirect_target(high_destination));
+ wire path_on=PREFETCH_PATH!=0 && BTB_ENABLE!=0 && PREDICT_ENABLE!=0;
+ wire use_hint=path_on && path_eligible && hint;
+ // A predicted destination stays in the current page. Only the sequential
+ // fallback can change pages, so carry into the VPN is independent of the BTB target.
+ wire [10:0] sequential_word={1'b0,path_pc[11:2]}+(path_pc[2] ? 11'd1 : 11'd2);
+ wire [51:0] next_page=path_pc[63:12]+52'd1;
+ wire [63:0] page_local_next={
+    sequential_word[10] && !use_hint ? next_page : path_pc[63:12],
+    use_hint ? hint_next[11:0] : {sequential_word[9:0],path_pc[1:0]}};
+ wire [63:0] chosen_next=use_direct_redirect ? page_local_next :
+    use_hint ? hint_next : path_pc+(WORD_SIZE==3 && !path_pc[2] ? 64'd8 : 64'd4);
+ wire chosen_in_page=use_direct_redirect ? use_hint || !sequential_word[10] :
+    chosen_next[63:12]==path_pc[63:12];
+ wire [12:0] cursor_sequential={1'b0,spec_offset}+(WORD_SIZE==3 && !spec_offset[2] ? 13'd8 : 13'd4);
+ assign path_query_event=path_on && path_eligible && (new_demand || allocate);
+ // A low-slot jump to the next packet changes priority but is not a packet redirect.
+ assign path_redirect_event=path_query_event && (use_direct_redirect ?
+    use_hint && (upper_hint || path_pc[2] || path_pc[11:3]==9'h1ff ||
+        low_destination[11:3]!=(path_pc[11:3]+9'd1) || low_destination[2]) :
+    chosen_next!=path_pc+(WORD_SIZE==3 && !path_pc[2] ? 64'd8 : 64'd4));
+ assign path_page_block_event=path_query_event && page_block;
+ wire [31:0] returned_word=forecast_upper[owner] ? d_rsp_data[63:32] : d_rsp_data[31:0];
+ wire [63:0] instruction_pc=address[owner]+(forecast_upper[owner] ? 64'd4 : 64'd0);
+ wire [31:0] expanded;
+ wire bad_compressed;
+ rv64_decompress expand(.c(returned_word[15:0]),.instruction(expanded),.illegal(bad_compressed));
+ wire compressed=EXTENSIONS!=0 && returned_word[1:0]!=3;
+ wire [31:0] actual_insn=compressed ? expanded : returned_word;
+ wire actual_return=actual_insn[6:0]==7'h67 && actual_insn[14:12]==0 && actual_insn[11:7]==0 &&
+  (actual_insn[19:15]==1 || actual_insn[19:15]==5) && actual_insn[31:20]==0;
+ wire [2:0] actual_kind=actual_insn[6:0]==7'h63 && (actual_insn[14:12]<=1 || actual_insn[14:12]>=4) ? 3'd1 :
+  actual_insn[6:0]==7'h6f ? 3'd2 : actual_insn[6:0]==7'h67 && actual_insn[14:12]==0 ? (actual_return ? 3'd3 : 3'd4) : 3'd0;
+ wire [63:0] bo={{51{actual_insn[31]}},actual_insn[31],actual_insn[7],actual_insn[30:25],actual_insn[11:8],1'b0};
+ wire [63:0] jo={{43{actual_insn[31]}},actual_insn[31],actual_insn[19:12],actual_insn[20],actual_insn[30:21],1'b0};
+ wire metadata_ok=!d_rsp_error && !(compressed && bad_compressed) && actual_kind==forecast_kind[owner] &&
+  (compressed ? 3'd2 : 3'd4)==forecast_bytes[owner] &&
+  (actual_kind!=1 || instruction_pc+bo==forecast_target[owner]) &&
+  (actual_kind!=2 || instruction_pc+jo==forecast_target[owner]);
+ assign path_reject_event=returned && !poison[owner] && !flush && !retarget && forecast_used[owner] && !metadata_ok;
+ // A new logical demand reserves its slot independently of downstream ready.
+ // If I service accepts it now, record the token and mark the new slot issued;
+ // otherwise the registered slot retries next cycle through the normal selector.
+ wire direct_demand=DEMAND_ISSUE!=0 && new_demand;
+ // An incoming demand can claim an unsent prefetch before it becomes the
+ // registered active demand. Already accepted/completed reads never reissue.
+ wire matched_demand=DEMAND_PRIORITY!=0 && take && found && !issued[match] && !done[match];
+ wire [1:0] issue_slot=direct_demand ? free_slot : matched_demand ? match : choose;
+ assign d_valid=!reset && allow && !flush && (direct_demand || matched_demand || (!retarget && choose_found)) && (count<4 || returned);
+ assign d_addr=direct_demand ? u_addr : address[issue_slot];assign d_size=direct_demand ? u_size : sizes[issue_slot];
+ wire send=d_valid && d_ready;
+ assign pending=count;
+ assign busy=count!=0;
+ assign hit_event=take && found;
+ assign drop_event=returned && (poison[owner] || flush || retarget);
+ always @(posedge clk)begin
+  if(reset)begin
+   forecast_used<=0;forecast_upper<=0;forecast_in_page<=0;valid<=0;issued<=0;done<=0;poison<=0;error<=0;rh<=0;rt<=0;count<=0;demand<=0;active<=0;cancelled<=0;speculate<=0;spec_offset<=0;spec_in_page<=0;spec_page<=0;
+   for(j=0;j<4;j=j+1)begin address[j]<=0;payload[j]<=0;causes[j]<=0;sizes[j]<=0;tokens[j]<=0;forecast_offset[j]<=0;forecast_target[j]<=0;forecast_kind[j]<=0;forecast_bytes[j]<=0;end
+  end else begin
+
+   if(consume)begin if(cancelled)cancelled<=0;else begin active<=0;valid[demand]<=0;end end
+   if(flush || retarget)begin
+    for(j=0;j<4;j=j+1)if(valid[j])begin if(issued[j] && !done[j])poison[j]<=1;else valid[j]<=0;end
+    speculate<=0;
+   end
+   if(returned)begin
+    rh<=rh+1'b1;
+    if(poison[owner] || flush || retarget)valid[owner]<=0;
+    else begin done[owner]<=1;payload[owner]<=d_rsp_data;causes[owner]<=d_rsp_cause;error[owner]<=d_rsp_error;end
+   end
+   if(send)begin issued[issue_slot]<=1;tokens[rt]<=issue_slot;rt<=rt+1'b1;end
+   case({send,returned})2'b10:count<=count+1'b1;2'b01:count<=count-1'b1;default:;endcase
+   if(flush)begin
+    if(active && !consume)cancelled<=1;
+    active<=0;speculate<=0;
+   end else if(take)begin
+    active<=1;demand<=found ? match : free_slot;
+    if(found)valid[match]<=1;
+    else begin valid[free_slot]<=1;issued[free_slot]<=direct_demand && send;done[free_slot]<=0;poison[free_slot]<=0;address[free_slot]<=u_addr;sizes[free_slot]<=u_size;end
+    if(!found)begin spec_offset<=chosen_next[11:0];spec_in_page<=chosen_in_page;spec_page<=u_addr[63:12];speculate<=(u_size==2'(WORD_SIZE) || (WORD_SIZE==3 && u_size==2)) && u_addr[1:0]==0;end
+   end
+   if(!flush && !(take && !found) && allow && !retarget && active && speculate && spec_in_page)begin
+    if(exists)begin
+     spec_offset<=path_on ? forecast_offset[existing_slot] : cursor_sequential[11:0];
+     spec_in_page<=path_on ? successor_in_page[existing_slot] : !cursor_sequential[12];
+    end
+    else if(free_found)begin
+     valid[free_slot]<=1;issued[free_slot]<=0;done[free_slot]<=0;poison[free_slot]<=0;address[free_slot]<=alloc_pc;sizes[free_slot]<=WORD_SIZE==3 && alloc_pc[2] ? 2'd2 : 2'(WORD_SIZE);
+     spec_offset<=chosen_next[11:0];spec_in_page<=chosen_in_page;
+    end
+   end
+   if(new_demand || allocate)begin
+    forecast_used[free_slot]<=use_hint;forecast_upper[free_slot]<=upper_hint;forecast_offset[free_slot]<=chosen_next[11:0];forecast_in_page[free_slot]<=chosen_in_page;forecast_target[free_slot]<=hint_target;
+    forecast_kind[free_slot]<=hint_kind;forecast_bytes[free_slot]<=hint_bytes;
+   end
+   // A bad forecast only stops further prefetch. It never cancels the demanded
+   // read or changes the returned instruction; F/X retain architectural recovery.
+   if(path_reject_event)speculate<=0;
+
+  end
+ end
+ end endgenerate
+endmodule

@@ -92,6 +92,7 @@ make timing
 | [versions/v36_walker_response](versions/v36_walker_response/README.md) | 页表遍历器直收物理通道响应，拆开 TLB 填充与缓存回包 |
 | [versions/v37_onehot_tlb](versions/v37_onehot_tlb/README.md) | 并行匹配 TLB 表项，独热选择读出和填充位置 |
 | [versions/v38_page_cursor](versions/v38_page_cursor/README.md) | 推测游标保存页内偏移，跨页后等待新的需求取指 |
+| [versions/v39_compact_forecast](versions/v39_compact_forecast/README.md) | 每个取指表项仅保存预测后继的页内偏移和同页标志 |
 | [benchmarks](benchmarks/README.md) | 各版执行相同二进制的公共基准程序 |
 | [tools](tools/README.md) | 仓库检查与跨版本性能比较工具 |
 | [results](results/README.md) | 跨版本对比记录，各版详细记录保留在各自 results/ |
