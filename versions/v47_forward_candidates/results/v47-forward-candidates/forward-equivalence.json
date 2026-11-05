@@ -1,0 +1,11 @@
+{
+  "result": "pass",
+  "scope": "forward data selection on accepted instructions",
+  "assumptions": [
+    "state == EMPTY or ex_finish",
+    "ex_finish implies state != EMPTY",
+    "accepted active X has no ex_trap",
+    "ex_rd_wen == (!ex_trap && candidate_x_write && ex_rd != 0)"
+  ],
+  "log_sha256": "484068d58e97cbafaf13d8ec9e9afdf4f649d748c6acd9c7d58f5e3fe4e2a33f"
+}

@@ -1,0 +1,38 @@
+{
+  "full": {
+    "cycles": 911,
+    "instret": 1300,
+    "paired_issues": 517,
+    "decode_pairs": 522,
+    "warm_instructions": 960,
+    "warm_cycles": 576,
+    "warm_ipc": 1.6666666666666667,
+    "anchor_cycle": 183,
+    "trace_sha256": "b17cd78a3d80c93249ec307a027f5911287ec1a4e6f923d95327178bc23bbbf4",
+    "vcd_sha256": "991a5b08835cc51f3b4172689260c8c99a1fb1982736eb9bf42f808da9ff3d5f"
+  },
+  "narrow": {
+    "cycles": 1415,
+    "instret": 1300,
+    "paired_issues": 0,
+    "decode_pairs": 0,
+    "warm_instructions": 960,
+    "warm_cycles": 960,
+    "warm_ipc": 1.0,
+    "anchor_cycle": 243,
+    "trace_sha256": "56e9282e506a048fd2b34e64fa3b3728a74c3fd56fcb12029f6ce1ee382617f2",
+    "vcd_sha256": "3df8713cbdc9964da2a9cd2fe0b04f32ed5faa1c36ae30cba971cc90ab64ef62"
+  },
+  "onealu": {
+    "cycles": 1419,
+    "instret": 1300,
+    "paired_issues": 0,
+    "decode_pairs": 525,
+    "warm_instructions": 960,
+    "warm_cycles": 960,
+    "warm_ipc": 1.0,
+    "anchor_cycle": 242,
+    "trace_sha256": "d89c2a655f1c4a73cf526a40ccf24ca76b98310596c06f063768550f23e9cae0",
+    "vcd_sha256": "a6e80c91465969879f961b6cf38e2cc81db7e3456093aac490f5b9375d600267"
+  }
+}

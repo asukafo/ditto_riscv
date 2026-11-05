@@ -1,8 +1,8 @@
 # ditto_riscv
 
 通过可运行的 RTL、逐条参考对照、真实波形与性能实验学习 RISC-V core 设计。
-当前发布版本是 **v41 RV64IMAC 顺序双发射核**，热循环稳定区间达到 1.67 IPC。v1–v40 独立冻结。
-v41 支持 RV64IMAC、Zicsr/Zifencei、M/S/U、软件异常、中断与 Sv39/Svade。
+当前发布版本是 **v47 RV64IMAC 顺序双发射核**，热循环稳定区间达到 1.67 IPC。v1–v46 独立冻结。
+v47 支持 RV64IMAC、Zicsr/Zifencei、M/S/U、软件异常、中断与 Sv39/Svade。
 第二槽支持 30 种整数操作。v28 和 v29 缩短了数据请求以及指令、数据缓存补行的交接。
 
 ## 快速开始
@@ -44,7 +44,7 @@ make diagrams
 make timing
 ```
 
-根目录命令默认转发到 `versions/v41_page_target/`，输出位于该版的 `build/`。
+根目录命令默认转发到 `versions/v47_forward_candidates/`，输出位于该版的 `build/`。
 `make diagrams` 导出真实流水线 VCD 的阶段采样图；`make wave PROGRAM=full_demo` 用 Surfer 打开波形。
 选择旧版使用 `make test VERSION=v1_multicycle`，或进入该版本目录运行其 Makefile。
 `PROGRAM`、`LATENCY`、`GAP`、`CROSS`、`LIB`、`CLOCK_NS` 等命令行参数会传给所选版本。
@@ -100,6 +100,7 @@ make timing
 | [versions/v44_pair_operands](versions/v44_pair_operands/README.md) | 第二发射槽空闲时采样候选操作数，有效停顿时保持 |
 | [versions/v45_primary_operands](versions/v45_primary_operands/README.md) | 第一槽空闲时采样操作数，执行和访存等待时保持 |
 | [versions/v46_early_forward](versions/v46_early_forward/README.md) | 前递候选按 X 槽占用状态选择，接收时核对完成条件 |
+| [versions/v47_forward_candidates](versions/v47_forward_candidates/README.md) | 前递候选与异常接收判定解耦，保持有效接收时的优先级 |
 | [benchmarks](benchmarks/README.md) | 各版执行相同二进制的公共基准程序 |
 | [tools](tools/README.md) | 仓库检查与跨版本性能比较工具 |
 | [results](results/README.md) | 跨版本对比记录，各版详细记录保留在各自 results/ |
