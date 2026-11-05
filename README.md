@@ -95,6 +95,7 @@ make timing
 | [versions/v39_compact_forecast](versions/v39_compact_forecast/README.md) | 每个取指表项仅保存预测后继的页内偏移和同页标志 |
 | [versions/v40_store_trace](versions/v40_store_trace/README.md) | 退休日志复用 load 写回结果，另存 store 与 AMO 写入值 |
 | [versions/v41_page_target](versions/v41_page_target/README.md) | 回包指令用页内带符号偏移校验预测目标 |
+| [versions/v42_decoder_timing](versions/v42_decoder_timing/README.md) | 拆分有符号地址加法，验证分层整核含端口时序 |
 | [benchmarks](benchmarks/README.md) | 各版执行相同二进制的公共基准程序 |
 | [tools](tools/README.md) | 仓库检查与跨版本性能比较工具 |
 | [results](results/README.md) | 跨版本对比记录，各版详细记录保留在各自 results/ |

@@ -1,0 +1,12 @@
+{
+  "rv64imac": {
+    "result": "pass",
+    "log_sha256": "9f7bf2d0d193856bd2b2a443525692030227e2ff984b88abe57086d7ca4ba095",
+    "command": "-- Running command `read_verilog -sv versions/v41_page_target/rtl/rv64_decoder.sv; rename rv64_decoder gold; read_verilog -sv .local/v42/control-add/rtl/rv64_decoder.sv; rename rv64_decoder gate; proc; opt; miter -equiv -flatten gold gate proof; hierarchy -top proof; opt; sat -verify -prove trigger 0 -show-inputs' --"
+  },
+  "rv64i": {
+    "result": "pass",
+    "log_sha256": "232e5d47986dcfdd65a6816ccf415c5327a55ec7d899ab6120703bdafd425dc3",
+    "command": "-- Running command `read_verilog -sv versions/v41_page_target/rtl/rv64_decoder.sv; rename rv64_decoder gold; read_verilog -sv versions/v42_decoder_timing/rtl/rv64_decoder.sv; rename rv64_decoder gate; chparam -set EXTENSIONS 0 gold gate; proc; opt; miter -equiv -flatten gold gate proof; hierarchy -top proof; opt; sat -verify -prove trigger 0 -show-inputs' --"
+  }
+}
