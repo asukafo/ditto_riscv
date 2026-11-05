@@ -98,6 +98,7 @@ make timing
 | [versions/v42_decoder_timing](versions/v42_decoder_timing/README.md) | 拆分有符号地址加法，验证分层整核含端口时序 |
 | [versions/v43_retire_store](versions/v43_retire_store/README.md) | 在 W 阶段生成最终 store 记录，缩短写回标志的组合路径 |
 | [versions/v44_pair_operands](versions/v44_pair_operands/README.md) | 第二发射槽空闲时采样候选操作数，有效停顿时保持 |
+| [versions/v45_primary_operands](versions/v45_primary_operands/README.md) | 第一槽空闲时采样操作数，执行和访存等待时保持 |
 | [benchmarks](benchmarks/README.md) | 各版执行相同二进制的公共基准程序 |
 | [tools](tools/README.md) | 仓库检查与跨版本性能比较工具 |
 | [results](results/README.md) | 跨版本对比记录，各版详细记录保留在各自 results/ |
