@@ -2,7 +2,7 @@
 VERSION ?= v41_page_target
 PYTHON ?= python3
 BENCHMARK_ARGS ?=
-VERSIONS := v1_multicycle v2_single_issue v3_icache v4_fetch_buffer v5_early_restart v6_dcache v7_dcache_early v8_split_memory v9_static_predict v10_return_stack v11_tlb v12_dynamic_predict v13_gshare v14_btb v15_fetch_queue v16_ifetch_pipeline v17_fetch_window v18_btb_window v19_window_forward v20_demand_issue v21_demand_priority v22_hit_under_refill v23_fill_forward v24_dual_alu v25_wide_frontend v26_second_branch v27_integer_pair v28_data_turnover v29_ifill_turnover v30_window_cursor v31_equal_branch v32_data_under_refill v33_onehot_arbiter v34_retire_amo v35_prefetch_redirect v36_walker_response v37_onehot_tlb v38_page_cursor v39_compact_forecast v40_store_trace v41_page_target v42_decoder_timing
+VERSIONS := v1_multicycle v2_single_issue v3_icache v4_fetch_buffer v5_early_restart v6_dcache v7_dcache_early v8_split_memory v9_static_predict v10_return_stack v11_tlb v12_dynamic_predict v13_gshare v14_btb v15_fetch_queue v16_ifetch_pipeline v17_fetch_window v18_btb_window v19_window_forward v20_demand_issue v21_demand_priority v22_hit_under_refill v23_fill_forward v24_dual_alu v25_wide_frontend v26_second_branch v27_integer_pair v28_data_turnover v29_ifill_turnover v30_window_cursor v31_equal_branch v32_data_under_refill v33_onehot_arbiter v34_retire_amo v35_prefetch_redirect v36_walker_response v37_onehot_tlb v38_page_cursor v39_compact_forecast v40_store_trace v41_page_target v42_decoder_timing v43_retire_store
 VERSION_DIR := versions/$(VERSION)
 
 ifeq ($(filter $(VERSION),$(VERSIONS)),)
@@ -84,6 +84,7 @@ versions:
 	@echo 'v40_store_trace      load result reuse in retirement'
 	@echo 'v41_page_target      page-local target validation (default)'
 	@echo 'v42_decoder_timing split signed address and branch addition'
+	@echo 'v43_retire_store     store trace qualification in writeback'
 
 $(FORWARDED):
 	$(MAKE) -C "$(VERSION_DIR)" $@
