@@ -1,0 +1,9 @@
+{
+  "result": "pass",
+  "scope": "combinational forwarding equivalence in an accepting context",
+  "assumptions": [
+    "state == EMPTY or ex_finish",
+    "ex_finish implies state != EMPTY"
+  ],
+  "log_sha256": "7f018babda107e1c540ad15343a687645bcf2fda29883f949b6bc63fddf4c7ac"
+}
