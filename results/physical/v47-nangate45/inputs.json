@@ -1,0 +1,30 @@
+{
+  "source_commit": "872e3aad1f02e37f4c5fca71022915b4c7d8212a",
+  "version": "v47_forward_candidates",
+  "mapping": "flatten",
+  "clock_ns": 10,
+  "io_delay_ns": 1,
+  "corner": "Nangate45 typical",
+  "mapped_netlist_sha256": "19504ec21c67caa8a5e6028a58173f597628dcffca9fdb60cbb0c9a93552cf87",
+  "physical_netlist_sha256": "8e09272c477fd7f4bc0f7aa295483982b8843e9e0a9b61375e2d1b01b3fd911c",
+  "constraints_sha256": "c5688a807ebd3824ff6cc6e84c811c9378179da0dd4ae66ee7dae2843f7f7d17",
+  "image": "openroad/orfs@sha256:f55910bed183e4d14bded571e777000ae2892138d3412a90c262ac6e699ac11f",
+  "image_platform": "linux/amd64",
+  "openroad_binary_sha256": "79a6c0dee51b4b0895d4da5c40ec47a8d263cc036ac8ce2869d9384b149d66d9",
+  "platform_sha256": {
+    "lef/NangateOpenCellLibrary.tech.lef": "834a79295054cd4209178d1bade67c353863c47bb4b3c22ee38b862b7cec37f2",
+    "lef/NangateOpenCellLibrary.macro.mod.lef": "a43aea339f12a57a63497783e508ba16f3da2dc056d3247dec7d99707c2dedef",
+    "lib/NangateOpenCellLibrary_typical.lib": "8d540a4d4cf6d09d27c87ad067857a9c0c2eeb023ab7a56e058cd3113db4e9b1",
+    "make_tracks.tcl": "8f8fbff8d8e0dfd232307058f6766973742e36f8f27bd1c717ea001e142cba99",
+    "setRC.tcl": "521df813bf4da9d7400df33e3f680c9a328cc720830dbfca1188083741503fa5",
+    "grid_strategy-M1-M4-M7.tcl": "13f6979391f4e5373b6e0b9e9df6f8f07f69787e970e13e5d170f830b83006db",
+    "rcx_patterns.rules": "2f65fafbe2c704b378563c53a680b93cef080c2799997019d43df7d1e5a563e9"
+  },
+  "tie_cells": {
+    "driver_cells_in_physical_v": 4360,
+    "yosys_git_commit": "0c11ea098be065e585a90a06e7b7da49936cf231",
+    "verilator_version": "5.052",
+    "gate_cases_matching_rtl_trace_and_ram": 60,
+    "gate_equivalence_csv_sha256": "d418b405920b5e843c5af62f153343524ff02a7180de98e7b1652f5597cc3a48"
+  }
+}

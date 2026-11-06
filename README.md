@@ -50,6 +50,8 @@ make timing
 `PROGRAM`、`LATENCY`、`GAP`、`CROSS`、`LIB`、`CLOCK_NS` 等命令行参数会传给所选版本。
 `make clean` 只清理当前所选版本的构建产物。
 
+v47 的 [Nangate45 物理时序实验](results/physical/v47-nangate45/README.md) 记录了展平网表在布局、时钟树和布线阶段的时序变化。
+
 ## 目录与版本
 
 | 路径 | 内容 |
