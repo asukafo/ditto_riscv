@@ -1,8 +1,9 @@
 # ditto_riscv
 
 通过可运行的 RTL、逐条参考对照、真实波形与性能实验学习 RISC-V core 设计。
-当前发布版本是 **v47 RV64IMAC 顺序双发射核**，热循环稳定区间达到 1.67 IPC。v1–v46 独立冻结。
+默认单核版本是 **v47 RV64IMAC 顺序双发射核**，热循环稳定区间达到 1.67 IPC。v1–v47 独立冻结。
 v47 支持 RV64IMAC、Zicsr/Zifencei、M/S/U、软件异常、中断与 Sv39/Svade。
+实验版 [v48 双 hart 原型](versions/v48_dual_hart/README.md) 由两个 v47 派生核心组成，可以运行共享内存与原子操作实验。
 第二槽支持 30 种整数操作。v28 和 v29 缩短了数据请求以及指令、数据缓存补行的交接。
 
 ## 快速开始
@@ -16,6 +17,7 @@ make check
 make tools
 make lint
 make test
+make test-multicore
 make test-icache
 make test-fetch
 make test-early
@@ -103,6 +105,7 @@ v47 的 [Nangate45 物理时序实验](results/physical/v47-nangate45/README.md)
 | [versions/v45_primary_operands](versions/v45_primary_operands/README.md) | 第一槽空闲时采样操作数，执行和访存等待时保持 |
 | [versions/v46_early_forward](versions/v46_early_forward/README.md) | 前递候选按 X 槽占用状态选择，接收时核对完成条件 |
 | [versions/v47_forward_candidates](versions/v47_forward_candidates/README.md) | 前递候选与异常接收判定解耦，保持有效接收时的优先级 |
+| [versions/v48_dual_hart](versions/v48_dual_hart/README.md) | 双 hart，共享内存仲裁、跨核 AMO 和 LR/SC 实验 |
 | [benchmarks](benchmarks/README.md) | 各版执行相同二进制的公共基准程序 |
 | [tools](tools/README.md) | 仓库检查与跨版本性能比较工具 |
 | [results](results/README.md) | 跨版本对比记录，各版详细记录保留在各自 results/ |
@@ -167,7 +170,7 @@ make compare BENCHMARK_ARGS="--run-id my-experiment"
 ## 功能与学习入口
 
 程序通过已提交的退出邮箱存储结束；EBREAK、ECALL 由软件异常处理程序接收。
-MMU 配有各8项I/D TLB，只缓存4KiB映射，采用Svade软件管理A/D位；大页仍由遍历器处理。尚无F/D/V/H、PMP或多核，未进行正式ISA合规认证或Linux启动验证。
+MMU 配有各8项I/D TLB，只缓存4KiB映射，采用Svade软件管理A/D位；大页仍由遍历器处理。尚无 F/D/V/H 或 PMP。v48 双 hart 平台还处于裸机仿真阶段，未进行正式 ISA 合规认证或 Linux 启动验证。
 
 - [单发射流水线、前递与精确异常](versions/v2_single_issue/README.md)
 - [指令缓存、权限、FENCE.I 与等待测量](versions/v3_icache/README.md)

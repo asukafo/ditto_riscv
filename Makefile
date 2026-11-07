@@ -2,7 +2,7 @@
 VERSION ?= v47_forward_candidates
 PYTHON ?= python3
 BENCHMARK_ARGS ?=
-VERSIONS := v1_multicycle v2_single_issue v3_icache v4_fetch_buffer v5_early_restart v6_dcache v7_dcache_early v8_split_memory v9_static_predict v10_return_stack v11_tlb v12_dynamic_predict v13_gshare v14_btb v15_fetch_queue v16_ifetch_pipeline v17_fetch_window v18_btb_window v19_window_forward v20_demand_issue v21_demand_priority v22_hit_under_refill v23_fill_forward v24_dual_alu v25_wide_frontend v26_second_branch v27_integer_pair v28_data_turnover v29_ifill_turnover v30_window_cursor v31_equal_branch v32_data_under_refill v33_onehot_arbiter v34_retire_amo v35_prefetch_redirect v36_walker_response v37_onehot_tlb v38_page_cursor v39_compact_forecast v40_store_trace v41_page_target v42_decoder_timing v43_retire_store v44_pair_operands v45_primary_operands v46_early_forward v47_forward_candidates
+VERSIONS := v1_multicycle v2_single_issue v3_icache v4_fetch_buffer v5_early_restart v6_dcache v7_dcache_early v8_split_memory v9_static_predict v10_return_stack v11_tlb v12_dynamic_predict v13_gshare v14_btb v15_fetch_queue v16_ifetch_pipeline v17_fetch_window v18_btb_window v19_window_forward v20_demand_issue v21_demand_priority v22_hit_under_refill v23_fill_forward v24_dual_alu v25_wide_frontend v26_second_branch v27_integer_pair v28_data_turnover v29_ifill_turnover v30_window_cursor v31_equal_branch v32_data_under_refill v33_onehot_arbiter v34_retire_amo v35_prefetch_redirect v36_walker_response v37_onehot_tlb v38_page_cursor v39_compact_forecast v40_store_trace v41_page_target v42_decoder_timing v43_retire_store v44_pair_operands v45_primary_operands v46_early_forward v47_forward_candidates v48_dual_hart
 VERSION_DIR := versions/$(VERSION)
 
 ifeq ($(filter $(VERSION),$(VERSIONS)),)
@@ -11,12 +11,13 @@ endif
 
 .DEFAULT_GOAL := help
 FORWARDED := tools lint test test-base test-full test-pipeline test-icache test-fetch test-early test-dcache test-data-early test-split test-predict test-ras test-tlb test-bht test-gshare test-btb test-queue test-ifetch test-window test-path test-forward test-issue test-priority test-under test-fill test-dual test-wide test-integer-pair test-data-turnover test-ifill-turnover test-equal-branch test-data-under-refill test-mapped test-alu test-rv64i sim diff wave sweep diagrams synth timing clean
-.PHONY: help versions check compare benchmark $(FORWARDED)
+.PHONY: help versions check compare benchmark test-multicore $(FORWARDED)
 
 help:
 	@echo 'ditto_riscv — selected version: $(VERSION)'
 	@echo 'make lint / test / diff PROGRAM=full_demo / timing / diagrams'
 	@echo 'make test VERSION=v1_multicycle    # frozen baseline'
+	@echo 'make test-multicore              # v48 dual-hart Verilator tests'
 	@echo 'make check                       # layout, links, frozen files, result archives'
 	@echo 'make compare [BENCHMARK_ARGS="--run-id my-experiment"]'
 	@echo 'make versions                    # available architectures'
@@ -89,6 +90,11 @@ versions:
 	@echo 'v45_primary_operands primary operand capture while empty'
 	@echo 'v46_early_forward    X occupancy based forwarding selection'
 	@echo 'v47_forward_candidates forwarding before acceptance qualification (default)'
+
+	@echo 'v48_dual_hart        two-hart shared-memory prototype'
+
+test-multicore:
+	$(MAKE) -C versions/v48_dual_hart test-multicore
 
 $(FORWARDED):
 	$(MAKE) -C "$(VERSION_DIR)" $@
